@@ -1,0 +1,85 @@
+# STEMCELL
+stemcell_os: "ubuntu-xenial"                                     # stemcell os
+stemcell_version: "315.64"                                       # stemcell version
+
+# NETWORK
+private_networks_name: "default"                                 # private network name
+
+# MONGODB_REPL_SET_NAME
+replSetName1: "op1"                                              # replica set1 name
+replSetName2: "op2"                                              # replica set2 name
+replSetName3: "op3"                                              # replica set3 name
+
+# MONGODB_SLAVE1
+mongodb_slave1_azs: [z3]                                         # mongodb slave1 azs
+mongodb_slave1_instances: 2                                      # mongodb slave1 instances
+mongodb_slave1_vm_type: "medium"                                 # mongodb slave1 vm type
+mongodb_slave1_persistent_disk_type: "10GB"                      # mongodb slave1 persistent disk type
+mongodb_slave1_static_ips: "<MONGODB_SLAVE1_PRIVATE_IPS>"        # mongodb slave1's private IPs (e.g. ["10.0.11.11","10.0.11.12"])
+
+# MONGODB_SLAVE2
+mongodb_slave2_azs: [z3]                                         # mongodb slave2 azs
+mongodb_slave2_instances: 2                                      # mongodb slave2 instances
+mongodb_slave2_vm_type: "medium"                                 # mongodb slave2 vm type
+mongodb_slave2_persistent_disk_type: "10GB"                      # mongodb slave2 persistent disk type
+mongodb_slave2_static_ips: "<MONGODB_SLAVE2_PRIVATE_IPS>"        # mongodb slave2's private IPs (e.g. ["10.0.11.14","10.0.11.15"])
+
+# MONGODB_SLAVE3
+mongodb_slave3_azs: [z3]                                         # mongodb slave3 azs
+mongodb_slave3_instances: 2                                      # mongodb slave3 instances
+mongodb_slave3_vm_type: "medium"                                 # mongodb slave3 vm type
+mongodb_slave3_persistent_disk_type: "10GB"                      # mongodb slave3 persistent disk type
+mongodb_slave3_static_ips: "<MONGODB_SLAVE3_PRIVATE_IPS>"        # mongodb slave3's private IPs (e.g. ["10.0.11.17","10.0.11.18"])
+
+# MONGODB_MASTER1
+mongodb_master1_azs: [z3]                                                # mongodb master1 azs
+mongodb_master1_instances: 1                                             # mongodb master1 instances
+mongodb_master1_vm_type: "medium"                                        # mongodb master1 vm type
+mongodb_master1_persistent_disk_type: "10GB"                             # mongodb master1 persistent disk type
+mongodb_master1_static_ips: "<MONGODB_MASTER1_PRIVATE_IP>"               # mongodb master1's private IP (e.g. "10.0.11.10")
+mongodb_master1_replSet_hosts: "<MONGODB_MASTER1_REPLSET_HOSTS>"         # 첫번째 Host는 replicaSet1 의master1 ip, 차례대로 slave1 의 ips. (e.g. ["10.0.11.10", "10.0.11.11","10.0.11.12"])
+
+# MONGODB_MASTER2
+mongodb_master2_azs: [z3]                                                # mongodb master2 azs
+mongodb_master2_instances: 1                                             # mongodb master2 instances
+mongodb_master2_vm_type: "medium"                                        # mongodb master2 vm type
+mongodb_master2_persistent_disk_type: "10GB"                             # mongodb master2 persistent disk type
+mongodb_master2_static_ips: "<MONGODB_MASTER2_PRIVATE_IP>"                                 # mongodb master2's private IP (e.g. "10.0.11.13")
+mongodb_master2_replSet_hosts: "<MONGODB_MASTER2_REPLSET_HOSTS>"         # 첫번째 Host는 replicaSet2 의master2 ip, 차례대로 slave2 의 ips. (e.g. ["10.0.11.13", "10.0.11.14","10.0.11.15"])
+
+# MONGODB_MASTER3
+mongodb_master3_azs: [z3]                                                # mongodb master3 azs
+mongodb_master3_instances: 1                                             # mongodb master3 instances
+mongodb_master3_vm_type: "medium"                                        # mongodb master3 vm type
+mongodb_master3_persistent_disk_type: "10GB"                             # mongodb master3 persistent disk type
+mongodb_master3_static_ips: "<MONGODB_MASTER3_PRIVATE_IP>"               # mongodb master3's private IP (e.g. "10.0.11.16")
+mongodb_master3_replSet_hosts: "<MONGODB_MASTER3_REPLSET_HOSTS>"         # 첫번째 Host는 replicaSet3 의master3 ip, 차례대로 slave3 의 ips. (e.g. ["10.0.11.16", "10.0.11.17","10.0.11.18"])
+
+# MONGODB_CONFIG
+mongodb_config_azs: [z3]                                                 # mongodb config azs
+mongodb_config_instances: 3                                              # mongodb config instances
+mongodb_config_vm_type: "medium"                                         # mongodb config vm type
+mongodb_config_persistent_disk_type: "10GB"                              # mongodb config persistent disk type
+mongodb_config_static_ips: "<MONGODB_CONFIG_PRIVATE_IPS>"                # mongodb config's private IPs (e.g. ["10.0.11.19", "10.0.11.20","10.0.11.21"])
+
+# MONGODB_SHARD
+mongodb_shard_azs: [z3]                                                  # mongodb shard azs
+mongodb_shard_instances: 1                                               # mongodb shard instances
+mongodb_shard_vm_type: "medium"                                          # mongodb shard vm type
+mongodb_shard_static_ips: "<MONGODB_SHARD_PRIVATE_IP>"                   # mongodb shard's private IP (e.g. "10.0.11.22")
+
+# MONGODB_BROKER
+mongodb_broker_azs: [z3]                                                 # mongodb broker azs
+mongodb_broker_instances: 1                                              # mongodb broker instances
+mongodb_broker_vm_type: "medium"                                         # mongodb broker vm type
+mongodb_broker_static_ips: "<MONGODB_BROKER_PRIVATE_IP>"                 # mongodb broker's private IP (e.g. "10.0.11.23")
+
+# BROKER_REGISTRAR
+broker_registrar_broker_azs: [z3]                                        # broker registrar azs
+broker_registrar_broker_instances: 1                                     # broker registrar instances
+broker_registrar_broker_vm_type: "medium"                                # broker registrar vm type
+
+# BROKER_DEREGISTRAR
+broker_deregistrar_broker_azs: [z3]                                      # broker deregistrar azs
+broker_deregistrar_broker_instances: 1                                   # broker deregistrar instances
+broker_deregistrar_broker_vm_type: "medium"                              # broker deregistrar vm type

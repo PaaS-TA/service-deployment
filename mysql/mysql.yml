@@ -1,0 +1,148 @@
+# mysql 설정 파일 내용
+name: mysql                              # 서비스 배포이름(필수)
+
+releases:
+- name: paasta-mysql                                    # 서비스 릴리즈 이름(필수)
+  url: http://45.248.73.44/index.php/s/F84rLeAt7Se3STF/download
+  version: "2.0"                                        # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+
+stemcells:
+- alias: default
+  os: ((stemcell_os))
+  version: "((stemcell_version))"
+
+update:
+  canaries: 1                            # canary 인스턴스 수(필수)
+  canary_watch_time: 30000-600000        # canary 인스턴스가 수행하기 위한 대기 시간(필수)
+  max_in_flight: 1                       # non-canary 인스턴스가 병렬로 update 하는 최대 개수(필수)
+  update_watch_time: 30000-600000        # non-canary 인스턴스가 수행하기 위한 대기 시간(필수)
+
+instance_groups:
+- name: mysql
+  azs: ((mysql_azs))
+  instances: ((mysql_instances))
+  vm_type: ((mysql_vm_type))
+  stemcell: default
+  persistent_disk_type: ((mysql_persistent_disk_type))
+  networks:
+  - name: ((private_networks_name))
+    static_ips:
+    - ((mysql_static_ip))
+  jobs:
+  - name: mysql
+    release: paasta-mysql
+    properties:
+      admin_password: ((mysql_admin_password))                # MySQL 어드민 패스워드 (변경 시, op-mysql-java-broker job properties의 jdbc_pwd 변숫값과 동일 적용)
+      cluster_ips:                                            # 클러스터 구성시 IPs(필수)
+      - ((mysql_static_ip))
+      network_name: ((private_networks_name))
+      seeded_databases: null
+      syslog_aggregator: null
+      collation_server: utf8_unicode_ci    # Mysql CharSet
+      character_set_server: utf8
+
+- name: proxy
+  azs: ((proxy_azs))
+  instances: ((proxy_instances))
+  vm_type: ((proxy_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips:
+    - ((proxy_static_ip))
+  jobs:
+  - name: proxy
+    release: paasta-mysql
+    properties:
+      cluster_ips:
+      - ((mysql_static_ip))
+      external_host: ((system_domain))       # PaaS-TA 설치시 설정한 외부 호스트 정보(필수)
+      nats:                                    # PaaS-TA 설치시 설치한 nats 정보 (필수)
+        machines:
+        - ((paasta_nats_ip))
+        password: "((paasta_nats_password))"
+        port: ((paasta_nats_port))
+        user: ((paasta_nats_user))
+      network_name: ((private_networks_name))
+      proxy:                                   # proxy 정보 (필수)
+        api_password: admin
+        api_username: api
+        api_force_https: false
+      syslog_aggregator: null
+
+- name: paasta-mysql-java-broker
+  azs: ((mysql_broker_azs))
+  instances: ((mysql_broker_instances))
+  vm_type: ((mysql_broker_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips:
+    - ((mysql_broker_static_ip))
+  jobs:
+  - name: op-mysql-java-broker
+    release: paasta-mysql
+    properties:                                        # Mysql 정보
+      jdbc_ip: ((proxy_static_ip))
+      jdbc_pwd: ((mysql_admin_password))               # JDBC 패스워드 (변경 시, mysql job properties의 admin_password 변숫값과 동일 적용)
+      jdbc_port: 3306
+      log_dir: paasta-mysql-java-broker
+      log_file: paasta-mysql-java-broker
+      log_level: INFO
+
+- name: broker-registrar
+  lifecycle: errand                                 # bosh deploy시 vm에 생성되어 설치 되지 않고 bosh errand 로 실행할때 설정, 주로 테스트 용도에 쓰임
+  azs: ((broker_registrar_broker_azs))
+  instances: ((broker_registrar_broker_instances))
+  vm_type: ((broker_registrar_broker_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+  jobs:
+  - name: broker-registrar
+    release: paasta-mysql
+    properties:
+      broker:
+        host: ((mysql_broker_static_ip))
+        name: mysql-service-broker
+        password: cloudfoundry
+        username: admin
+        protocol: http
+        port: 8080
+      cf:
+        admin_password: ((paasta_admin_password))
+        admin_username: ((paasta_admin_username))
+        api_url: https://api.((system_domain))                                            #PAAS-TA URI
+        skip_ssl_validation: true
+
+- name: broker-deregistrar
+  lifecycle: errand                                 # bosh deploy시 vm에 생성되어 설치 되지 않고 bosh errand 로 실행할때 설정, 주로 테스트 용도에 쓰임
+  azs: ((broker_deregistrar_broker_azs))
+  instances: ((broker_deregistrar_broker_instances))
+  vm_type: ((broker_deregistrar_broker_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+  jobs:
+  - name: broker-deregistrar
+    release: paasta-mysql
+    properties:
+      broker:
+        name: mysql-service-broker
+      cf:
+        admin_password: ((paasta_admin_password))
+        admin_username: ((paasta_admin_username))
+        api_url: https://api.((system_domain))                                           #PAAS-TA URI
+        skip_ssl_validation: true
+
+meta:
+  apps_domain: ((system_domain))                                                         #PAAS-TA URI
+  environment: null
+  external_domain: ((system_domain))                                                     #PAAS-TA URI
+  nats:
+    machines:
+    - ((paasta_nats_ip))
+    password: "((paasta_nats_password))"
+    port: ((paasta_nats_port))
+    user: ((paasta_nats_user))
+  syslog_aggregator: null

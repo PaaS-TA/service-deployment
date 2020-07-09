@@ -1,0 +1,36 @@
+# STEMCELL
+stemcell_os: "ubuntu-xenial"                                     # stemcell os
+stemcell_version: "315.64"                                       # stemcell version
+
+# NETWORK
+private_networks_name: "default"                                 # private network name
+
+# MYSQL
+mysql_azs: [z4]                                                  # mysql azs
+mysql_instances: 1                                               # mysql instances (default : 1)
+mysql_vm_type: "small"                                           # mysql vm type
+mysql_persistent_disk_type: "8GB"                                # mysql persistent disk type
+mysql_static_ip: "<MYSQL_PRIVATE_IP>"                            # mysql's private IP (e.g. "10.0.30.10")
+mysql_admin_password: "<MYSQL_ADMIN_PASSWORD>"                   # mysql admin password (e.g. "admin!Service")
+
+# PROXY
+proxy_azs: [z4]                                                  # proxy azs
+proxy_instances: 1                                               # proxy instances (default : 1)
+proxy_vm_type: "small"                                           # proxy vm type
+proxy_static_ip: "<PROXY_PRIVATE_IP>"                            # proxy's private IP (e.g. "10.0.30.11")
+
+# MYSQL_BROKER
+mysql_broker_azs: [z4]                                           # mysql broker azs
+mysql_broker_instances: 1                                        # mysql broker instances (default : 1)
+mysql_broker_vm_type: "small"                                    # mysql broker vm type
+mysql_broker_static_ip: "<MYSQL_BROKER_PRIVATE_IP>"              # mysql broker's private IP (e.g. "10.0.30.12")
+
+# BROKER_REGISTRAR
+broker_registrar_broker_azs: [z4]                                # broker registrar azs
+broker_registrar_broker_instances: 1                             # broker registrar instances (default : 1)
+broker_registrar_broker_vm_type: "small"                         # broker registrar vm type
+
+# BROKER_DEREGISTRAR
+broker_deregistrar_broker_azs: [z4]                              # broker deregistrar azs
+broker_deregistrar_broker_instances: 1                           # broker deregistrar instances (default : 1)
+broker_deregistrar_broker_vm_type: "small"                       # broker deregistrar vm type

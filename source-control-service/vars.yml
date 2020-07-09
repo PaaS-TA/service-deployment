@@ -1,0 +1,55 @@
+# STEMCELL
+stemcell_os: "ubuntu-xenial"                                   # stemcell os
+stemcell_version: "315.64"                                     # stemcell version
+
+# VM_TYPE
+vm_type_small: "minimal"                                       # vm type small
+
+# NETWORK
+private_networks_name: "default"                               # private network name
+public_networks_name: "vip"                                    # public network name
+
+# SCM-SERVER
+scm_azs: [z3]                                                  # scm : azs
+scm_instances: 1                                               # scm : instances (1)
+scm_persistent_disk_type: "30GB"                               # scm : persistent disk type
+scm_private_ips: "<SCM_PRIVATE_IPS>"                           # scm : private ips (e.g. "10.0.81.21")
+
+# MARIA-DB# MARIA_DB
+mariadb_azs: [z3]                                              # mariadb : azs
+mariadb_instances: 1                                           # mariadb : instances (1) 
+mariadb_persistent_disk_type: "2GB"                            # mariadb : persistent disk type 
+mariadb_private_ips: "<MARIADB_PRIVATE_IPS>"                   # mariadb : private ips (e.g. "10.0.81.22")
+mariadb_port: "<MARIADB_PORT>"                                 # mariadb : database port (e.g. 31306)
+mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"             # mariadb : database admin password (e.g. "!paas_ta202")
+mariadb_broker_username: "<MARIADB_BROKER_USERNAME>"           # mariadb : service-broker-user id (e.g. "sourcecontrol")
+mariadb_broker_password: "<MARIADB_BROKER_PASSWORD>"           # mariadb : service-broker-user password (e.g. "!scadmin2017")
+
+# HAPROXY
+haproxy_azs: [z7]                                              # haproxy : azs
+haproxy_instances: 1                                           # haproxy : instances (1)
+haproxy_persistent_disk_type: "2GB"                            # haproxy : persistent disk type
+haproxy_private_ips: "<HAPROXY_PRIVATE_IPS>"                   # haproxy : private ips (e.g. "10.0.0.103")
+haproxy_public_ips: "<HAPROXY_PUBLIC_IPS>"                     # haproxy : public ips (e.g. "101.101.101.5")
+
+# WEB-UI
+web_ui_azs: [z3]                                               # web-ui : azs
+web_ui_instances: 1                                            # web-ui : instances (1)
+web_ui_persistent_disk_type: "2GB"                             # web-ui : persistent disk type
+web_ui_private_ips: "<WEB_UI_PRIVATE_IPS>"                     # web-ui : private ips (e.g. "10.0.81.24")
+
+# SCM-API
+api_azs: [z3]                                                  # scm-api : azs
+api_instances: 1                                               # scm-api : instances (1)
+api_persistent_disk_type: "2GB"                                # scm-api : persistent disk type
+api_private_ips: "<API_PRIVATE_IPS>"                           # scm-api : private ips (e.g. "10.0.81.25")
+
+# SERVICE-BROKER
+broker_azs: [z3]                                               # service-broker : azs
+broker_instances: 1                                            # service-broker : instances (1)
+broker_persistent_disk_type: "2GB"                             # service-broker : persistent disk type
+broker_private_ips: "<BROKER_PRIVATE_IPS>"                     # service-broker : private ips (e.g. "10.0.81.26")
+
+# UAAC
+uaa_client_sc_id: "scclient"                                   # source-control-service uaa client id
+uaa_client_sc_secret: "clientsecret"                           # source-control-service uaa client secret

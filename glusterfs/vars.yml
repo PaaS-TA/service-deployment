@@ -1,0 +1,47 @@
+# STEMCELL
+stemcell_os: "ubuntu-xenial"                                     # stemcell os
+stemcell_version: "315.64"                                       # stemcell version
+
+
+# NETWORK
+private_networks_name: "default"                                 # private network name
+public_networks_name: "vip"                                      # public network name
+
+
+# MYSQL
+mysql_azs: [z4]                                                  # mysql azs
+mysql_instances: 1                                               # mysql instances 
+mysql_vm_type: "medium"                                          # mysql vm type
+mysql_private_static_ips: "<MYSQL_PRIVATE_IP>"                   # mysql's private IP (e.g. "10.0.121.40")
+mysql_persistent_disk_type: "1GB"                                # mysql persistent disk type
+mysql_port: "3306"                                               # mysql port (default : 3306)
+mysql_admin_username: "<MYSQL_ADMIN_USERNAME>"                   # mysql admin username
+mysql_admin_password: "<MYSQL_ADMIN_PASSWORD>"                   # mysql admin password (e.g. "admin1234")
+
+
+# GLUSTERFS SERVER
+glusterfs_url: "<GLUSTERFS_PUBLIC_IP>"                           # Glusterfs 서비스 public 주소
+glusterfs_tenantname: "<GLUSTERFS_TENANT_NAME>"                  # Glusterfs 서비스 테넌트 이름(e.g. "service")
+glusterfs_username: "<GLUSTERFS_USERNAME>"                       # Glusterfs 서비스 계정 아이디(e.g. "swift")
+glusterfs_password: "<GLUSTERFS_PASSWORD>"                       # Glusterfs 서비스 암호(e.g. "password")
+
+
+# GLUSTERFS_BROKER
+broker_azs: [z4]                                                 # glusterfs broker azs
+broker_instances: 1                                              # glusterfs broker instances 
+broker_persistent_disk_type: "4GB"                               # glusterfs broker persistent disk type
+broker_vm_type: "small"                                          # glusterfs broker vm type
+broker_private_static_ips: "<GLUSTERFS_BROKER_PRIVATE_IP>"       # glusterfs broker's private IP (e.g. "10.0.121.41")
+
+
+# GLUSTERFS_BROKER_REGISTRAR
+broker_registrar_azs: [z4]                                       # broker registrar azs
+broker_registrar_instances: 1                                    # broker registrar instances 
+broker_registrar_vm_type: "small"                                # broker registrar vm type
+
+
+# GLUSTERFS_BROKER_DEREGISTRAR
+broker_deregistrar_azs: [z4]                                     # broker deregistrar azs
+broker_deregistrar_instances: 1                                  # broker deregistrar instances 
+broker_deregistrar_vm_type: "small"                              # broker deregistrar vm type
+

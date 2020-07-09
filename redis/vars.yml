@@ -1,0 +1,38 @@
+# STEMCELL
+stemcell_os: "ubuntu-xenial"                                      # Deployment Main Stemcell OS
+stemcell_version: "315.64"                                        # Main Stemcell Version
+
+# NETWORK
+private_networks_name: "default"                                  # private network name
+
+# MARIA DB
+mariadb_azs: [z5]                                                 # mariadb azs
+mariadb_instances: 1                                              # mariadb instances 
+mariadb_vm_type: "medium"                                         # mariadb vm type
+mariadb_persistent_disk_type: "2GB"                               # mariadb persistent disk type
+mariadb_user_password: "admin"                                    # mariadb admin password
+mariadb_port: 3306                                                # mariadb port (default : 3306)
+
+# ON DEMAND BROKER
+broker_azs: [z5]                                                  # broker azs
+broker_instances: 1                                               # broker instances 
+broker_vm_type: "service_medium"                                  # broker vm type
+
+# PROPERTIES
+broker_server_port: 8080                                          # broker server port
+
+### On-Demand Dedicated Service Instance Properties ###
+on_demand_service_instance_name: "redis"                          # On-Demand Service Instance Name
+service_password: "admin"                                         # On-Demand Redis Service password
+service_port: 6379                                                # On-Demand Redis Service port
+
+# SERVICE PLAN INFO
+service_instance_guid: "54e2de61-de84-4b9c-afc3-88d08aadfcb6"            # Service Instance Guid
+service_instance_name: "redis"                                           # Service Instance Name
+service_instance_bullet_name: "Redis Dedicated Server Use"               # Service Instance bullet Name
+service_instance_bullet_desc: "Redis Service Using a Dedicated Server"   # Service Instance bullet에 대한 설명을 입력
+service_instance_plan_guid: "2a26b717-b8b5-489c-8ef1-02bcdc445720"       # Service Instance Plan Guid
+service_instance_plan_name: "dedicated-vm"                               # Service Instance Plan Name
+service_instance_plan_desc: "Redis service to provide a key-value store" # Service Instance Plan에 대한 설명을 입력
+service_instance_org_limitation: "-1"                                    # Org에 설치할수 있는 Service Instance 개수를 제한한다. (-1일경우 제한없음)
+service_instance_space_limitation: "-1"                                  # Space에 설치할수 있는 Service Instance 개수를 제한한다. (-1일경우 제한없음)

@@ -1,0 +1,104 @@
+name: glusterfs                       # 서비스 배포이름(필수)
+
+releases:
+- name: paasta-glusterfs             # 서비스 릴리즈 이름(필수)
+  url: http://45.248.73.44/index.php/s/RnYnw5JrZycg3Wt/download
+  version: "2.0"                       # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+
+update:
+  canaries: 1                        # canary 인스턴스 수(필수)
+  canary_watch_time: 30000-600000    # canary 인스턴스가 수행하기 위한 대기 시간(필수)
+  update_watch_time: 30000-600000    # non-canary 인스턴스가 수행하기 위한 대기 시간(필수)
+  max_in_flight: 1                   # non-canary 인스턴스가 병렬로 update 하는 최대 개수(필수)
+
+stemcells:
+- alias: default
+  os: ((stemcell_os))
+  version: ((stemcell_version))
+
+instance_groups:
+- name: mysql
+  instances: ((mysql_instances))                        # job 인스턴스 수(필수)
+  azs: ((mysql_azs))
+  stemcell: default
+  networks:                                             # 네트워크 구성정보
+  - name: ((private_networks_name))                     # Networks block에서 선언한 network 이름(필수)
+    static_ips: ((mysql_private_static_ips))            # 사용할 IP addresses 정의(필수): MySQL 서버 IP
+  persistent_disk_type: ((mysql_persistent_disk_type))  # 영구적 디스크 사이즈 정의(옵션): 1G, 상황에 맞게 수정
+  vm_type: ((mysql_vm_type))
+  jobs: 
+  - name: mysql                                         # job template 이름(필수)
+    release: paasta-glusterfs
+    properties:                                         # job에 대한 속성을 지정(필수)
+      admin_username: ((mysql_admin_username))          # MySQL 어드민 계정
+      admin_password: ((mysql_admin_password))          # MySQL 어드민 패스워드
+
+
+- name: paasta-glusterfs-broker
+  instances: ((broker_instances))
+  azs: ((broker_azs))
+  networks:
+  - name: ((private_networks_name))
+    static_ips: ((broker_private_static_ips))
+  stemcell: default
+  vm_type: medium
+  jobs: 
+  - name: op-glusterfs-java-broker
+    release: paasta-glusterfs 
+    properties:
+      jdbc_ip: ((mysql_private_static_ips))                  # Mysql IP(필수)
+      jdbc_pwd: ((mysql_admin_password))                     # Mysql password(필수)
+      jdbc_port: ((mysql_port))                              # Mysql Port
+      log_dir: paasta-glusterfs-broker                       # Broker Log 저장 디렉토리 명
+      log_file: paasta-glusterfs-broker                      # Broker Log 저장 파일 명
+      log_level: INFO                                        # Broker Log 단계
+      glusterfs_url: ((glusterfs_url))                       # Glusterfs 서비스 주소
+      glusterfs_tenantname: ((glusterfs_tenantname))         # Glusterfs 서비스 테넌트 이름
+      glusterfs_username: ((glusterfs_username))             # Glusterfs 서비스 계정 아이디
+      glusterfs_password: ((glusterfs_password))             # Glusterfs 서비스 암호
+
+- name: broker-registrar
+  instances: ((broker_registrar_instances))
+  azs: ((broker_registrar_azs))
+  lifecycle: errand  # bosh deploy시 vm에 생성되어 설치 되지 않고 bosh errand 로실행할때 설정, 주로 테스트 용도에 쓰임
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+  vm_type: ((broker_registrar_vm_type))
+  jobs: 
+  - name: broker-registrar
+    release: paasta-glusterfs
+    properties:
+      broker:
+        host: ((broker_private_static_ips))          # Service Broker IP
+        name: glusterfs-service                      # Service Broker Name
+        password: cloudfoundry                       # Service Broker Auth Password
+        username: admin                              # Service Broker Auth Id
+        protocol: http                               # Service Broker Http Protocol
+        port: 8080                                   # Service Broker port
+      cf:
+        admin_password: ((paasta_admin_username))    # paasta Paasword
+        admin_username: ((paasta_admin_password))    # paasta Id
+        api_url: https://api.((system_domain))       # paasta Target Url
+        skip_ssl_validation: true                    # paasta SSL 설정
+
+- name: broker-deregistrar
+  instances: ((broker_deregistrar_instances))
+  azs: ((broker_deregistrar_azs))
+  lifecycle: errand
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+  vm_type: ((broker_deregistrar_vm_type))
+  jobs: 
+  - name: broker-deregistrar
+    release: paasta-glusterfs
+    properties:
+      broker:
+      name: glusterfs-service
+      cf:
+        admin_password: ((paasta_admin_username))
+        admin_username: ((paasta_admin_password))
+        api_url: https://api.((system_domain))
+        skip_ssl_validation: true
+properties: {}

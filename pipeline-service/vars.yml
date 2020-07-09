@@ -1,0 +1,120 @@
+# STEMCELL
+stemcell_os: "ubuntu-xenial"                                     # stemcell os
+stemcell_version: "315.64"                                       # stemcell version
+
+# NETWORK
+private_networks_name: "default"                                 # private network name
+public_networks_name: "vip"                                      # public network name
+
+# UAAC
+pipeline_clinet_id: "pipeclient"                                 # pipeline client id for UAA
+pipeline_clinet_secret: "clientsecret"                           # pipeline client password for UAA
+
+# MARIADB
+mariadb_port: "3306"                                             # mariadb database port (default : 3306)
+mariadb_azs: [z5]                                                # mariadb azs
+mariadb_instances: 1                                             # mariadb instances
+mariadb_persistent_disk_type: "2GB"                              # mariadb persistent disk type
+mariadb_vm_type: "small"                                         # mariadb vm type (e.g. small/medium/large etc)
+mariadb_internal_static_ips: "<MARIADB_PRIVATE_IP>"              # mariadb's private IP (e.g. "10.0.161.30")
+mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"               # mariadb admin password (e.g. "admin!Service")
+
+# POSTGRES
+postgres_port: "5432"                                            # postgresql port (default : 5432)
+postgres_azs: [z5]                                               # postgresql azs
+postgres_instances: 1                                            # postgresql instances
+postgres_persistent_disk_type: "2GB"                             # postgresql persistent disk type
+postgres_vm_type: "small"                                        # postgresql vm type
+postgres_internal_static_ips: "<POSTGRES_PRIVATE_IP>"            # postgresql's private IP (e.g. "10.0.161.31")
+postgres_datasource_username: "<POSTGRES_ADMIN_USERNAME>"        # postgresql username (e.g. sonar)
+postgres_datasource_password: "<POSTGRES_ADMIN_PASSWORD>"        # postgresql password (e.g. sonar@2020)
+
+# INSPECTION_SERVER
+inspection_azs: [z5]                                             # inspection server(SonarQube) azs
+inspection_instances: 1                                          # inspection server(SonarQube) instances 
+inspection_vm_type: "small"                                      # inspection server(SonarQube) vm type
+inspection_internal_static_ips: "<INSPECTION_SERVER_PRIVATE_IP>" # inspection server(SonarQube)'s private IP (e.g. "10.0.161.32")
+
+# HAPROXY
+haproxy_azs: [z7]                                                # haproxy azs
+haproxy_instances: 1                                             # haproxy instances
+haproxy_vm_type: "small"                                         # haproxy vm type
+haproxy_internal_static_ips: "<HAPROXY_PRIVATE_IP>"              # haproxy's private IP (e.g. "10.0.0.11")
+haproxy_public_static_ips: "<HAPROXY_PUBLIC_IP>"                 # haproxy's public IP
+
+# CI_SERVER
+ci_server_azs: [z5]                                                           # ci server(Jenkins) azs
+ci_server_instances: 2                                                        # ci server(Jenkins) instances
+ci_server_persistent_disk_type: "5GB"                                         # ci server(Jenkins) persistent disk type
+ci_server_vm_type: "small"                                                    # ci server(Jenkins) vm type
+ci_server_shared_internal_static_ip: "<CI_SERVER_SHARD_PRIVATE_IP>"           # ci server(Jenkins)'s private IP for shared (e.g. "10.0.161.33")
+ci_server_dedicated_internal_static_ip: "<CI_SERVER_DEDICATED_PRIVATE_IP>"    # ci server(Jenkins)'s public IP for dedicated (e.g. "10.0.161.34")
+ci_server_password: "<CI_SERVER_PASSWORD>"                                    # ci server(Jenkins) password (e.g. "admin!@#")
+ci_server_admin_user_username: "<CI_SERVER_ADMIN_USERNAME>"                   # ci server(Jenkins) admin username
+ci_server_admin_user_password: "<CI_SERVER_ADMIN_PASSWORD>"                   # ci server(Jenkins) admin password (e.g. "admin!@#")
+ci_server_http_url: "<CI_SERVER_HTTP_URL>"                                    # ci server(Jenkins) 내부 IP 앞 두자리 입력 (e.g. 10.110.10.10 의 경우, "10.110" 입력)
+
+# BINARY_STORAGE
+binary_storage_azs: [z5]                                           # binary storage azs
+binary_storage_instances: 1                                        # binary storage instances
+binary_storage_persistent_disk_type: "5GB"                         # binary storage persistent disk type
+binary_storage_vm_type: "small"                                    # binary storage vm type
+binary_storage_internal_static_ips: "<BINARY_STORAGE_PRIVATE_IP>"  # binary storage's private IP (e.g. "10.0.161.35")
+binary_storage_proxy_port: "10008"                                 # binary storage 프록시 서버 Port(Object Storage 접속 Port) (default : 10008)
+binary_storage_username: "paasta-pipeline"                         # binary storage 최초 생성되는 유저이름(Object Storage 접속 유저이름)
+binary_storage_password: "paasta-pipeline"                         # binary storage 최초 생성되는 유저 비밀번호(Object Storage 접속 유저 비밀번호)
+binary_storage_tenantname: "paasta-pipeline"                       # binary storage 최초 생성되는 테넌트 이름(Object Storage 접속 테넌트 이름)
+binary_storage_email: "email@email.com"                            # binary storage 최소 생성되는 유저의 이메일
+binary_storage_binary_desc: "paasta-pipeline-object service"       # binary storage 설명
+binary_storage_container: "delivery-pipeline-container"            # binary storage 최소 생성되는container 이름
+
+# COMMON_API
+common_api_port: "8081"                                          # common api port 
+common_api_azs: [z5]                                             # common api azs
+common_api_instances: 1                                          # common api instances
+common_api_vm_type: "small"                                      # common api vm type
+common_api_internal_static_ips: "<COMMON_API_PRIVATE_IP>"        # common api's private IP (e.g. "10.0.161.36")
+
+# INSPECTION_API
+inspection_api_port: "8083"                                         # inspection api port
+inspection_api_azs: [z5]                                            # inspection api azs
+inspection_api_instances: 1                                         # inspection api instances
+inspection_api_vm_type: "small"                                     # inspection api vm type
+inspection_api_internal_static_ips: "<INSPECTION_API_PRIVATE_IP>"   # inspection api's private IP (e.g. "10.0.161.37")
+
+# BINARY_STORAGE_API
+storage_api_port: "8080"                                         # storage api port
+storage_api_azs: [z5]                                            # storage api azs
+storage_api_instances: 1                                         # storage api instances
+storage_api_vm_type: "small"                                     # storage api vm type
+storage_api_internal_static_ips: "<STORAGE_API_PRIVATE_IP>"      # storage api's private IP (e.g. "10.0.161.38")
+
+# API
+api_port: "8082"                                                 # api port 
+api_azs: [z5]                                                    # api azs
+api_instances: 1                                                 # api instances
+api_persistent_disk_type: "2GB"                                  # api persistent disk type
+api_vm_type: "small"                                             # api vm type
+api_internal_static_ips: "<API_PRIVATE_IP>"                      # api's private IP (e.g. "10.0.161.39")
+
+# SERVICE_BROKER
+service_broker_port: "8080"                                       # pipeline service broker port
+service_broker_azs: [z5]                                          # pipeline service broker azs
+service_broker_instances: 1                                       # pipeline service broker instances
+service_broker_persistent_disk_type: "2GB"                        # pipeline service broker persistent disk type
+service_broker_vm_type: "small"                                   # pipeline service broker vm type
+service_broker_internal_static_ips: "<SERVICE_BROKER_PRIVATE_IP>" # pipeline service broker's private IP (e.g. "10.0.161.40")
+
+# UI(DASHBOARD)
+ui_port: "8084"                                                  # ui(dahsboard) port
+ui_azs: [z5]                                                     # ui(dahsboard) azs
+ui_instances: 1                                                  # ui(dahsboard) instances
+ui_vm_type: "small"                                              # ui(dahsboard) vm type
+ui_internal_static_ips: "<UI_PRIVATE_IP>"                        # ui(dahsboard)'s private IP (e.g. "10.0.161.41")
+
+# SCHEDULER
+scheduler_port: "8080"                                           # scheduler port
+scheduler_azs: [z5]                                              # scheduler azs
+scheduler_instances: 1                                           # scheduler instances
+scheduler_vm_type: "small"                                       # scheduler vm type
+scheduler_internal_static_ips: "<SCHEDULER_PRIVATE_IP>"          # scheduler's private IP (e.g. "10.0.161.42")

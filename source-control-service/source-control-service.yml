@@ -1,0 +1,177 @@
+---
+name: source-control-service
+
+releases:
+- name: paasta-sourcecontrol-release
+  url: http://45.248.73.44/index.php/s/Y35xmiyYTaxPdwP/download
+  version: "1.0"
+
+stemcells:
+- alias: default
+  os: ((stemcell_os))
+  version: ((stemcell_version))
+
+update:
+  canaries: 1                            # canary 인스턴스 수(필수)
+  canary_watch_time: 30000-120000        # canary 인스턴스가 수행하기 위한 대기 시간(필수)
+  max_in_flight: 4                       # non-canary 인스턴스가 병렬로 update 하는 최대 개수(필수)
+  update_watch_time: 30000-120000        # non-canary 인스턴스가 수행하기 위한 대기 시간(필수)
+
+instance_groups:
+- name: scm-server
+  azs: ((scm_azs))
+  instances: ((scm_instances))
+  persistent_disk_type: ((scm_persistent_disk_type))
+  vm_type: ((vm_type_small))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: ((scm_private_ips))
+  jobs:
+  - name: scm-server
+    release: paasta-sourcecontrol-release
+
+- name: mariadb
+  azs: ((mariadb_azs))
+  instances: 1
+  persistent_disk_type: ((mariadb_persistent_disk_type))
+  vm_type: ((vm_type_small))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: ((mariadb_private_ips))
+  jobs:
+  - name: mariadb
+    release: paasta-sourcecontrol-release
+
+- name: haproxy
+  azs: ((haproxy_azs))
+  instances: ((haproxy_instances))
+  persistent_disk_type: ((haproxy_persistent_disk_type))
+  vm_type: ((vm_type_small))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: ((haproxy_private_ips))
+  - name: ((public_networks_name))
+    static_ips: ((haproxy_public_ips))
+  jobs:
+  - name: haproxy
+    release: paasta-sourcecontrol-release
+
+- name: sourcecontrol-webui
+  azs: ((web_ui_azs))
+  instances: ((web_ui_instances))
+  persistent_disk_type: ((web_ui_persistent_disk_type))
+  vm_type: ((vm_type_small))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: ((web_ui_private_ips))
+  jobs:
+  - name: sourcecontrol-webui
+    release: paasta-sourcecontrol-release
+
+- name: sourcecontrol-api
+  azs: ((api_azs))
+  instances: ((api_instances))
+  persistent_disk_type: ((api_persistent_disk_type))
+  vm_type: ((vm_type_small))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: ((api_private_ips))
+  jobs:
+  - name: sourcecontrol-api
+    release: paasta-sourcecontrol-release
+
+- name: sourcecontrol-broker
+  azs: ((broker_azs))
+  instances: ((broker_instances))
+  persistent_disk_type: ((broker_persistent_disk_type))
+  vm_type: ((vm_type_small))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips:
+    - ((broker_private_ips))
+  jobs:
+  - name: sourcecontrol-broker
+    release: paasta-sourcecontrol-release
+
+properties:
+  spring:
+    datasource:
+      url: jdbc:mysql://((mariadb_private_ips)):((mariadb_port))/PAASTA_SRC_DB?autoReconnect=true&useUnicode=true&characterEncoding=utf8
+      username: ((mariadb_broker_username))
+      password: ((mariadb_broker_password))
+      databasename: "PAASTA_SRC_DB"
+    jpa:
+      database: mysql
+
+  haproxy:                                # sourcecontrol haproxy
+    host_ip: ((haproxy_private_ips))                # sourcecontrol haproxy host IP
+    url: ((haproxy_private_ips))                # sourcecontrol haproxy host IP
+    http_port: 8080                        # sourcecontrol haproxy host port
+
+  sourcecontrol-webui:                  # sourcecontrol webui
+    port: 8080
+    haproxy:
+      urls:
+      - ((web_ui_private_ips))
+    java_opts: '-XX:MaxMetaspaceSize=104857K -Xss349K -Xms681574K -XX:MetaspaceSize=104857K -Xmx681574K'
+
+  sourcecontrol-api:                    # sourcecontrol api
+    base:
+      url: http://((api_private_ips)):8082        # sourcecontrol api base url
+    port: 8082                              # sourcecontrol api port
+    haproxy:
+      urls:
+      - ((api_private_ips))
+    java_opts: '-XX:MaxMetaspaceSize=104857K -Xss349K -Xms681574K -XX:MetaspaceSize=104857K -Xmx681574K'
+
+  sourcecontrol-broker:                 # sourcecontrol broker
+    port: 8080                               # sourcecontrol port
+    java_opts: '-XX:MaxMetaspaceSize=104857K -Xss349K -Xms681574K -XX:MetaspaceSize=104857K -Xmx681574K'
+
+  mariadb:
+    port: ((mariadb_port))
+    datasource:
+      username: root
+      password: ((mariadb_admin_password))
+      databasename:  "PAASTA_SRC_DB"
+
+  scm:
+    base:
+      url: http://((scm_private_ips)):8084/scm
+      port: 8084
+    haproxy:
+      urls:
+      - ((scm_private_ips))
+    clone:
+      url: http://((haproxy_public_ips)):8084/scm
+  dashboard:
+    url: http://((haproxy_public_ips)):8080/repositories/user/{instanceId}
+  api:
+    user: '/api/rest/users'
+    repo: '/api/rest/repositories'
+  cf:
+    uaa:
+      oauth:
+        info:
+          uri: https://uaa.((system_domain))/userinfo
+        token:
+          check:
+            uri: https://uaa.((system_domain))/check_token
+          access:
+            uri: https://uaa.((system_domain))/oauth/token
+        logout:
+          url: https://uaa.((system_domain))/logout.do
+        authorization:
+          uri: https://uaa.((system_domain))/oauth/authorize
+        client:
+          id: ((uaa_client_sc_id))
+          secret: ((uaa_client_sc_secret))
+    api:
+      url: https://api.((system_domain))/v2/service_instances/[SUID]/permissions
+

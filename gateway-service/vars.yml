@@ -1,0 +1,36 @@
+# STEMCELL
+stemcell_os: "ubuntu-xenial"                                         # stemcell os
+stemcell_version: "315.64"                                           # stemcell version
+
+# VM_TYPE
+vm_type_default: "medium"                                            # vm type default
+vm_type_highmem: "small-highmem-16GB"                                # vm type highmemory
+
+# NETWORK
+private_networks_name: "default"                                     # private network name
+public_networks_name: "vip"                                          # public network name :: The public network name can only use "vip" or "service_public".
+
+# MARIA_DB
+mariadb_azs: [z3]                                                    # mariadb : azs
+mariadb_instances: 1                                                 # mariadb : instances (1) 
+mariadb_persistent_disk_type: "10GB"                                 # mariadb : persistent disk type 
+mariadb_port: "<MARIADB_PORT>"                                       # mariadb : database port (e.g. 3306)
+mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"                   # mariadb : database admin password (e.g. "paas-ta!admin")
+mariadb_broker_username: "<MARIADB_BROKER_USERNAME>"                 # mariadb : service-broker-user id (e.g. "apigateway")
+mariadb_broker_password: "<MARIADB_BROKER_PASSWORD>"                 # mariadb : service-broker-user password (e.g. "broker!admin")
+
+# SERVICE-BROKER
+broker_azs: [z3]                                                     # service-broker : azs
+broker_instances: 1                                                  # service-broker : instances (1)
+broker_port: "<SERVICE_BROKER_PORT>"                                 # service-broker : broker port (e.g. "8080")
+broker_logging_level_broker: "INFO"                                  # service-broker : broker logging level
+broker_logging_level_hibernate: "INFO"                               # service-broker : hibernate logging level
+broker_services_id: "<SERVICE_BROKER_SERVICES_GUID>"                 # service-broker : service guid (e.g. "8b78dfb6-1fb6-4586-b767-45b5f77e0d42")
+broker_services_plans_id: "<SERVICE_BROKER_SERVICES_PLANS_GUID>"     # service-broker : service plan id (e.g. "b5e33932-8f87-4712-9776-887bfb73c584")
+
+# API-GATEWAY
+api_gateway_azs: [z7]                                                # api-gateway : azs
+api_gateway_instances: 2                                             # api-gateway : instances (N)
+api_gateway_persistent_disk_type: "20GB"                             # api-gateway : persistent disk type
+api_gateway_public_ips: "<API_GATEWAY_PUBLIC_IPS>"                   # api-gateway : public ips (e.g. ["00.00.00.00" , "11.11.11.11"])
+api_gateway_admin_password: "<API_GATEWAY_ADMIN_PASSWORD>"           # api-gateway : api-gateway super admin password (e.g. "admin!Service")

@@ -1,0 +1,81 @@
+---
+name: web-ide
+
+stemcells:
+  - alias: default
+    os: ((stemcell_os))
+    version: ((stemcell_version))
+
+releases:
+  - name: paas-ta-webide-release                                 # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
+    url: http://45.248.73.44/index.php/s/q7fBcXokm7FSNdW/download
+    version: "1.0"                                             # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+
+update:
+  canaries: 1                                               # canary 인스턴스 수(필수)
+  canary_watch_time: 5000-120000                            # canary 인스턴스가 수행하기 위한 대기 시간(필수)
+  update_watch_time: 5000-120000                            # non-canary 인스턴스가 수행하기 위한 대기 시간(필수)
+  max_in_flight: 1                                          # non-canary 인스턴스가 병렬로 update 하는 최대 개수(필수)
+  serial: false
+
+
+instance_groups:
+- name: eclipse-che  #작업 이름(필수)
+  azs: ((eclipse_che_azs))
+  instances: ((eclipse_che_instances))
+  vm_type: ((eclipse_che_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+  - name: ((public_networks_name))
+    static_ips: ((eclipse_che_public_ips))
+  jobs:
+  - name: eclipse-che
+    release: paas-ta-webide-release
+
+- name: mariadb
+  azs: ((mariadb_azs))
+  instances: ((mariadb_instances))
+  vm_type: ((mariadb_vm_type))
+  stemcell: default
+  persistent_disk_type: ((mariadb_persistent_disk_type))
+  networks:
+  - name: ((private_networks_name))
+  jobs:
+  - name: mariadb
+    release: paas-ta-webide-release
+  syslog_aggregator: null
+  properties:
+    mariadb:                                                # MARIA DB SERVER 설정 정보
+      port: ((mariadb_port))                                            # MARIA DB PORT 번호
+      admin_user:
+        password: ((mariadb_admin_password))                             # MARIA DB ROOT 계정 비밀번호
+      host_names:
+        - mariadb0
+  ########## INFRA ##########
+
+  ######## BROKER ########
+
+- name: webide-broker
+  azs: ((broker_azs))
+  instances: ((broker_instances))
+  vm_type: ((broker_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+  jobs:
+  - name: web-ide-broker
+    release: paas-ta-webide-release
+  syslog_aggregator: null
+  properties:
+    webide:
+      servers: ((eclipse_che_public_ips))
+    server:
+      port: ((broker_port))
+    datasource:
+      password: ((mariadb_admin_password))
+    serviceDefinition:
+      id: ((broker_services_id))
+      plan1:
+        id: ((broker_services_plans_id))
+

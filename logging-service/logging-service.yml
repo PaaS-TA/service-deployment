@@ -1,0 +1,241 @@
+---
+name: logging-service 
+
+releases:
+- name: paasta-logging-service-release
+  url: http://45.248.73.44/index.php/s/eoCBY5QSFjJr3AS/download
+  version: "1.0"
+
+stemcells:
+- alias: default
+  os: ((stemcell_os))
+  version: ((stemcell_version))
+
+update: 
+  canaries: 1                            # canary 인스턴스 수(필수)
+  canary_watch_time: 30000-600000        # canary 인스턴스가 수행하기 위한 대기 시간(필수)
+  max_in_flight: 1                       # non-canary 인스턴스가 병렬로 update 하는 최대 개수(필수)
+  update_watch_time: 5000-600000        # non-canary 인스턴스가 수행하기 위한 대기 시간(필수)
+  serial: false
+
+instance_groups:
+- name: elasticsearch_master
+  azs: ((es_master_azs))
+  instances: ((es_master_instances))
+  persistent_disk_type: ((es_master_persistent_disk_type))
+  vm_type: ((vm_type_default))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: ((es_master_private_ips))
+  jobs:
+  - name: elasticsearch
+    release: paasta-logging-service-release
+    properties: 
+      elasticsearch:
+        cluster_name: logsearch
+        exec: null
+        master_hosts: ((es_master_private_ips))
+        node:
+          allow_data: false
+          allow_master: true
+  - name: cerebro
+    release: paasta-logging-service-release
+    properties:
+      elasticsearch:
+        cluster_name: logsearch
+  update:
+    max_in_flight: 1
+
+- name: queue
+  azs: ((queue_azs))
+  instances: ((queue_instances))
+  persistent_disk_type: ((queue_persistent_disk_type))
+  vm_type: ((vm_type_default))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: ((queue_private_ips))
+  jobs:
+  - name: queue
+    release: paasta-logging-service-release
+    properties:
+      redis:
+        host: ((queue_private_url))
+
+- name: maintenance
+  azs: ((maintenance_azs))
+  instances: ((maintenance_instances))
+  vm_type: ((vm_type_minimal))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: ((maintenance_private_ips))
+  jobs:
+  - name: elasticsearch_config
+    release: paasta-logging-service-release
+    properties:
+      elasticsearch_config:
+        elasticsearch:
+          host: ((es_master_private_url))
+        index_prefix: ((es_config_index_prefix))
+        templates:
+        - shards-and-replicas: /var/vcap/jobs/elasticsearch_config/index-templates/shards-and-replicas.json
+        - index-settings: /var/vcap/jobs/elasticsearch_config/index-templates/index-settings.json
+        - index-mappings: /var/vcap/jobs/elasticsearch_config/index-templates/index-mappings.json
+        - index-mappings-laas: /var/vcap/jobs/elasticsearch_config/index-templates/index-mappings-laas.json
+        - index-mappings-app: /var/vcap/jobs/elasticsearch_config/index-templates/index-mappings-app.json
+        - index-mappings-platform: /var/vcap/jobs/elasticsearch_config/index-templates/index-mappings-platform.json
+  - name: curator
+    release: paasta-logging-service-release
+    properties:
+      elasticsearch_config:
+        index_prefix: ((es_config_index_prefix))
+      curator:
+        elasticsearch:
+          host: ((es_master_private_url))
+          port: 9200
+        purge_logs:
+          retention_period: ((retention_period))
+          unit: days
+  update:
+    serial: true
+
+- name: elasticsearch_data
+  azs: ((es_data_azs))
+  instances: ((es_data_instances))
+  persistent_disk_type: ((es_data_persistent_disk_type))
+  vm_type: ((vm_type_medium))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: ((es_data_private_ips))
+  jobs:
+  - name: elasticsearch
+    release: paasta-logging-service-release
+    properties:
+      elasticsearch:
+        cluster_name: logsearch
+        exec: null
+        master_hosts: ((es_master_private_ips))
+        node:
+          allow_data: true
+          allow_master: false
+  update:
+    max_in_flight: 1
+    serial: true
+
+- name: visualization
+  azs: ((visualization_azs))
+  instances: ((visualization_instances))
+  vm_type: ((vm_type_default))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: ((visualization_private_ips))
+  jobs:
+  - name: kibana
+    release: paasta-logging-service-release
+    properties:
+      kibana:
+        elasticsearch: 
+          host: ((es_master_private_url))
+          port: 9200
+        version: ((visualization_version))
+      laas: 
+        cf_api_url: "https://api.((system_domain))"
+        cf_client_id: ((uaa_client_laas_id))
+        cf_client_secret: ((uaa_client_laas_secret))
+        cf_uaa_callback_url: http://((router_public_ips))/app/laas/callback
+        cf_uaa_scope: cloud_controller.read&openid
+        cf_uaa_url: "https://uaa.((system_domain))"
+        elasticsearch_index_prefix: ((es_config_index_prefix))
+        top_left_logo_image: ((laas_logo))
+
+- name: collector
+  azs: ((collector_azs))
+  instances: ((collector_instances))
+  vm_type: ((vm_type_default))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: ((collector_private_ips))
+  jobs:
+  - name: ingestor_syslog 
+    release: paasta-logging-service-release
+    properties:
+      logstash_ingestor:
+        debug: false
+        relp:
+          port: null
+      redis:
+        host: ((queue_private_url))
+  - name: ingestor_cloudfoundry-firehose
+    release: paasta-logging-service-release
+    properties:
+      cloudfoundry:
+        api_endpoint: https://api.((system_domain))
+        firehose_client_id: firehose-to-syslog
+        firehose_client_secret: firehose-secret
+        firehose_events: LogMessage
+        skip_ssl_validation: true
+      create-uaa-client:
+        cloudfoundry:
+          system_domain: ((system_domain))
+          uaa_admin_client_id: ((uaa_client_admin_id)) 
+          uaa_admin_client_secret: ((uaa_client_admin_secret))
+      syslog:
+        host: ((router_private_url))
+        port: 5514
+
+- name: parser
+  azs: ((parser_azs))
+  instances: ((parser_instances))
+  vm_type: ((vm_type_default))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: ((parser_private_ips))
+  jobs:
+  - name: parser
+    release: paasta-logging-service-release
+    properties:
+      logstash_parser:
+        debug: false
+        elasticsearch:
+          index: ((es_config_index_prefix))((parser_es_index))
+          index_type: ((parser_es_index_type))
+      redis:
+        host: ((queue_private_url))
+  - name: elasticsearch
+    release: paasta-logging-service-release
+    properties:
+      elasticsearch:
+        cluster_name: logsearch
+        exec: null
+        master_hosts: ((es_master_private_ips))
+  update:
+    max_in_flight: 4
+    serial: false
+
+- name: router
+  azs: ((router_azs))
+  instances: ((router_instances))
+  vm_type: ((vm_type_minimal))                          
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: ((router_private_ips))
+  - name: ((public_networks_name))
+    static_ips: ((router_public_ips))
+  jobs:
+  - name: haproxy
+    release: paasta-logging-service-release
+    properties:
+      haproxy:
+        cluster_monitor:
+        ingestor:
+          backend_servers: ((collector_private_ips))
+        kibana:
+          backend_servers: ((visualization_private_ips))
+

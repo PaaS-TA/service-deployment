@@ -1,0 +1,14 @@
+---
+
+- type: replace
+  path: /instance_groups/name=router/networks/name=((private_networks_name))
+  value:
+    name: ((private_networks_name))
+    default: [dns, gateway]
+    static_ips: ((router_private_ips))
+
+- type: replace
+  path: /instance_groups/name=router/networks/name=((public_networks_name))
+  value:
+    name: ((public_networks_name))
+    static_ips: ((router_public_ips))

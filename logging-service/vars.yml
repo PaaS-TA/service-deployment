@@ -1,0 +1,73 @@
+# STEMCELL
+stemcell_os: "ubuntu-xenial"                                     # stemcell os
+stemcell_version: "315.64"                                       # stemcell version
+
+# VM_TYPE
+vm_type_minimal: "minimal"                                       # vm type minimal
+vm_type_default: "small"                                         # vm type small
+vm_type_medium: "medium"                                         # vm type medium
+
+# NETWORK
+private_networks_name: "default"                                 # private network name 
+public_networks_name: "vip"                                      # public network name
+private_nat_networks_name: "default"                             # AWS의 경우, NATS Network Name
+
+# ELASTICSEARCH_MASTER
+es_master_azs: [z3]                                              # elasticsearch master : azs
+es_master_instances: 1                                           # elasticsearch master : instances (1) 
+es_master_persistent_disk_type: "10GB"                           # elasticsearch master : persistent disk type
+es_master_private_ips: "<ES_MASTER_PRIVATE_IPS>"                 # elasticsearch master : private ips (e.g. ["10.0.81.11"])
+es_master_private_url: "<ES_MASTER_PRIVATE_URL>"                 # elasticsearch master : private url (e.g. "10.0.81.11")
+
+# QUEUE
+queue_azs: [z3]                                                  # queue : azs
+queue_instances: 1                                               # queue : instances (1)
+queue_persistent_disk_type: "10GB"                               # queue : persistent disk type
+queue_private_ips: "<QUEUE_PRIVATE_IPS>"                         # queue : private ips (e.g. ["10.0.81.12"])
+queue_private_url: "<QUEUE_PRIVATE_URL>"                         # queue : private url (e.g. "10.0.81.12")
+
+# MAINTENANCE
+maintenance_azs: [z3]                                            # maintenance : azs
+maintenance_instances: 1                                         # maintenance : instances (1)
+maintenance_private_ips: "<MAINTENANCE_PRIVATE_IPS>"             # maintenance : private ips (e.g. ["10.0.81.13"])
+
+# ELASTICSEARCH_DATA
+es_data_azs: [z3]                                                # elasticsearch data : azs 
+es_data_instances: 2                                             # elasticsearch data : instances (N)
+es_data_persistent_disk_type: "20GB"                             # elasticsearch data : persistent disk type
+es_data_private_ips: "<ES_DATA_PRIVATE_IPS>"                     # elasticsearch data : private ips (e.g. ["10.0.81.14", "10.0.81.15"])
+
+# VISUALIZATION
+visualization_azs: [z3]                                          # visualization : azs
+visualization_instances: 1                                       # visualization : instances (1) 
+visualization_private_ips: "<VISUALIZATION_PRIVATE_IPS>"         # visualization : private ips (e.g. ["10.0.81.16"])
+visualization_version:  "5.3.0"                                  # visualization : version (5.3.0)
+
+# COLLECTOR
+collector_azs: [z3]                                              # collector : azs
+collector_instances: 1                                           # collector : instances (1)
+collector_private_ips: "<COLLECTOR_PRIVATE_IPS>"                 # collector : private ips (e.g. ["10.0.81.17"])
+
+# PARSER
+parser_azs: [z3]                                                 # parser : azs
+parser_instances: 2                                              # parser : instances (N)
+parser_private_ips: "<PARSER_PRIVATE_IPS>"                       # parser : private ips (e.g. ["10.0.81.18", "10.0.81.19"])
+parser_es_index: "%{[@metadata][index]}-%{+YYYY.MM.dd.HH}"       # parser : elasticsearch index
+parser_es_index_type: '%{[@metadata][type]}'                     # parser : elasticsearch index type
+
+# ROUTER
+router_azs: [z7]                                                 # router : azs 
+router_instances: 1                                              # router : instances (1)
+router_private_ips: "<ROUTER_PRIVATE_IPS>"                       # router : private ips (e.g. ["10.0.0.101"])
+router_public_ips: "<ROUTER_PUBLIC_IPS>"                         # router : public ips (e.g. "13.209.212.226")
+router_private_url: "<ROUTER_PRIVATE_URL>"                       # router : private url (e.g. "10.0.0.101")
+
+# UAAC
+uaa_client_laas_id: "laasclient"                                 # logging service uaa client id
+uaa_client_laas_secret: "clientsecret"                           # logging service uaa client secret
+
+# LOGGING SERVICE
+es_config_index_prefix: "laas-"                                  # logging service elasticsearch index prefix ("laas-")
+retention_period: 7                                              # logging service retention period
+laas_logo: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAABGCAYAAABll74gAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3FpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQyIDc5LjE2MDkyNCwgMjAxNy8wNy8xMy0wMTowNjozOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkYzhkNmI4YS1kZWNkLThkNGItOThiNC0zMjRjZjU1OTE0NmYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MkRBNUQ0REMyQ0EwMTFFOEI2QkZBQUY2QUYwM0UzRjkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MkRBNUQ0REIyQ0EwMTFFOEI2QkZBQUY2QUYwM0UzRjkiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjQ5YzFjOTUyLWE2MDEtZTI0NC1iMzIzLTMzYTIyNzI1NDcxYiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpkYzhkNmI4YS1kZWNkLThkNGItOThiNC0zMjRjZjU1OTE0NmYiLz4gPC9y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"
+

@@ -1,0 +1,395 @@
+# paasta-delivery-pipeline-service 설정 파일 내용
+name: pipeline-service                      # 서비스 배포이름(필수)
+
+releases:
+- name: paasta-delivery-pipeline-release                    # 서비스 릴리즈 이름(필수)
+  url: http://45.248.73.44/index.php/s/Dz52W7EGY7GscxJ/download
+  version: "1.0"                                        # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+
+stemcells:
+- alias: default
+  os: ((stemcell_os))
+  version: "((stemcell_version))"
+
+update:
+  canaries: 1                            # canary 인스턴스 수(필수)
+  canary_watch_time: 30000-120000        # canary 인스턴스가 수행하기 위한 대기 시간(필수)
+  max_in_flight: 1                       # non-canary 인스턴스가 병렬로 update 하는 최대 개수(필수)
+  update_watch_time: 30000-120000        # non-canary 인스턴스가 수행하기 위한 대기 시간(필수)
+
+instance_groups:
+- name: mariadb
+  azs: ((mariadb_azs))
+  instances: ((mariadb_instances))
+  persistent_disk_type: ((mariadb_persistent_disk_type))
+  vm_type: ((mariadb_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: [((mariadb_internal_static_ips))]
+  jobs:
+  - name: mariadb
+    release: paasta-delivery-pipeline-release
+
+- name: postgres
+  azs: ((postgres_azs))
+  instances: ((postgres_instances))
+  persistent_disk_type: ((postgres_persistent_disk_type))
+  vm_type: ((postgres_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: [((postgres_internal_static_ips))]
+  jobs:
+  - name: postgres
+    release: paasta-delivery-pipeline-release
+
+- name: inspection
+  azs: ((inspection_azs))
+  instances: ((inspection_instances))
+  vm_type: ((inspection_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: [((inspection_internal_static_ips))]
+  jobs:
+  - name: inspection
+    release: paasta-delivery-pipeline-release
+
+- name: haproxy
+  azs: ((haproxy_azs))
+  instances: ((haproxy_instances))
+  vm_type: ((haproxy_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: [((haproxy_internal_static_ips))]
+  - name: ((public_networks_name))
+    static_ips: [((haproxy_public_static_ips))]
+  jobs:
+  - name: haproxy
+    release: paasta-delivery-pipeline-release
+
+- name: ci_server
+  azs: ((ci_server_azs))
+  instances: ((ci_server_instances))
+  persistent_disk_type: ((ci_server_persistent_disk_type))
+  vm_type: ((ci_server_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips:
+    - ((ci_server_shared_internal_static_ip))
+    - ((ci_server_dedicated_internal_static_ip))
+  jobs:
+  - name: ci_server
+    release: paasta-delivery-pipeline-release
+  env:
+    bosh:
+      password: $6$4gDD3aV0rdqlrKC$2axHCxGKIObs6tAmMTqYCspcdvQXh3JJcvWOY2WGb4SrdXtnCyNaWlrf3WEqvYR2MYizEGp3kMmbpwBC6jsHt0
+
+- name: binary_storage
+  azs: ((binary_storage_azs))
+  instances: ((binary_storage_instances))
+  persistent_disk_type: ((binary_storage_persistent_disk_type))
+  vm_type: ((binary_storage_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: [((binary_storage_internal_static_ips))]
+  jobs:
+  - name: binary_storage
+    release: paasta-delivery-pipeline-release
+
+- name: delivery-pipeline-common-api
+  azs: ((common_api_azs))
+  instances: ((common_api_instances))
+  vm_type: ((common_api_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: [((common_api_internal_static_ips))]
+  jobs:
+  - name: delivery-pipeline-common-api
+    release: paasta-delivery-pipeline-release
+
+- name: delivery-pipeline-inspection-api
+  azs: ((inspection_api_azs))
+  instances: ((inspection_api_instances))
+  vm_type: ((inspection_api_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: [((inspection_api_internal_static_ips))]
+  jobs:
+  - name: delivery-pipeline-inspection-api
+    release: paasta-delivery-pipeline-release
+
+- name: delivery-pipeline-binary-storage-api
+  azs: ((storage_api_azs))
+  instances: ((storage_api_instances))
+  vm_type: ((storage_api_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: [((storage_api_internal_static_ips))]
+  jobs:
+  - name: delivery-pipeline-binary-storage-api
+    release: paasta-delivery-pipeline-release
+
+- name: delivery-pipeline-api
+  azs: ((api_azs))
+  instances: ((api_instances))
+  vm_type: ((api_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: [((api_internal_static_ips))]
+  jobs:
+  - name: delivery-pipeline-api
+    release: paasta-delivery-pipeline-release
+
+- name: delivery-pipeline-service-broker
+  azs: ((service_broker_azs))
+  instances: ((service_broker_instances))
+  vm_type: ((service_broker_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: [((service_broker_internal_static_ips))]
+  jobs:
+  - name: delivery-pipeline-service-broker
+    release: paasta-delivery-pipeline-release
+
+- name: delivery-pipeline-ui
+  azs: ((ui_azs))
+  instances: ((ui_instances))
+  vm_type: ((ui_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: [((ui_internal_static_ips))]
+  jobs:
+  - name: delivery-pipeline-ui
+    release: paasta-delivery-pipeline-release
+
+- name: delivery-pipeline-scheduler
+  azs: ((scheduler_azs))
+  instances: ((scheduler_instances))
+  vm_type: ((scheduler_vm_type))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+    static_ips: [((scheduler_internal_static_ips))]
+  jobs:
+  - name: delivery-pipeline-scheduler
+    release: paasta-delivery-pipeline-release
+
+properties:
+  cf:                                                      # CLOUD FOUNDRY 설정 정보
+    uaa:
+      oauth:
+        info:
+          uri: https://uaa.((system_domain))/userinfo
+        token:
+          check:
+            uri: https://uaa.((system_domain))/check_token
+          access:
+            uri: https://uaa.((system_domain))/oauth/token
+        logout:
+          uri: https://uaa.((system_domain))/logout.do
+        authorization:
+          uri: https://uaa.((system_domain))/oauth/authorize
+        client:
+          id: ((pipeline_clinet_id))
+          secret: ((pipeline_clinet_secret))
+    api:
+      url: https://api.((system_domain))/v2/service_instances/[SUID]/permissions
+
+  ci_server:                                               # CI SERVER 설정 정보
+    password: "((ci_server_password))"
+    admin_user:
+      username: "((ci_server_admin_user_username))"
+      password: "((ci_server_admin_user_password))"
+    http_url: "((ci_server_http_url))"                                       # # CI SERVER 내부 IP 앞 두자리 입력 (e.g. 10.110.10.10 의 경우, "10.110" 입력)
+    http_port: 8088
+    ajp13_port: 8009
+    ssh:
+      username: vcap
+      password: c1oudc0w
+      port: 22
+      identity: "null"                                     # PERM KEY 경로
+      key: "null"
+    credentials:
+      scope: "GLOBAL"
+      url: "/credentials/store/system/domain/_"
+      class_name: "com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl"
+    job:
+      name: "ci_server"                                    # JOB 이름과 동일하게 설정
+    shared:                                                # Shared 서비스 설정 정보
+      urls:
+        - http://((ci_server_shared_internal_static_ip)):8088
+    dedicated:                                             # Dedicated 서비스 설정 정보
+      urls:
+        - http://((ci_server_dedicated_internal_static_ip)):8088
+
+  mariadb:                                                 # MARIA DB SERVER 설정 정보
+    port: ((mariadb_port))
+    admin_user:
+      password: "((mariadb_admin_password))"
+    host: ((mariadb_internal_static_ips))
+    host_names:
+    - mariadb0
+    host_ips:
+    - ((mariadb_internal_static_ips))
+    datasource:
+      url: jdbc:mysql://((mariadb_internal_static_ips)):3306/delivery_pipeline?autoReconnect=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false
+      username: root
+      password: "((mariadb_admin_password))"
+      driver_class_name: com.mysql.cj.jdbc.Driver
+    jpa:
+      database:
+        name: mysql
+
+  postgres:                                                # POSTGRESQL SERVER 설정 정보
+    port: ((postgres_port))
+    host: ((postgres_internal_static_ips))
+    vcap_password: c1oudc0w
+    datasource:
+      url: jdbc:postgresql://((postgres_internal_static_ips)):((postgres_port))/sonar
+      username: "((postgres_datasource_username))"
+      password: "((postgres_datasource_password))"
+      database: "sonar"
+
+  inspection:                                              # INSPECTION SERVER 설정 정보
+    url: ((inspection_internal_static_ips))
+    http_url: 'http://((inspection_internal_static_ips))'
+    http_port: 9000
+    admin:
+      username: admin
+      password: admin
+
+  binary_storage:                                          # BINARY STORAGE SERVER 설정 정보
+    proxy_ip: ((binary_storage_internal_static_ips))                                 # 프록시 서버 IP(swift-keystone job의 static_ip, Object Storage 접속 IP)
+    proxy_port: ((binary_storage_proxy_port))                                      # 프록시 서버 Port(Object Storage 접속 Port)
+    username: ((binary_storage_username))                      # 최초 생성되는 유저이름(Object Storage 접속 유저이름)
+    password: ((binary_storage_password))                      # 최초 생성되는 유저 비밀번호(Object Storage 접속 유저 비밀번호)
+    tenantname: ((binary_storage_tenantname))                    # 최초 생성되는 테넌트 이름(Object Storage 접속 테넌트 이름)
+    email: ((binary_storage_email))                         # 최소 생성되는 유저의 이메일
+    binary_desc: "((binary_storage_binary_desc))"
+    container: ((binary_storage_container))
+    auth_port: 5000
+
+  common_api:                                              # COMMON API 설정 정보
+    url: http://((common_api_internal_static_ips))
+    server:
+      port: ((common_api_port))
+    authorization:
+      id: admin
+      password: PaaS-TA
+    logging:
+      level: INFO
+    haproxy:
+      urls:
+        - ((common_api_internal_static_ips))
+    java_opts: '-XX:MaxMetaspaceSize=104857K -Xss349K -Xms681574K -XX:MetaspaceSize=104857K -Xmx681574K'
+
+  pipeline_api:                                            # CI API 설정 정보
+    url: http://((api_internal_static_ips))
+    server:
+      port: ((api_port))
+    authorization:
+      id: admin
+      password: PaaS-TA
+    http:
+      multipart:
+        max_file_size: 1000Mb
+        max_request_size: 1000Mb
+    logging:
+      level: INFO
+    haproxy:
+      urls:
+        - ((api_internal_static_ips))
+    java_opts: '-XX:MaxMetaspaceSize=104857K -Xss349K -Xms681574K -XX:MetaspaceSize=104857K -Xmx681574K'
+
+  inspection_api:                                          # INSPECTION API 설정 정보
+    url: http://((inspection_api_internal_static_ips))
+    server:
+      port: ((inspection_api_port))
+    http:
+      multipart:
+        max_file_size: 1000Mb
+        max_request_size: 1000Mb
+    logging:
+      level: INFO
+    authorization:
+      id: admin
+      password: PaaS-TA
+    haproxy:
+      urls:
+        - ((inspection_api_internal_static_ips))
+    java_opts: '-XX:MaxMetaspaceSize=104857K -Xss349K -Xms681574K -XX:MetaspaceSize=104857K -Xmx681574K'
+
+  binary_storage_api:                                      # BINARY STORAGE API 설정 정보
+    http:
+      multipart:
+        max_file_size: 1000Mb
+        max_request_size: 1000Mb
+    server:
+      port: ((storage_api_port))
+    logging:
+      level: INFO
+    url: http://((storage_api_internal_static_ips))
+    authorization:
+      id: admin
+      password: PaaS-TA
+    java_opts: '-XX:MaxMetaspaceSize=104857K -Xss349K -Xms681574K -XX:MetaspaceSize=104857K -Xmx681574K'
+
+  pipeline_ui:                                              # UI 설정 정보
+    url: http://((ui_internal_static_ips))
+    server:
+      port: ((ui_port))
+    http:
+      multipart:
+        max_file_size: 1000Mb
+        max_request_size: 1000Mb
+    logging:
+      level: INFO
+    haproxy:
+      urls:
+        - ((ui_internal_static_ips))
+    java_opts: '-XX:MaxMetaspaceSize=104857K -Xss349K -Xms681574K -XX:MetaspaceSize=104857K -Xmx681574K'
+
+  pipeline_scheduler:                                      # SCHEDULER 설정 정보
+    server:
+      port: ((scheduler_port))
+    logging:
+      level: INFO
+    quartz:
+      scheduler:
+        instance_name: paastaDeliveryPipelineScheduler
+        instance_id: AUTO
+      thread_pool:
+        thread_count: 5
+    job:
+      start_delay: 0
+      repeat_interval: 5000
+      description: PaaS-TA Delivery Pipeline Scheduler
+      key: StatisticsJob
+    java_opts: '-XX:MaxMetaspaceSize=104857K -Xss349K -Xms681574K -XX:MetaspaceSize=104857K -Xmx681574K'
+
+  pipeline_service_broker:                                 # SERVICE BROKER 설정 정보
+    server:
+      port: ((service_broker_port))
+    logging:
+      controller:
+        level: INFO
+      service:
+        level: INFO
+    dashboard:
+      url: http://((haproxy_public_static_ips)):8084/dashboard/[SUID]/     # DASHBOARD URL : http://<HAPROXY>:<UI-PORT>/dashboard/[SUID]/
+    java_opts: '-XX:MaxMetaspaceSize=104857K -Xss349K -Xms681574K -XX:MetaspaceSize=104857K -Xmx681574K'
+
+  haproxy:                                                 # HAPROXY 설정 정보
+    url: ((haproxy_internal_static_ips))
+    http_port: 8080

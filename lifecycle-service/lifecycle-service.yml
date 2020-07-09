@@ -1,0 +1,91 @@
+---
+name: lifecycle-service
+
+releases:
+- name: paasta-app-lifecycle-service
+  url: http://45.248.73.44/index.php/s/KZsLzMKE3kDr9SJ/download
+  version: "1.0"
+
+stemcells:
+- alias: default
+  os: ((stemcell_os))
+  version: ((stemcell_version))
+
+update:
+  canaries: 1
+  canary_watch_time: 30000-600000
+  max_in_flight: 1
+  update_watch_time: 10000-600000
+  serial: true
+
+instance_groups:
+- name: mariadb
+  azs: ((mariadb_azs))
+  instances: ((mariadb_instances))
+  persistent_disk_type: ((mariadb_persistent_disk_type))
+  vm_type: ((vm_type_default))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+  jobs:
+  - name: mariadb
+    release: paasta-app-lifecycle-service
+    properties:
+      database:
+        port: ((mariadb_port))
+        admin_password: ((mariadb_admin_password))
+        broker:
+          username: ((mariadb_broker_username))
+          password: ((mariadb_broker_password))
+  update:
+    max_in_flight: 1
+
+- name: service-broker
+  azs: ((broker_azs))
+  instances: ((broker_instances))
+  vm_type: ((vm_type_default))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+  jobs:
+  - name: service-broker
+    release: paasta-app-lifecycle-service
+    properties:
+      bosh:
+        client:
+          id: ((bosh_client_admin_id))
+          secret: ((bosh_client_admin_secret))
+        url: ((bosh_url)):((bosh_director_port))
+        oauth_url: ((bosh_url)):((bosh_oauth_port))
+        deployment_name: lifecycle-service
+      port: ((broker_port))
+      logging:
+        level_broker: ((broker_logging_level_broker))
+        level_hibernate: ((broker_logging_level_hibernate))
+      service:
+        init_password: ((app_lifecycle_serviceadmin_password))
+      services:
+        id: ((broker_services_id))
+        plans:
+          id: ((broker_services_plans_id))
+  update:
+    max_in_flight: 1
+
+- name: app-lifecycle
+  azs: ((app_lifecycle_azs))
+  instances: ((app_lifecycle_instances))
+  persistent_disk_type: ((app_lifecycle_persistent_disk_type))
+  vm_type: ((vm_type_default))
+  stemcell: default
+  networks:
+  - name: ((private_networks_name))
+  - name: ((public_networks_name))
+  jobs:
+  - name: app-lifecycle
+    release: paasta-app-lifecycle-service
+    properties:
+      service:
+        admin_password: ((app_lifecycle_admin_password))
+        init_password: ((app_lifecycle_serviceadmin_password))
+  update:
+    max_in_flight: 1

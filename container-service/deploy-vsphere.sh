@@ -4,6 +4,7 @@
 BOSH_NAME="<BOSH_NAME>"                             # bosh name (e.g. micro-bosh)
 IAAS="vsphere"                                      # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
 COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"          # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+DEPLOYMENT_NAME="container-service"                # deployment name
 
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d container-service deploy --no-redact container-service.yml \
@@ -14,4 +15,5 @@ bosh -e ${BOSH_NAME} -n -d container-service deploy --no-redact container-servic
     -o operations/iaas/${IAAS}/set-working-dir-no-rp.yml \
     -o operations/rename.yml \
     -o operations/misc/single-master.yml \
-    -o operations/misc/first-time-deploy.yml
+    -o operations/misc/first-time-deploy.yml \
+    -v deployment_name=${DEPLOYMENT_NAME}

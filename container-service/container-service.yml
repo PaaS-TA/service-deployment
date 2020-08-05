@@ -710,7 +710,7 @@ instance_groups:
         server_url: ((bosh_url)):8844
         admin_client_secret: ((credhub_admin_client_secret))
       caas:
-        cluster_name: ((director_name))/container-service
+        cluster_name: ((director_name))/((deployment_name))
         api_server_url: https://((caas_master_public_url)):((caas_master_port))
         service_broker_auth_secret: 'YWRtaW46Y2xvdWRmb3VuZHJ5' # DO NOT MODIFY
         init_command: "/var/vcap/jobs/container-service-broker/script/set_caas_service_info.sh"

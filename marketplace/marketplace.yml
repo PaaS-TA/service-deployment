@@ -3,8 +3,8 @@ name: marketplace                             # 서비스 배포이름(필수) b
 
 releases:
 - name: paasta-marketplace-env-release
-  url: http://45.248.73.44/index.php/s/9RWWR79zEQotGmj/download 
-  version: "1.0"
+  url: http://45.248.73.44/index.php/s/S9S6YFcQrppcFPX/download 
+  version: "1.1"
 
 stemcells:
 - alias: default
@@ -20,16 +20,16 @@ update:
 
 instance_groups:
 - name: binary_storage
-  azs: ((binary_azs))
-  instances: ((binary_instances))
+  azs: ((object_storage_azs))
+  instances: ((object_storage_instances))
   stemcell: default
-  persistent_disk_type: ((binary_persistent_disk_type)) 
-  vm_type: ((binary_vm_type))
+  persistent_disk_type: ((object_storage_persistent_disk_type)) 
+  vm_type: ((object_storage_vm_type))
   networks:
   - name: ((private_networks_name))
     default: [dns, gateway]
   - name: ((public_networks_name))
-    static_ips: ((binary_public_static_ips))                             # Object Storage 의 public_IP(아래 properties.binary_storage.proxy_ip 와 동일)
+    static_ips: ((object_storage_public_static_ips))                             # Object Storage 의 public_IP(아래 properties.binary_storage.proxy_ip 와 동일)
   jobs:
   - name: binary_storage
     release: paasta-marketplace-env-release
@@ -50,18 +50,18 @@ properties:
   mariadb:                                                 # MARIA DB SERVER 설정 정보
     port: ((mariadb_port))
     admin_user:
-      password: ((mariadb_admin_password))                     # MARIA DB ADMIN USER PASSWORD
+      password: ((mariadb_admin_password))                 # MARIA DB ADMIN USER PASSWORD
   binary_storage:                                          # BINARY STORAGE SERVER 설정 정보
-    proxy_ip: ((binary_public_static_ips))                              # Object Storage 의 public_IP
+    proxy_ip: ((object_storage_public_static_ips))         # Object Storage 의 public_IP
     proxy_port: 10008                                      # 프록시 서버 Port(Object Storage 접속 Port)
-    auth_port: 5000
+    auth_port: ((object_storage_auth_port))
     username:                                              # 최초 생성되는 유저이름(Object Storage 접속 유저이름)
-      - paasta-marketplace
+      - ((object_storage_username))
     password:                                              # 최초 생성되는 유저 비밀번호(Object Storage 접속 유저 비밀번호)
-      - paasta
+      - ((object_storage_password))
     tenantname:                                            # 최초 생성되는 테넌트 이름(Object Storage 접속 테넌트 이름)
-      - paasta-marketplace
+      - ((object_storage_tenantname))
     email:                                                 # 최소 생성되는 유저의 이메일
-      - email@email.com
-    binary_desc:
-      - 'marketplace-container'
+      - ((object_storage_email))
+    binary_desc:                                           # objectStorage_swift_container
+      - ((object_storage_container))

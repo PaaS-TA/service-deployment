@@ -4,8 +4,8 @@ releases:
   url: http://45.248.73.44/index.php/s/Cx8GxEknyEgmJj8/download
   version: 0.34.1
 - name: cfcr-etcd
-  url: http://45.248.73.44/index.php/s/CqnxagWff3AdRct/download
-  version: 1.11.1
+  url: http://45.248.73.44/index.php/s/yrNCc8NfFcTSYqd/download
+  version: 1.12.4
 - name: docker
   url: http://45.248.73.44/index.php/s/RNNWSjW3Mqs6JYE/download
   version: 35.2.1
@@ -16,8 +16,8 @@ releases:
   url: http://45.248.73.44/index.php/s/zSCEzNHtpJxqmEg/download
   version: 1.12.0
 - name: paasta-container-service-projects-release
-  url: http://45.248.73.44/index.php/s/FnefwBw37bY7Ko2/download
-  version: "2.0"
+  url: http://45.248.73.44/index.php/s/2Tc3Bca2md3f289/download
+  version: "2.0.1"
 
 stemcells:
 - alias: ((stemcell_alias))
@@ -328,6 +328,7 @@ instance_groups:
         storage-media-type: application/json
         tls-cert-file: /var/vcap/jobs/kube-apiserver/config/kubernetes.pem
         tls-private-key-file: /var/vcap/jobs/kube-apiserver/config/kubernetes-key.pem
+        tls-cipher-suites: "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"
         token-auth-file: /var/vcap/jobs/kube-apiserver/config/tokens.csv
         v: 2
       kube-controller-manager-password: ((kube-controller-manager-password))
@@ -356,6 +357,7 @@ instance_groups:
         terminated-pod-gc-threshold: 100
         tls-cert-file: /var/vcap/jobs/kube-controller-manager/config/kube-controller-manager-cert.pem
         tls-private-key-file: /var/vcap/jobs/kube-controller-manager/config/kube-controller-manager-private-key.pem
+        tls-cipher-suites: "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"
         use-service-account-credentials: true
         v: 2
       service-account-private-key: ((service-account-key.private_key))
@@ -374,6 +376,8 @@ instance_groups:
         kind: KubeSchedulerConfiguration
       tls:
         kubernetes: ((tls-kubernetes))
+      k8s-args:
+        tls-cipher-suites: "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"
   - name: kubernetes-roles
     release: kubo
     properties:
@@ -475,6 +479,7 @@ instance_groups:
         kubeconfig: /var/vcap/jobs/kubelet/config/kubeconfig
         network-plugin: cni
         root-dir: /var/vcap/data/kubelet
+        tls-cipher-suites: "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"
       kubelet-configuration:
         apiVersion: kubelet.config.k8s.io/v1beta1
         authentication:
@@ -852,7 +857,8 @@ instance_groups:
         auth:
           enabled: true
           username: "admin"
-
+          password: "$2a$10$ZNfjMOhbDtg8SIm1wrxqEePF338gRC71sfPVR0U23bwTtMnCq1Vwe"
+          password_string: "cloudfoundry"      
 
 update:
   canaries: 1

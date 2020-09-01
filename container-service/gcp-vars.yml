@@ -37,11 +37,11 @@ haproxy_http_port: 8080                                                       # 
 haproxy_azs: [z7]                                                             # haproxy azs
 
 # MARIADB
-mariadb_port: "3306"                                                          # mariadb port
+mariadb_port: "13306"                                                         # mariadb port (e.g. 13306)-- Do Not Use "3306"
 mariadb_azs: [z5]                                                             # mariadb azs
 mariadb_persistent_disk_type: "10GB"                                          # mariadb persistent disk type
-mariadb_admin_user_id: "<MARIADB_ADMIN_USER_ID>"                              # mariadb admin user name
-mariadb_admin_user_password: "<MARIADB_ADMIN_USER_PASSWORD>"                  # mariadb admin user password
+mariadb_admin_user_id: "<MARIADB_ADMIN_USER_ID>"                              # mariadb admin user name (e.g. root)
+mariadb_admin_user_password: "<MARIADB_ADMIN_USER_PASSWORD>"                  # mariadb admin user password (e.g. paasta!admin)
 mariadb_role_set_administrator_code_name: "Administrator"                     # administrator role's code name (e.g. Administrator)
 mariadb_role_set_administrator_code: "RS0001"                                 # administrator role's code (e.g. RS0001)
 mariadb_role_set_regular_user_code_name: "Regular User"                       # regular user role's code name (e.g. Regular User)
@@ -74,9 +74,9 @@ caas_service_broker_instances: 1                                              # 
 caas_service_broker_port: 8888                                                # caas service broker port
 caas_service_broker_azs: [z6]                                                 # caas service broker azs
 
-#PRIVATE IMAGE REPOSITORY
+# PRIVATE IMAGE REPOSITORY
 private_image_repository_azs: [z7]                                                     # private image repository azs
-private_image_repository_port: 5000                                                    # private image repository port
+private_image_repository_port: 15001                                                   # private image repository port (e.g. 15001)-- Do Not Use "5000"
 private_image_repository_root_directory: "/var/vcap/data/private-image-repository"     # private image repository root directory
 private_image_repository_public_url: "<PRIVATE_IMAGE_REPOSITORY_PUBLIC_URL>"           # private image repository's public IP
 private_image_repository_persistent_disk_type: "10GB"                                  # private image repository's persistent disk type
@@ -91,7 +91,7 @@ caas_master_azs: [z7]                                                          #
 caas_master_persistent_disk_type: "50GB"                                       # caas master's persistent disk type
 
 # WORKER
-caas_worker_instances: 3                                                       # caas worker node instances
+caas_worker_instances: 3                                                       # caas worker node instances (N)
 caas_worker_azs: [z4,z5,z6]                                                    # caas worker node azs
 
 # JENKINS

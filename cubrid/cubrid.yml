@@ -3,8 +3,8 @@ name: cubrid                               # 서비스 배포이름(필수)
 
 releases:
 - name: "paasta-cubrid"                    #서비스 릴리즈 이름(필수)
-  version: "2.0"                           #서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
-  url: http://45.248.73.44/index.php/s/QSgfJESsE8HNnca/download
+  version: "2.0.1"                           #서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  url: http://45.248.73.44/index.php/s/ic6tB9gcgdL3XQK/download
 
 stemcells:
 - alias: default
@@ -28,6 +28,11 @@ instance_groups:
   jobs:
   - name: cubrid
     release: "paasta-cubrid"
+    properties:
+      cubrid:
+        max_clients: ((cubrid_max_clients))
+        certificate: "((cubrid_certificate.public_key))"
+        private_key: "((cubrid_certificate.private_key))"
 
 - name: cubrid_broker                       #작업 이름(필수): Cubrid 서비스 브로커
   azs: ((cubrid_broker_azs))
@@ -39,14 +44,17 @@ instance_groups:
   jobs:
   - name: cubrid_broker                     # job template 이름(필수)
     release: "paasta-cubrid"
-properties:
-  cubrid:                                   # Cubrid 설정 정보
-    max_clients: ((cubrid_max_clients))
-  cubrid_broker:                            # Cubrid Servcice Broker 설정 정보
-    cubrid_db_port: ((cubrid_db_port))      # Cubrid Port
-    cubrid_db_name: ((cubrid_db_name))      # Cubrid service 관리를 위한 데이터베이스 이름
-    cubrid_db_user: ((cubrid_db_user))      # 브로커 관리용 데이터베이스 접근 사용자이름
-    cubrid_db_passwd: ((cubrid_db_passwd))  # 브로커 관리용 데이터베이스 접근 사용자 비밀번호
-    cubrid_ssh_port: ((cubrid_ssh_port))    # Cubrid가 설치된 서버 SSH 접속 포트
-    cubrid_ssh_user: ((cubrid_ssh_user))    # Cubrid가 설치된 서버 SSH 접속 사용자 이름
-    cubrid_ssh_key: ((ssh_key))
+    properties:
+      cubrid:                                   # Cubrid 설정 정보
+        private_key: "((cubrid_certificate.private_key))"
+      cubrid_broker:                            # Cubrid Servcice Broker 설정 정보
+        cubrid_db_port: ((cubrid_db_port))      # Cubrid Port
+        cubrid_db_name: ((cubrid_db_name))      # Cubrid service 관리를 위한 데이터베이스 이름
+        cubrid_db_user: ((cubrid_db_user))      # 브로커 관리용 데이터베이스 접근 사용자이름
+        cubrid_db_passwd: ((cubrid_db_passwd))  # 브로커 관리용 데이터베이스 접근 사용자 비밀번호
+        cubrid_ssh_port: ((cubrid_ssh_port))    # Cubrid가 설치된 서버 SSH 접속 포트
+        cubrid_ssh_user: ((cubrid_ssh_user))    # Cubrid가 설치된 서버 SSH 접속 사용자 이름
+
+variables:
+- name: cubrid_certificate
+  type: ssh

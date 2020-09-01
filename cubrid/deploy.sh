@@ -8,5 +8,4 @@ COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d cubrid deploy --no-redact cubrid.yml \
     -l ${COMMON_VARS_PATH} \
-    -l vars.yml \
-    -l operations/${IAAS}-pem.yml
+    -l vars.yml 

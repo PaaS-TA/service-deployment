@@ -28,4 +28,4 @@ mariadb_instances: 1                                             # mariadb : ins
 maraidb_persistent_disk_type: "5GB"                              # mariadb : persistent disk type
 mariadb_vm_type: "small"                                         # mariadb : vm type
 mariadb_port: "<MARIADB_PORT>"                                   # mariadb : port (e.g. 13306) -- Do Not Use "3306"
-mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"               # mariadb : admin password
+mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"               # mariadb : admin password (e.g. admin@1234)

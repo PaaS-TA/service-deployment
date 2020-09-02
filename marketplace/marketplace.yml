@@ -3,8 +3,8 @@ name: marketplace                             # 서비스 배포이름(필수) b
 
 releases:
 - name: paasta-marketplace-env-release
-  url: http://45.248.73.44/index.php/s/S9S6YFcQrppcFPX/download 
-  version: "1.1"
+  url: http://45.248.73.44/index.php/s/mDmMGB3qkN4MQjB/download 
+  version: "1.0.1"
 
 stemcells:
 - alias: default

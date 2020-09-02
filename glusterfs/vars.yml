@@ -12,10 +12,9 @@ public_networks_name: "vip"                                      # public networ
 mysql_azs: [z4]                                                  # mysql azs
 mysql_instances: 1                                               # mysql instances 
 mysql_vm_type: "medium"                                          # mysql vm type
-mysql_private_static_ips: "<MYSQL_PRIVATE_IP>"                   # mysql's private IP (e.g. "10.0.121.40")
 mysql_persistent_disk_type: "1GB"                                # mysql persistent disk type
-mysql_port: "3306"                                               # mysql port (default : 3306)
-mysql_admin_username: "<MYSQL_ADMIN_USERNAME>"                   # mysql admin username
+mysql_port: 13306                                                # mysql port (e.g. 13306) -- Do Not Use "3306"
+mysql_admin_username: "<MYSQL_ADMIN_USERNAME>"                   # mysql admin username (e.g. "root")
 mysql_admin_password: "<MYSQL_ADMIN_PASSWORD>"                   # mysql admin password (e.g. "admin1234")
 
 
@@ -31,7 +30,6 @@ broker_azs: [z4]                                                 # glusterfs bro
 broker_instances: 1                                              # glusterfs broker instances 
 broker_persistent_disk_type: "4GB"                               # glusterfs broker persistent disk type
 broker_vm_type: "small"                                          # glusterfs broker vm type
-broker_private_static_ips: "<GLUSTERFS_BROKER_PRIVATE_IP>"       # glusterfs broker's private IP (e.g. "10.0.121.41")
 
 
 # GLUSTERFS_BROKER_REGISTRAR

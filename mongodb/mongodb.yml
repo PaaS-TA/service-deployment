@@ -3,8 +3,8 @@ name: mongodb  # 서비스 배포이름(필수)
 
 releases:
 - name: paasta-mongodb-shard  #서비스 릴리즈 이름(필수)
-  url: http://45.248.73.44/index.php/s/ZXFpTyfwbbmW4M4/download
-  version: "2.0"   #서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  url: http://45.248.73.44/index.php/s/7DyiWNWD2N8pT8J/download
+  version: "2.0.1"   #서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
 
 # this section describes how updates are handled
 update:

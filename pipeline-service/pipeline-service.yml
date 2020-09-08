@@ -3,8 +3,8 @@ name: pipeline-service                      # 서비스 배포이름(필수)
 
 releases:
 - name: paasta-delivery-pipeline-release                    # 서비스 릴리즈 이름(필수)
-  url: http://45.248.73.44/index.php/s/Dz52W7EGY7GscxJ/download
-  version: "1.0"                                        # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  url: http://45.248.73.44/index.php/s/dK3MyHJ7XdJE7E6/download
+  version: "1.0.1"                                        # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
 
 stemcells:
 - alias: default
@@ -243,7 +243,7 @@ properties:
     host_ips:
     - ((mariadb_internal_static_ips))
     datasource:
-      url: jdbc:mysql://((mariadb_internal_static_ips)):3306/delivery_pipeline?autoReconnect=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false
+      url: jdbc:mysql://((mariadb_internal_static_ips)):((mariadb_port))/delivery_pipeline?autoReconnect=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false
       username: root
       password: "((mariadb_admin_password))"
       driver_class_name: com.mysql.cj.jdbc.Driver
@@ -278,7 +278,7 @@ properties:
     email: ((binary_storage_email))                         # 최소 생성되는 유저의 이메일
     binary_desc: "((binary_storage_binary_desc))"
     container: ((binary_storage_container))
-    auth_port: 5000
+    auth_port: ((binary_storage_auth_port))                         # keystone auth port
 
   common_api:                                              # COMMON API 설정 정보
     url: http://((common_api_internal_static_ips))

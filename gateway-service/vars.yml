@@ -14,7 +14,7 @@ public_networks_name: "vip"                                          # public ne
 mariadb_azs: [z3]                                                    # mariadb : azs
 mariadb_instances: 1                                                 # mariadb : instances (1) 
 mariadb_persistent_disk_type: "10GB"                                 # mariadb : persistent disk type 
-mariadb_port: "<MARIADB_PORT>"                                       # mariadb : database port (e.g. 3306)
+mariadb_port: "<MARIADB_PORT>"                                       # mariadb : database port (e.g. 31306) -- Do Not Use "3306"
 mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"                   # mariadb : database admin password (e.g. "paas-ta!admin")
 mariadb_broker_username: "<MARIADB_BROKER_USERNAME>"                 # mariadb : service-broker-user id (e.g. "apigateway")
 mariadb_broker_password: "<MARIADB_BROKER_PASSWORD>"                 # mariadb : service-broker-user password (e.g. "broker!admin")

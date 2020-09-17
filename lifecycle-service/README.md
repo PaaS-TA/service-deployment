@@ -17,7 +17,7 @@
 ```
 ### Install Guide
 
-[라이프사이클 관리 서비스 설치 가이드](https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/v5.0.1/service-guide/tools/PAAS-TA_LIFECYCLE_MANAGEMENT_SERVICE_INSTALL_GUIDE_V1.0.md)
+[라이프사이클 관리 서비스 설치 가이드](https://github.com/PaaS-TA/Guide-5.0-Ravioli)
 
 ### Lifecycle Service Release
 

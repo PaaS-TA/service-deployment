@@ -3,8 +3,8 @@ name: pipeline-service                      # 서비스 배포이름(필수)
 
 releases:
 - name: paasta-delivery-pipeline-release                    # 서비스 릴리즈 이름(필수)
-  url: http://45.248.73.44/index.php/s/dK3MyHJ7XdJE7E6/download
-  version: "1.0.1"                                        # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  url: http://45.248.73.44/index.php/s/maQQNLmYNEAG78y/download
+  version: "1.0.2"                                        # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
 
 stemcells:
 - alias: default

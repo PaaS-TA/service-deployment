@@ -1,6 +1,6 @@
 # STEMCELL
 stemcell_os: "ubuntu-xenial"                                     # stemcell os
-stemcell_version: "315.64"                                       # stemcell version
+stemcell_version: "621.94"                                       # stemcell version
 
 # VM_TYPE
 vm_type_minimal: "minimal"                                       # vm type minimal

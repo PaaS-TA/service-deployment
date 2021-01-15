@@ -14,8 +14,6 @@ eclipse_che_azs: [z7]                                                     # ecli
 eclipse_che_instances: 0                                                  # eclipse-che : instances (1), ondemand service default 0
 eclipse_che_vm_type: "large"                                              # eclipse-che : vm type
 eclipse_che_public_ips: "<ECLIPSE_CHE_INIT_PUBLIC_IPS>"                   # eclipse-che : public ips (e.g. ["00.00.00.00" , "11.11.11.11"])
-eclipse_che_buffer_ips: "<ECLIPSE_CHE_BUFFER_PUBLIC_IPS>"                 # eclipse-che : OnDemand 에서 사용할 여분의 public ips
-eclipse_che_instance_name: "eclipse-che"                                  # eclipse-che : 작업 이름
 
 # MARIA_DB
 mariadb_azs: [z4]                                                         # mariadb : azs
@@ -31,18 +29,4 @@ broker_instances: 1                                                       # serv
 broker_vm_type: "medium"                                                  # service-broker : vm type
 broker_port: "<BROKER_PORT>"                                              # service-broker : broker port (e.g. "8080")
 serviceDefinition_id: "<SERVICE_GUID>"                                    # serviceDefinition_id : service guid (e.g. "af86588c-6212-11e7-907b-b6006ad3webide0")
-serviceDefinition_name: "WEB IDE"
 serviceDefinition_plan1_id: "<SERVICE_PLAN_ID>"                           # serviceDefinition_plan1_id : service plan id (e.g. "a5930564-6212-11e7-907b-b6006ad3webide1")
-serviceDefinition_plan1_name: "<SERVICE_PLAN_NAME>"                       # serviceDefinition_plan1_name : service plan name (e.g. "dedicated-vm")
-serviceDefinition_plan1_desc: "WEB IDE SERVICE"
-serviceDefinition_bullet_name: "Web IDE OnDemand Server Use"
-serviceDefinition_bullet_desc: "Web IDE Service Using a OnDemand Server"
-serviceDefinition_org_limitation: "-1"                                    # serviceDefinition_org_limitation : 조직별 서비스 제한
-serviceDefinition_space_limitation: "-1"                                  # serviceDefinition_space_limitation : 공간별 서비스 제한
-
-# RELEASE
-releases_name: "paas-ta-webide-release"                                   # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
-releases_url: "http://45.248.73.44/index.php/s/WTSjj7szKy38b6X/download"
-
-# CF
-cloudfoundry_sslSkipValidation: "true"

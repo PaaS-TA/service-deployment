@@ -1,5 +1,5 @@
 ---
-name: "((deployment_name))"
+name: web-ide
 
 stemcells:
   - alias: "((stemcell_alias))"
@@ -7,9 +7,9 @@ stemcells:
     version: ((stemcell_version))
 
 releases:
-  - name: "((releases_name))"                                 # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
-    url: "((releases_url))"
-    version: "2.0"                                             # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  - name: paas-ta-webide-release                                 # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
+    url: http://45.248.73.44/index.php/s/Fs7WB5yTfdqZXbC/download
+    version: "1.1.0"                                             # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
 
 update:
   canaries: 1                                               # canary 인스턴스 수(필수)
@@ -20,30 +20,33 @@ update:
 
 
 instance_groups:
-- name: eclipse-che                                           # 작업 이름(필수)
+- name: eclipse-che  #작업 이름(필수)
   azs: ((eclipse_che_azs))
   instances: ((eclipse_che_instances))
   vm_type: ((eclipse_che_vm_type))
-  stemcell: "((stemcell_alias))"
+  stemcell: default
   networks:
   - name: ((private_networks_name))
-#  - name: ((public_networks_name))                           
-#    static_ips: ((eclipse_che_public_ips))                   # 배포시 사용할 public ips, OnDemand instance를 초기에 0 으로 셋팅해서 주석처리.
+  - name: ((public_networks_name))
+    static_ips: ((eclipse_che_public_ips))
   jobs:
-  - name: "((eclipse_che_instance_name))"
-    release: "((releases_name))"
+  - name: eclipse-che
+    release: paas-ta-webide-release
+  properties:
+    eclipseche:
+      publicip: ((eclipse_che_public_ips))
 
 - name: mariadb
   azs: ((mariadb_azs))
   instances: ((mariadb_instances))
   vm_type: ((mariadb_vm_type))
-  stemcell: "((stemcell_alias))"
+  stemcell: default
   persistent_disk_type: ((mariadb_persistent_disk_type))
   networks:
   - name: ((private_networks_name))
   jobs:
   - name: mariadb
-    release: "((releases_name))"
+    release: paas-ta-webide-release
   syslog_aggregator: null
   properties:
     mariadb:                                                # MARIA DB SERVER 설정 정보
@@ -60,43 +63,23 @@ instance_groups:
   azs: ((broker_azs))
   instances: ((broker_instances))
   vm_type: ((broker_vm_type))
-  stemcell: "((stemcell_alias))"
+  stemcell: default
   networks:
   - name: ((private_networks_name))
   jobs:
   - name: web-ide-broker
-    release: "((releases_name))"
+    release: paas-ta-webide-release
   syslog_aggregator: null
   properties:
     network:
-      static_ips: "((eclipse_che_buffer_ips))"
+      static_ips: ((eclipse_che_public_ips))
+    webide:
+      servers: ((eclipse_che_public_ips))
     server:
       port: ((broker_port))
     datasource:
-      password: "((mariadb_admin_password))"
+      password: ((mariadb_admin_password))
     serviceDefinition:
-      id: "((serviceDefinition_id))"
-      name: "((serviceDefinition_name))"
-      bullet:
-        name: "((serviceDefinition_bullet_name))"
-        desc: "((serviceDefinition_bullet_desc))"
+      id: ((broker_services_id))
       plan1:
-        id: "((serviceDefinition_plan1_id))"
-        name: "((serviceDefinition_plan1_name))"
-        desc: "((serviceDefinition_plan1_desc))"
-      org_limitation: "((serviceDefinition_org_limitation))"
-      space_limitation: "((serviceDefinition_space_limitation))"
-    bosh:
-      client_id: "((bosh_client_admin_id))"
-      client_secret: "((bosh_client_admin_secret))"
-      url: ((bosh_url)):((bosh_director_port))
-      oauth_url: ((bosh_url)):((bosh_oauth_port))
-      deployment_name: "((deployment_name))"
-      instance_name: "((eclipse_che_instance_name))"
-    cloudfoundry:
-      url: "((system_domain))"
-      sslSkipValidation: "((cloudfoundry_sslSkipValidation))"
-      admin:
-        id: "((paasta_admin_username))"
-        password: "((paasta_admin_password))"
-
+        id: ((broker_services_plans_id))

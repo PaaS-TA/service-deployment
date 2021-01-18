@@ -1,3 +1,10 @@
 - type: replace
-  path: /releases/name=paasta-app-lifecycle-service/url
-  value: file:///home/((inception_os_user_name))/workspace/paasta-5.0/release/service/paasta-app-lifecycle-service-release.tgz
+  path: /releases/name=paasta-app-lifecycle-service
+  value:
+    name: paasta-app-lifecycle-service
+    sha1: 725b94900b8eb6acf94959d2c69718606e969b8d
+    stemcell:
+      os: ubuntu-xenial
+      version: "621.94"
+    url: http://45.248.73.44/index.php/s/agf9G2LiqBKFgyc/download
+    version: 1.0

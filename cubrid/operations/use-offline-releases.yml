@@ -1,0 +1,7 @@
+- type: replace
+  path: /releases/name=paasta-cubrid/url
+  value: file://((releases_dir))/release/service/paasta-cubrid-2.0.1.tgz
+
+- type: replace
+  path: /releases/name=paasta-cubrid/version
+  value: "2.0.1"

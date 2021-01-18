@@ -1,0 +1,7 @@
+- type: replace
+  path: /releases/name=paasta-delivery-pipeline-release/url
+  value: file://((releases_dir))/service/paasta-delivery-pipeline-release-1.0.2.tgz
+
+- type: replace
+  path: /releases/name=paasta-delivery-pipeline-release/version
+  value: "1.0.2"

@@ -1,7 +1,0 @@
-- type: replace
-  path: /releases/name=paasta-marketplace-env-release/url
-  value: file://((releases_dir))/service/marketplace/paasta-marketplace-env-release-1.0.1.tgz
-
-- type: replace
-  path: /releases/name=paasta-marketplace-env-release/version
-  value: "1.0.1"

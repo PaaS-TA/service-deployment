@@ -1,7 +1,10 @@
 - type: replace
-  path: /releases/name=paasta-cubrid/url
-  value: file:///home/((inception_os_user_name))/workspace/paasta-5.0/release/service/paasta-cubrid-2.0.1.tgz
-
-- type: replace
-  path: /releases/name=paasta-cubrid/version
-  value: "2.0.1"
+  path: /releases/name=paasta-cubrid
+  value:
+    name: paasta-cubrid
+    sha1: a79854d8a9f76404cca4f8dca3448b5c89c6c9e3
+    stemcell:
+      os: ubuntu-xenial
+      version: "621.94"
+    url: http://45.248.73.44/index.php/s/cKz9DfMFppjGGZn/download
+    version: "2.0.1"

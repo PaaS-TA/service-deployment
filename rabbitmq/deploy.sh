@@ -1,11 +1,10 @@
 #!/bin/bash
 
 # VARIABLES
-BOSH_NAME="micro-bosh"                           # bosh name (e.g. micro-bosh)
-IAAS="openstack"                                 # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. ../../common/common_vars.yml)
+BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
 # DEPLOY
-bosh -e ${BOSH_NAME} -n -d rabbitmq deploy --no-redact rabbitmq.yml \
+bosh -e ${BOSH_ENVIRONMENT} -n -d rabbitmq deploy --no-redact rabbitmq.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml

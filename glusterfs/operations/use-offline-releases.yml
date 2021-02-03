@@ -1,0 +1,7 @@
+- type: replace
+  path: /releases/name=paasta-glusterfs/url
+  value: file://((releases_dir))/service/paasta-glusterfs-2.0.1.tgz
+
+- type: replace
+  path: /releases/name=paasta-glusterfs/version
+  value: "2.0.1"

@@ -1,3 +1,10 @@
 - type: replace
-  path: /releases/name=paasta-on-demand-redis-release/url
-  value: file:///home/((inception_os_user_name))/workspace/paasta-5.0/release/service/paasta-on-demand-redis-release.tgz
+  path: /releases/name=paasta-on-demand-redis-release
+  value:
+    name: paasta-on-demand-redis-release
+    sha1: a2fe6a4d03af704e5c450b9ac10d5992f26c23b0
+    stemcell:
+      os: ubuntu-xenial
+      version: "621.94"
+    url: http://45.248.73.44/index.php/s/a7jtcMze6xyyYQd/download
+    version: "1.1.0"

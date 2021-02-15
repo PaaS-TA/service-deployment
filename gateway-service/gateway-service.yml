@@ -3,7 +3,7 @@ name: gateway-service
 
 releases:
 - name: paasta-api-gateway-service
-  url: http://45.248.73.44/index.php/s/9q5gyTL5txPdLS3/download
+  url: https://nextcloud.paas-ta.org/index.php/s/9q5gyTL5txPdLS3/download
   version: "1.0"
 
 stemcells:

@@ -3,7 +3,7 @@ name: logging-service
 
 releases:
 - name: paasta-logging-service-release
-  url: http://45.248.73.44/index.php/s/eoCBY5QSFjJr3AS/download
+  url: https://nextcloud.paas-ta.org/index.php/s/eoCBY5QSFjJr3AS/download
   version: "1.0"
 
 stemcells:

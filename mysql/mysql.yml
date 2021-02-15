@@ -8,7 +8,7 @@ addons:
 
 releases:
 - name: paasta-mysql
-  url: http://45.248.73.44/index.php/s/iAbN8WkGMRGrm2p/download
+  url: https://nextcloud.paas-ta.org/index.php/s/iAbN8WkGMRGrm2p/download
   version: "2.0.1"
 - name: bpm
   version: latest

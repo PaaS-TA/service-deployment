@@ -3,7 +3,7 @@ name: lifecycle-service
 
 releases:
 - name: paasta-app-lifecycle-service
-  url: http://45.248.73.44/index.php/s/KZsLzMKE3kDr9SJ/download
+  url: https://nextcloud.paas-ta.org/index.php/s/KZsLzMKE3kDr9SJ/download
   version: "1.0"
 
 stemcells:

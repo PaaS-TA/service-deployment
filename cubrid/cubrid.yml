@@ -4,7 +4,7 @@ name: cubrid                               # 서비스 배포이름(필수)
 releases:
 - name: "paasta-cubrid"                    #서비스 릴리즈 이름(필수)
   version: "2.0.1"                           #서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
-  url: http://45.248.73.44/index.php/s/ic6tB9gcgdL3XQK/download
+  url: https://nextcloud.paas-ta.org/index.php/s/ic6tB9gcgdL3XQK/download
 
 stemcells:
 - alias: default

@@ -6,5 +6,5 @@
     stemcell:
       os: ubuntu-xenial
       version: "621.94"
-    url: http://45.248.73.44/index.php/s/Lt6Cnikpe87YeRD/download
+    url: https://nextcloud.paas-ta.org/index.php/s/Lt6Cnikpe87YeRD/download
     version: "2.0"

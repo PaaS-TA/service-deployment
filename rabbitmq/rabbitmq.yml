@@ -3,7 +3,7 @@ name: rabbitmq
 
 releases:
 - name: paasta-rabbitmq
-  url: http://45.248.73.44/index.php/s/3eT2Zmia5Jww5Gx/download
+  url: https://nextcloud.paas-ta.org/index.php/s/3eT2Zmia5Jww5Gx/download
   version: "2.0"
 
 stemcells:

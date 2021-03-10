@@ -19,8 +19,8 @@ releases:
 - name: bpm
   version: latest
 - name: "paasta-on-demand-redis-release"                    # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
-  version: "1.1.0"                                            # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
-  url: https://nextcloud.paas-ta.org/index.php/s/R6y32CAMEmBiaSx/download
+  version: "1.2.0"                                            # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  #url: https://nextcloud.paas-ta.org/index.php/s/R6y32CAMEmBiaSx/download
 
 update:
   canaries: 1                                               # canary 인스턴스 수(필수)
@@ -69,7 +69,8 @@ instance_groups:
   jobs:
   - name: redis
     release: "paasta-on-demand-redis-release"
-    
+    properties:
+      cce_enable: false
 - name: sanity-tests
   azs:
   - z5

@@ -23,7 +23,7 @@ broker_server_port: 8080                                          # broker serve
 
 ### On-Demand Dedicated Service Instance Properties ###
 on_demand_service_instance_name: "redis"                          # On-Demand Service Instance Name
-service_password: "admin"                                         # On-Demand Redis Service password
+service_password: "PaaS-TA#2021!"                                         # On-Demand Redis Service password
 service_port: 6379                                                # On-Demand Redis Service port
 
 # SERVICE PLAN INFO

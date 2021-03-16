@@ -1,0 +1,11 @@
+---
+# CCE - rabbitmq patch 
+- type: replace
+  path: /instance_groups/name=rmq/jobs/name=rabbitmq-server/properties/rabbitmq-server/ssl?/enabled
+  value: true
+- type: replace
+  path: /instance_groups/name=rmq/jobs/name=rabbitmq-server/properties/rabbitmq-server/ssl?/verify
+  value: true
+- type: replace
+  path: /instance_groups/name=rmq/jobs/name=rabbitmq-server/properties/rabbitmq-server/cce_enable?
+  value: false 

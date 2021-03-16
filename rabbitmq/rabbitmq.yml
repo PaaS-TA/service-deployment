@@ -1,178 +1,198 @@
 ---
 name: rabbitmq
 
+instance_groups:
+- azs: ((broker_azs))
+  instances: ((broker_instances))
+  jobs:
+#  - name: cf-cli-6-linux
+#    release: cf-cli
+  - name: rabbitmq-service-broker
+    properties:
+      cf:
+        domain: ((system_domain))
+      rabbitmq-service-broker:
+        cc_endpoint: http://api.((system_domain))
+        logging:
+          level: debug
+          print_stack_traces: false
+        rabbitmq:
+          administrator:
+            password: PaaS-TA@2021
+            username: broker
+          hosts: USING BOSH LINKS
+          management:
+            username: admin
+          management_domain: paaasta-rabbitmq.((system_domain))
+          operator_set_policy:
+            enabled: true
+            policy_definition: '{"ha-mode":"exactly","ha-params":2,"ha-sync-mode":"automatic"}'
+            policy_name: operator_set_policy
+            policy_priority: 50
+        route: rabbitmq-multitenant-broker
+        service:
+          name: rabbitmq
+          password: broker-broker
+          plan_uuid: 22F0B28C-B886-4123-B01B-95E54D3DE6DA
+          shareable: true
+          username: broker
+          uuid: 568725FD-AD46-44CA-9853-621416E983A4
+    release: paasta-rabbitmq
+#  - consumes:
+#      nats:
+#        deployment: paasta
+#        from: nats
+#    name: route_registrar
+#    properties:
+#      route_registrar:
+#        routes:
+#        - name: rabbitmq-multitenant-broker
+#          port: 4567
+#          registration_interval: 20s
+#          uris:
+#          - rabbitmq-multitenant-broker.((system_domain))
+#    release: routing
+  - name: bpm
+    release: bpm
+  - name: broker-registrar
+    properties:
+      broker:
+        host: rabbitmq-broker.((system_domain))
+        port: ((broker_port))
+        name: rabbitmq
+        password: broker-broker
+        protocol: http
+        service:
+          name: rabbitmq
+        username: broker
+      cf:
+        admin_password: ((paasta_admin_password)) 
+        admin_username: ((paasta_admin_username))
+        api_url: https://api.((system_domain))
+    release: paasta-rabbitmq
+  - name: broker-deregistrar
+    properties:
+      broker:
+        name: rabbitmq
+        service:
+          name: rabbitmq
+      cf:
+        admin_password: ((paasta_admin_password)) 
+        admin_username: ((paasta_admin_username))
+        api_url: https://api.((system_domain))
+    release: paasta-rabbitmq
+#  - name: smoke-tests
+#    properties:
+#      broker:
+#        name: rabbitmq
+#      cf:
+#        admin_password: admin
+#        admin_username: admin
+#        api_url: https://api.((system_domain))
+#        domain: ((system_domain))
+#      smoke_tests:
+#        org: system
+#    release: paasta-rabbitmq-smoke-tests
+  name: rmq-broker
+  networks:
+  - name: ((private_networks_name)) 
+  stemcell: default
+  vm_type: ((vm_type_small)) 
+- azs: ((rabbitmq_azs))
+  instances: ((rabbitmq_instances))
+  jobs:
+  - name: rabbitmq-server
+    properties:
+      rabbitmq-server:
+        administrators:
+          broker:
+            password: PaaS-TA@2021
+            username: broker
+          management:
+            password: PaaS-TA#2021
+            username: admin
+        cluster_partition_handling: autoheal
+        cookie: rabbit-cluster:aws
+        disk_alarm_threshold: '{mem_relative,0.4}'
+        plugins:
+        - rabbitmq_management
+        - rabbitmq_mqtt
+        - rabbitmq_stomp
+        ports:
+        - 5672
+        - 5671
+        - 1883
+        - 8883
+        - 61613
+        - 61614
+        - 15672
+        - 15674
+        restart_statsdb_cron_schedule: 42 */4 * * *
+        #ssl:
+        #  enabled: true
+        #  verify: true
+    release: paasta-rabbitmq
+  name: rmq
+  networks:
+  - name: ((private_networks_name)) 
+  persistent_disk_type: 50GB
+  stemcell: default 
+  vm_type: ((vm_type_small))  
+- azs: ((haproxy_azs))
+  instances: ((haproxy_instances)) 
+  jobs:
+  - name: rabbitmq-haproxy
+    properties:
+      rabbitmq-haproxy:
+        stats:
+          password: PaaS-TA!2021
+          username: admin
+    release: paasta-rabbitmq
+#  - consumes:
+#      nats:
+#        deployment: paasta 
+#        from: nats
+#    name: route_registrar
+#    properties:
+#      route_registrar:
+#        routes:
+#        - name: paaasta-rabbitmq
+#          port: 15672
+#          registration_interval: 20s
+#          uris:
+#          - paaasta-rabbitmq.((system_domain))
+#    release: routing
+  - name: bpm
+    release: bpm
+  name: haproxy
+  networks:
+  - name: ((private_networks_name)) 
+  stemcell: default 
+  vm_type: ((vm_type_small)) 
+
 releases:
+#- name: rabbitmq-broker
+#  version: latest
+#- name: routing
+#  version: latest
+- name: cf-cli
+  version: latest
+#- name: cf-rabbitmq-smoke-tests
+#  version: latest
+- name: bpm
+  version: latest
 - name: paasta-rabbitmq
-  url: https://nextcloud.paas-ta.org/index.php/s/3eT2Zmia5Jww5Gx/download
-  version: "2.0"
+  #url: https://bosh.io/d/github.com/pivotal-cf/cf-rabbitmq-release
+  version: 2.1.0
 
 stemcells:
-- alias: default
+- alias: default 
   os: ((stemcell_os))
   version: ((stemcell_version))
 
 update:
-  canaries: 1                                          # canary 인스턴스 수(필수)
-  canary_watch_time: 30000-180000                      # canary 인스턴스가 수행하기 위한 대기 시간(필수)
-  max_in_flight: 6                                     # non-canary 인스턴스가 병렬로 update 하는 최대 개수(필수)
-  update_watch_time: 30000-180000                      # non-canary 인스턴스가 수행하기 위한 대기 시간(필수)
-
-instance_groups:
-- name: rmq                              # 작업 이름(필수): rabbitmq 서버
-  azs: ((rabbitmq_azs))
-  instances: ((rabbitmq_instances))                           # job 인스턴스 수(필수)
-  vm_type: ((vm_type_small))             # cloud config 에 정의한 vm_type
-  stemcell: default
-  networks:
-  - name: ((private_networks_name))       # cloud config 에 정의한 network 이름
-    static_ips: ((rabbitmq_private_ips))  # 사용할 IP addresses 정의(필수): rabbitmq-server IP
-  jobs:
-  - name: rabbitmq-server                # job template 이름(필수)
-    release: paasta-rabbitmq             # 릴리즈 이름(필수)
-  syslog_aggregator: null
-
-- name: haproxy                          # 작업 이름(필수): rabbitmq haproxy
-  azs: ((haproxy_azs))
-  instances: ((haproxy_instances))                           # job 인스턴스 수(필수)
-  vm_type: ((vm_type_small))             # cloud config 에 정의한 vm_type
-  stemcell: default
-  networks:
-  - name: ((private_networks_name))       # cloud config 에 정의한 network 이름
-    static_ips: ((haproxy_private_ips))   # 사용할 IP addresses 정의(필수): rabbitmq haproxy IP
-  jobs:
-  - name: rabbitmq-haproxy                # job template 이름(필수)
-    release: paasta-rabbitmq             # 릴리즈 이름(필수)
-  syslog_aggregator: null
-
-- name: paasta-rmq-broker                # 작업 이름(필수): rabbit mq broker
-  azs: ((broker_azs))
-  instances: ((broker_instances))        # job 인스턴스 수(필수)
-  vm_type: ((vm_type_small))             # cloud config 에 정의한 vm_type
-  stemcell: default
-  networks:
-  - name: ((private_networks_name))       # cloud config 에 정의한 network 이름
-    static_ips: ((broker_private_ips))    # 사용할 IP addresses 정의(필수): rabbitmq broker
-  jobs:
-  - name: rabbitmq-broker                # job template 이름(필수)
-    release: paasta-rabbitmq             # 릴리즈 이름(필수)
-  syslog_aggregator: null
-
-- name: broker-registrar
-  lifecycle: errand                      # bosh deploy시 vm에 생성되어 설치 되지 않고 bosh errand 로 실할때 설정, 주로 테스트 용도에 쓰임
-  azs: ((broker_registrar_azs))
-  instances: ((broker_registrar_instances))   # job 인스턴스 수(필수)
-  vm_type: ((vm_type_small))             # cloud config 에 정의한 vm_type
-  stemcell: default
-  networks:
-  - name: ((private_networks_name))       # cloud config 에 정의한 network 이름
-  properties:
-    broker:
-      host: ((broker_private_ips))
-      name: rabbitmq-sb
-      password: admin
-      username: admin
-      protocol: http
-      port: ((broker_port))
-  jobs:
-  - name: broker-registrar
-    release: paasta-rabbitmq
-
-- name: broker-deregistrar
-  lifecycle: errand                      # bosh deploy시 vm에 생성되어 설치 되지 않고 bosh errand 로실행할때 설정, 주로 테스트 용도에 쓰임
-  azs: ((broker_deregistrar_azs))
-  instances: ((broker_deregistrar_instances))  # job 인스턴스 수(필수)
-  vm_type: ((vm_type_small))             # cloud config 에 정의한 vm_type
-  stemcell: default
-  networks:
-  - name: ((private_networks_name))       # cloud config 에 정의한 network 이름
-  properties:
-    broker:
-      host: ((broker_private_ips))
-      name: rabbitmq-sb
-      password: admin
-      username: admin
-      protocol: http
-      port: ((broker_port))
-  jobs:
-  - name: broker-deregistrar
-    release: paasta-rabbitmq
-
-properties:
-  cf:                                          # CF 환경 정보
-    admin_password: ((paasta_admin_password))                      # CF 어드민 아이디 비밀번호(필수)
-    admin_username: ((paasta_admin_username))                      # CF 어드민 아이디 (필수)
-    api_url: http://api.((system_domain))    # CF API url(필수)
-    domain: api.((system_domain))                # CF 도메인(필수)
-  rabbitmq-server:
-    restart_statsdb_cron_schedule: "42 */4 * * *"
-    plugins:                                  # rabbitmq 플러그인 정보(필수)
-    - rabbitmq_management
-    - rabbitmq_mqtt
-    - rabbitmq_stomp
-    ports:                                    # rabbitmq haproxy 에서 허용하는 포트 목록(필수)
-    - 5672
-    - 5671
-    - 1883
-    - 8883
-    - 61613
-    - 61614
-    - 15672
-    - 15674
-    administrators:
-      management:                            # rabbitmq management 사용자 및 패스워드 정보
-        username: admin
-        password: admin
-      broker:                                # rabbitmq service broker 아이디 및 패스워드 정보
-        username: admin
-        password: admin
-  rabbitmq-haproxy:                          # rabbitmq service broker 아이디 및 패스워드 정보
-    stats:
-      username: admin
-      password: admin
-  broker:                                    # rabbitmq service broker 아이디 및 패스워드 정보
-    host: ((broker_private_ips))
-    protocol: http
-    name: p-rabbitmq
-    username: "admin"
-    password: "admin"
-  rabbitmq-broker:
-    route: paasta-rabbitmq-broker
-    cc_endpoint: http://api.((system_domain))
-    service:                                 # 서비스 이름및 uuid 플랜 Id 정보
-      username: "admin"
-      password: "admin"
-      name: p-rabbitmq
-      uuid: 163b47c6-a2f3-43b1-97f7-b83b37ecabcd
-      plan_uuid: 4e816145-4e71-4e24-a402-0c686b868e2d
-    logging:
-      level: debug
-      print_stack_traces: false
-    rabbitmq:
-      operator_set_policy:
-        enabled: true
-        policy_name: "operator_set_policy"
-        policy_definition: "{\"ha-mode\":\"exactly\",\"ha-params\":2,\"ha-sync-mode\":\"automatic\"}"
-        policy_priority: 50
-      management_domain: api.((system_domain))
-      ssl: |
-        -----BEGIN CERTIFICATE-----
-        MIIC+zCCAeOgAwIBAgIBAjANBgkqhkiG9w0BAQUFADAnMRUwEwYDVQQDEwxNeVRl
-        c3RSb290Q0ExDjAMBgNVBAcTBTY0MTAzMB4XDTE0MDkwNDA3MjIwOFoXDTI0MDkw
-        MTA3MjIwOFowKjEXMBUGA1UEAxMObWVyY3VyaW8ubG9jYWwxDzANBgNVBAoTBnNl
-        cnZlcjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANxxSzf958VIm8lp
-        qQ4BHSmz1z8yU/KEKSbuEfIqpGwpVx6TZ+ZYiXa0cMV2pE7UKR4OyJiuvtvv9kzu
-        6g+HTXmJo2cqVonGCAMp6d9TkCAMaMF76IrbLyGmvXQDcjOmWarvsGHW/w6gJpw9
-        svDP9EXyXTBUfaJq3T8+9UQBfMsL4dHwAt79YgvSQLsYiIi2rzQixK/4PHFeHf3G
-        I/UDgjG0YG9iCWp2g1Sc3Z6hYB/0pOCBxE7LCrSGS6/M/7c2569yK7NqSSNN7Lqz
-        ZoQSF1NYE6KRd2MK2A0QaKrn9v8K5/Lp0fk70bvwtLxTWtp3wq3bYQg8UdqY/6R8
-        UATS/aMCAwEAAaMvMC0wCQYDVR0TBAIwADALBgNVHQ8EBAMCBSAwEwYDVR0lBAww
-        CgYIKwYBBQUHAwEwDQYJKoZIhvcNAQEFBQADggEBAHC89mK1HJgDqwxjsGpa3V7t
-        Nuqe/XxEIUUN3Lm4gBLKq4wed4c6z4csv16f3uL9cypyHPSrQmMPV7CDgWLX4F7g
-        YN9PGaVfIp/rGNsDWJEVNU2rfIEDIUfcL+o844jE8CtmzZ4bGVrCHqKW5pAraai1
-        o5h3JaU4yDLo49rqPeRft2n/gj+5E3gi/1TsnuLuzB7kK1gaTTOrV3GASiGokCEN
-        4v1ZjaqMSGMcwA/esaLv2N6UYJgd5lyJ7PEL4ddE8QCTo2EPhYyltLxRqOjrxa+5
-        KONA94PDj14gOSSsoXkoj7gWQsuHT2RXmurYXk4/PkS+k1j0+ZCzKi/ZxF5jt50=
-        -----END CERTIFICATE-----
-      administrator:
-        username: admin
-        password: admin
+  canaries: 1
+  canary_watch_time: 30000-180000
+  max_in_flight: 4
+  serial: false
+  update_watch_time: 30000-180000

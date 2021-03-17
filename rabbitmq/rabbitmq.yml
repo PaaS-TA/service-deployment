@@ -185,6 +185,10 @@ releases:
   #url: https://bosh.io/d/github.com/pivotal-cf/cf-rabbitmq-release
   version: 2.1.0
 
+variables:
+- name: administar_password
+  type: password
+
 stemcells:
 - alias: default 
   os: ((stemcell_os))

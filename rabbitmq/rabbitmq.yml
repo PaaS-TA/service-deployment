@@ -32,10 +32,10 @@ instance_groups:
         route: rabbitmq-multitenant-broker
         service:
           name: rabbitmq
-          password: broker-broker
+          password: ((broker_password))
           plan_uuid: 22F0B28C-B886-4123-B01B-95E54D3DE6DA
           shareable: true
-          username: broker
+          username: ((broker_username))
           uuid: 568725FD-AD46-44CA-9853-621416E983A4
     release: paasta-rabbitmq
 #  - consumes:

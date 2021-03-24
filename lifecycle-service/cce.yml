@@ -1,0 +1,14 @@
+---
+# CCE - mariadb patch 
+- type: replace
+  path: /instance_groups/name=app-lifecycle/jobs/name=app-lifecycle/properties/postgres?/port
+  value: ((postgres_port))
+- type: replace
+  path: /instance_groups/name=app-lifecycle/jobs/name=app-lifecycle/properties/postgres?/cce_enable
+  value: true
+- type: replace
+  path: /instance_groups/name=app-lifecycle/jobs/name=app-lifecycle/properties/mariadb?/cce_enable
+  value: true
+- type: replace
+  path: /instance_groups/name=mariadb/jobs/name=mariadb/properties/mariadb?/cce_enable
+  value: true

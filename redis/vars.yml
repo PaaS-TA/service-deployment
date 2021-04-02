@@ -11,7 +11,7 @@ mariadb_instances: 1                                              # mariadb inst
 mariadb_vm_type: "medium"                                         # mariadb vm type
 mariadb_persistent_disk_type: "2GB"                               # mariadb persistent disk type
 mariadb_user_password: "admin"                                    # mariadb admin password
-mariadb_port: 3306                                                # mariadb port (default : 3306)
+mariadb_port: 13306                                               # mariadb port (e.g. 13306) -- Do Not Use "3306"
 
 # ON DEMAND BROKER
 broker_azs: [z5]                                                  # broker azs

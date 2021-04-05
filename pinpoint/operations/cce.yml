@@ -1,0 +1,31 @@
+---
+# set paasta-conf release
+- type: replace
+  path: /releases/name=paasta-conf?
+  value:
+    name: paasta-conf
+    url: https://nextcloud.paas-ta.org/index.php/s/CTDsro382NyyAEL/download
+    version: 1.0.1
+
+# CCE - collector tomcat patch
+- type: replace
+  path: /instance_groups/name=collector/jobs/-
+  value:
+    name: tomcat_conf
+    release: paasta-conf
+    properties:
+      cce_enable: true
+
+# CCE - pinpoint_web tomcat patch
+- type: replace
+  path: /instance_groups/name=pinpoint_web/jobs/-
+  value:
+    name: tomcat_conf
+    release: paasta-conf
+    properties:
+      cce_enable: true
+
+- type: replace
+  path: /properties/cce_enable
+  value: true
+

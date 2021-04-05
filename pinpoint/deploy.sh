@@ -10,4 +10,4 @@ bosh -e ${BOSH_ENVIRONMENT} -n -d pinpoint deploy --no-redact pinpoint.yml \
     -o operations/${CURRENT_IAAS}-network.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml \
-    -l operations/pem.yml
+    -o operations/cce.yml

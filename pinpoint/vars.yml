@@ -11,9 +11,6 @@ master_azs: [z3]                                                 # h_master azs
 master_instances: 1                                              # h_master instances (default : 1)
 master_vm_type: "large"                                          # h_master vm type 
 master_persistent_disk_type: "30GB"                              # h_master persistent disk type
-master_pem_ssh: false                                            # h_master pem ssh (default : false)
-master_replication: 1                                            # h_master replication (default : 1)
-master_tcp_listen_port: 29994                                    # h_master tcp listen port (default : 29994)
 
 # COLLECTOR
 collector_azs: [z3]                                              # collector azs
@@ -43,8 +40,3 @@ webui_instances: 1                                               # webui instanc
 webui_vm_type: "large"                                           # webui vm type
 webui_persistent_disk_type: "30GB"                               # webui persistent disk type
 webui_haproxy_public_ip: "<WEB_UI_PUBLIC_IP>"                    # webui haproxy's public IP
-
-# PROPERTIES
-resource_tracker_port: 8025                                      # resource tracker port (default : 8025) 
-scheduler_port: 8030                                             # scheduler port (default : 8030)
-resourcemanager_port: 8040                                       # resourcemanager port (default : 8040) 

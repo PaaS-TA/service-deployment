@@ -12,10 +12,10 @@ public_networks_name: "vip"                                      # public networ
 mysql_azs: [z4]                                                  # mysql azs
 mysql_instances: 1                                               # mysql instances 
 mysql_vm_type: "medium"                                          # mysql vm type
-mysql_persistent_disk_type: "1GB"                                # mysql persistent disk type
+mysql_persistent_disk_type: "2GB"                                # mysql persistent disk type
 mysql_port: 13306                                                # mysql port (e.g. 13306) -- Do Not Use "3306"
 mysql_admin_username: "<MYSQL_ADMIN_USERNAME>"                   # mysql admin username (e.g. "root")
-mysql_admin_password: "<MYSQL_ADMIN_PASSWORD>"                   # mysql admin password (e.g. "admin1234")
+mysql_admin_password: "<MYSQL_ADMIN_PASSWORD>"                   # mysql admin password (e.g. "admin#1234" 영어/숫자/특수문자 혼용 8자리 이상 또는 2종류 혼용 10자리 이상)
 
 
 # GLUSTERFS SERVER

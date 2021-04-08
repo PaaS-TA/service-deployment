@@ -1,0 +1,6 @@
+---
+
+- type: replace
+  path: /properties/cce_enable
+  value: true
+

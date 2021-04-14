@@ -5,7 +5,7 @@
   path: /releases/name=paasta-conf?
   value:
     name: paasta-conf
-    #url: file:///home/ubuntu/workspace/sunny/github/paasta-conf-release/paasta-conf-release-1.0.1.tgz
+    #url: file:///home/ubuntu/workspace/github/paasta-conf-release/paasta-conf-release-1.0.1.tgz
     url: https://nextcloud.paas-ta.org/index.php/s/XaAxdSbCSHp9KwY/download
     version: 1.0.2
 

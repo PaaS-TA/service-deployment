@@ -1,0 +1,8 @@
+---
+
+# CCE - mysql patch
+- type: replace
+  path: /instance_groups/name=mysql-broker/jobs/name=op-mysql-java-broker/properties/cce_enable?
+  value: true
+
+

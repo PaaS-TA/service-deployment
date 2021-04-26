@@ -6,6 +6,6 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 # bosh director alias name (PaaS-TA에
 
 # DEPLOY
 bosh -e ${BOSH_ENVIRONMENT} -n -d redis deploy --no-redact redis.yml \
-    -o cce.yml \
+    -o operations/cce.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml

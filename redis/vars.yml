@@ -17,13 +17,14 @@ mariadb_port: 13306                                               # mariadb port
 broker_azs: [z5]                                                  # broker azs
 broker_instances: 1                                               # broker instances 
 broker_vm_type: "service_medium"                                  # broker vm type
+bosh_version: 271.2.0
 
 # PROPERTIES
 broker_server_port: 8080                                          # broker server port
 
 ### On-Demand Dedicated Service Instance Properties ###
 on_demand_service_instance_name: "redis"                          # On-Demand Service Instance Name
-service_password: "PaaS-TA#2021!"                                         # On-Demand Redis Service password
+service_password: "PaaS-TA#2021!"                                 # On-Demand Redis Service password
 service_port: 6379                                                # On-Demand Redis Service port
 
 # SERVICE PLAN INFO

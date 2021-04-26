@@ -4,8 +4,7 @@
   path: /releases/name=paasta-conf?
   value:
     name: paasta-conf
-    url: file:///home/ubuntu/workspace/sunny/github/paasta-conf-release/paasta-conf-release-1.0.1.tgz
-    #url: https://nextcloud.paas-ta.org/index.php/s/aygBS2qfsmfsD5d/download
+    url: https://nextcloud.paas-ta.org/index.php/s/CTDsro382NyyAEL/download
     version: 1.0.1
 
 # CCE - sourcecontrol-webui tomcat patch

@@ -3,8 +3,8 @@ name: mongodb  # 서비스 배포이름(필수)
 
 releases:
 - name: paasta-mongodb-shard  #서비스 릴리즈 이름(필수)
-  url: https://nextcloud.paas-ta.org/index.php/s/7DyiWNWD2N8pT8J/download
-  version: "2.0.1"   #서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  url: https://nextcloud.paas-ta.org/index.php/s/73a4ZanqgZYPMny/download
+  version: "2.1.0"   #서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
 
 # this section describes how updates are handled
 update:
@@ -129,6 +129,10 @@ instance_groups:
     static_ips: ((mongodb_config_static_ips))
   jobs:
   - name: mongodb_config
+    properties:
+      mongodb:
+        key: ((key))
+      configsvr_hosts: ((mongodb_config_static_ips)) # mongodb_config hosts
     release: paasta-mongodb-shard
 - name: mongodb_shard
   vm_type: ((mongodb_shard_vm_type))
@@ -143,7 +147,6 @@ instance_groups:
     properties:
       mongodb:
         key: ((key))
-      bindIp: 0.0.0.0
       configsvr_hosts: ((mongodb_config_static_ips)) # mongodb_config hosts
       repl_name_host_list: # mongodb_master properties
       - ((replSetName1))/((mongodb_master1_static_ips)) # replicaSet1 의 이름/host

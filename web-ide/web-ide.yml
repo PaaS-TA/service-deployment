@@ -8,8 +8,8 @@ stemcells:
 
 releases:
   - name: paas-ta-webide-release                                 # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
-    url: https://nextcloud.paas-ta.org/index.php/s/Fs7WB5yTfdqZXbC/download
-    version: "1.1.0"                                             # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+    url: https://nextcloud.paas-ta.org/index.php/s/kYSnWLNCRDBRcrA/download
+    version: "2.1.0"                                             # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
 
 update:
   canaries: 1                                               # canary 인스턴스 수(필수)
@@ -20,7 +20,7 @@ update:
 
 
 instance_groups:
-- name: eclipse-che  #작업 이름(필수)
+- name: eclipse-che 					    # 작업 이름(필수)
   azs: ((eclipse_che_azs))
   instances: ((eclipse_che_instances))
   vm_type: ((eclipse_che_vm_type))
@@ -28,13 +28,11 @@ instance_groups:
   networks:
   - name: ((private_networks_name))
   - name: ((public_networks_name))
-    static_ips: ((eclipse_che_public_ips))
+    static_ips: ((eclipse_che_public_ips))		    # 배포시 사용할 public ips, OnDemand instance를 초기에 0 으로 셋팅해서 주석처리.
+
   jobs:
   - name: eclipse-che
     release: paas-ta-webide-release
-  properties:
-    eclipseche:
-      publicip: ((eclipse_che_public_ips))
 
 - name: mariadb
   azs: ((mariadb_azs))
@@ -72,14 +70,37 @@ instance_groups:
   syslog_aggregator: null
   properties:
     network:
-      static_ips: ((eclipse_che_public_ips))
-    webide:
-      servers: ((eclipse_che_public_ips))
+      static_ips: "((eclipse_che_buffer_ips))"
     server:
       port: ((broker_port))
     datasource:
-      password: ((mariadb_admin_password))
+      password: "((mariadb_admin_password))"
     serviceDefinition:
-      id: ((broker_services_id))
+      id: "((serviceDefinition_id))"
+      name: "((serviceDefinition_name))"
+      bullet:
+        name: "((serviceDefinition_bullet_name))"
+        desc: "((serviceDefinition_bullet_desc))"
       plan1:
-        id: ((broker_services_plans_id))
+        id: "((serviceDefinition_plan1_id))"
+        name: "((serviceDefinition_plan1_name))"
+        desc: "((serviceDefinition_plan1_desc))"
+      org_limitation: "((serviceDefinition_org_limitation))"
+      space_limitation: "((serviceDefinition_space_limitation))"
+    bosh:
+      client_id: "((bosh_client_admin_id))"
+      client_secret: "((bosh_client_admin_secret))"
+      url: ((bosh_url)):((bosh_director_port))
+      oauth_url: ((bosh_url)):((bosh_oauth_port))
+      deployment_name: "((deployment_name))"
+      instance_name: "eclipse-che"
+      version: ((bosh_version))
+    cloudfoundry:
+      url: "((system_domain))"
+      sslSkipValidation: "((cloudfoundry_sslSkipValidation))"
+      admin:
+        id: "((paasta_admin_username))"
+        password: "((paasta_admin_password))"
+
+properties:                                                     
+  cce_enable: false

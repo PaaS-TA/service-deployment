@@ -11,9 +11,11 @@ public_networks_name: "vip"                                               # publ
 
 # ECLIPSE-CHE
 eclipse_che_azs: [z7]                                                     # eclipse-che : azs
-eclipse_che_instances: 2                                                  # eclipse-che : instances (1)
+eclipse_che_instances: 0                                                  # eclipse-che : instances (default : 0)
 eclipse_che_vm_type: "large"                                              # eclipse-che : vm type
-eclipse_che_public_ips: "<ECLIPSE_CHE_INIT_PUBLIC_IPS>"                   # eclipse-che : public ips (e.g. ["00.00.00.00" , "11.11.11.11"])
+eclipse_che_public_ips: "<ECLIPSE_CHE_PUBLIC_IPS>"                    # eclipse-che : public ips (e.g. ["00.00.00.00" , "11.11.11.11"], 초기 배포시 [])
+eclipse_che_buffer_ips: "<ECLIPSE_CHE_BUFFER_IPS>"                 # eclipse-che : OnDemand 에서 사용할 여분의 public ips
+
 
 # MARIA_DB
 mariadb_azs: [z4]                                                         # mariadb : azs
@@ -21,12 +23,22 @@ mariadb_instances: 1                                                      # mari
 mariadb_vm_type: "small"                                                  # mariadb : vm type
 mariadb_persistent_disk_type: "10GB"                                      # mariadb : persistent disk type
 mariadb_port: "<MARIADB_PORT>"                                            # mariadb : database port (e.g. 31306) -- Do Not Use "3306"
-mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"                        # mariadb : database admin password (e.g. "Paasta@2018")
+mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"                        # mariadb : database admin password (e.g. "Paasta@2021")
 
 # SERVICE-BROKER
 broker_azs: [z4]                                                          # service-broker : azs
 broker_instances: 1                                                       # service-broker : instances (1)
 broker_vm_type: "medium"                                                  # service-broker : vm type
 broker_port: "<BROKER_PORT>"                                              # service-broker : broker port (e.g. "8080")
-broker_services_id: "<SERVICE_GUID>"                                      # service-broker : service guid (e.g. "af86588c-6212-11e7-907b-b6006ad3webide0")
-broker_services_plans_id: "<SERVICE_PLAN_ID>"                             # service-broker : service plan id (e.g. "a5930564-6212-11e7-907b-b6006ad3webide1")
+serviceDefinition_id: "<SERVICE_GUID>"                                    # serviceDefinition_id : service guid (e.g. "af86588c-6212-11e7-907b-b6006ad3webide0")
+serviceDefinition_name: "WEB IDE"
+serviceDefinition_plan1_id: "<SERVICE_PLAN_ID>"                           # serviceDefinition_plan1_id : service plan id (e.g. "a5930564-6212-11e7-907b-b6006ad3webide1")
+serviceDefinition_plan1_name: "<SERVICE_PLAN_NAME>"                       # serviceDefinition_plan1_name : service plan name (e.g. "dedicated-vm")
+serviceDefinition_plan1_desc: "WEB IDE SERVICE"
+serviceDefinition_bullet_name: "Web IDE OnDemand Server Use"
+serviceDefinition_bullet_desc: "Web IDE Service Using a OnDemand Server"
+serviceDefinition_org_limitation: "-1"                                    # serviceDefinition_org_limitation : 조직별 서비스 제한
+serviceDefinition_space_limitation: "-1"                                  # serviceDefinition_space_limitation : 공간별 서비스 제한
+
+# CF
+cloudfoundry_sslSkipValidation: "true"

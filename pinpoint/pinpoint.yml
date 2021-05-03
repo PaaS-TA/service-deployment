@@ -1,10 +1,10 @@
-# paasta-pinpoint-vsphere 설정 파일 내용
+# paasta-pinpoint 설정 파일 내용
 name: pinpoint                                                    # 서비스 배포이름(필수)
 
 releases:
 - name: "paasta-pinpoint-release"                                # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
-  version: "1.0"                                              # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
-  url: https://nextcloud.paas-ta.org/index.php/s/SJ6SoLksWEc3ckJ/download
+  version: "1.1.0"                                              # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  url: https://nextcloud.paas-ta.org/index.php/s/W537HGSMNPH3qfo/download
 
 stemcells:
 - alias: default
@@ -30,9 +30,10 @@ instance_groups:
   - name: h_master
     release: "paasta-pinpoint-release"
   syslog_aggregator: null
-  properties:
-    pem_key: ((pem_key))
-    PemSSH: ((master_pem_ssh))
+  provides:
+    h_master_link: {as: h_master}
+  consume:
+    h_master_link: {from: h_master}
 
 - name: collector                                                 # 작업 이름(필수)
   azs: ((collector_azs))
@@ -46,6 +47,11 @@ instance_groups:
   - name: collector 
     release: "paasta-pinpoint-release"
   syslog_aggregator: null
+  provides:
+    collector_link: {as: collector}
+  consume:
+    h_master_link: {from: h_master}
+    collector_link: {from: collector}
 
 - name: pinpoint_web                                              # 작업 이름(필수)
   azs: ((pinpoint_azs))
@@ -59,6 +65,11 @@ instance_groups:
   - name: pinpoint_web
     release: "paasta-pinpoint-release"
   syslog_aggregator: null
+  provides:
+    pinpoint_web_link: {as: pinpoint_web}
+  consume:
+    h_master_link: {from: h_master}
+    pinpoint_web_link: {from: pinpoint_web}
 
 - name: broker                                                    # 작업 이름(필수)
   azs: ((broker_azs))
@@ -72,6 +83,11 @@ instance_groups:
   - name: broker
     release: "paasta-pinpoint-release"
   syslog_aggregator: null
+  provides:
+    broker_link: {as: broker}
+  consume:
+    collector_link: {from: collector}
+    broker_link: {from: broker}
 
 - name: haproxy_webui                                             # 작업 이름(필수)
   azs: ((webui_azs))
@@ -87,17 +103,15 @@ instance_groups:
   - name: haproxy_webui
     release: "paasta-pinpoint-release"
   syslog_aggregator: null
+  provides:
+    haproxy_link: {as: haproxy_webui}
+  consume:
+    pinpoint_web_link: {from: pinpoint_web}
 
 properties:                                                       # Pinpoint 설정정보
-  master:                                                         # Pinpoint master 설정정보
-    replication: ((master_replication))                           # Pinpoint master 복제개수
-    tcp_listen_port: ((master_tcp_listen_port))                   # Pinpoint master tcp port
   broker:                                                         # Pinpoint broker 설정정보
     collector_tcp_port: ((collector_tcp_port))                    # Pinpoint collector tcp port 설정정보
     collector_stat_port: ((collector_stat_port))                  # Pinpoint collector stat port 설정정보
     collector_span_port: ((collector_span_port))                  # Pinpoint collector span port 설정정보
     dashboard_uri: http://((webui_haproxy_public_ip)):80/#/main   # Pinpoint dashboard url 설정정보
-  yarn:                                                           # Pinpoint yarn 설정정보      
-    resource_tracker_port: ((resource_tracker_port))              # Pinpoint yarn resource_tracker_port
-    scheduler_port: ((scheduler_port))                            # Pinpoint yarn scheduler_port
-    resourcemanager_port: ((resourcemanager_port))                # Pinpoint yarn resourcemanager_port
+  cce_enable: false

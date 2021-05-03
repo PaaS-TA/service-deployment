@@ -5,8 +5,6 @@ instance_groups:
 - azs: ((broker_azs))
   instances: ((broker_instances))
   jobs:
-#  - name: cf-cli-6-linux
-#    release: cf-cli
   - name: rabbitmq-service-broker
     properties:
       cf:
@@ -38,20 +36,6 @@ instance_groups:
           username: ((broker_username))
           uuid: 568725FD-AD46-44CA-9853-621416E983A4
     release: paasta-rabbitmq
-#  - consumes:
-#      nats:
-#        deployment: paasta
-#        from: nats
-#    name: route_registrar
-#    properties:
-#      route_registrar:
-#        routes:
-#        - name: rabbitmq-multitenant-broker
-#          port: 4567
-#          registration_interval: 20s
-#          uris:
-#          - rabbitmq-multitenant-broker.((system_domain))
-#    release: routing
   - name: bpm
     release: bpm
   - name: broker-registrar
@@ -81,18 +65,6 @@ instance_groups:
         admin_username: ((paasta_admin_username))
         api_url: https://api.((system_domain))
     release: paasta-rabbitmq
-#  - name: smoke-tests
-#    properties:
-#      broker:
-#        name: rabbitmq
-#      cf:
-#        admin_password: admin
-#        admin_username: admin
-#        api_url: https://api.((system_domain))
-#        domain: ((system_domain))
-#      smoke_tests:
-#        org: system
-#    release: paasta-rabbitmq-smoke-tests
   name: rmq-broker
   networks:
   - name: ((private_networks_name)) 
@@ -128,9 +100,6 @@ instance_groups:
         - 15672
         - 15674
         restart_statsdb_cron_schedule: 42 */4 * * *
-        #ssl:
-        #  enabled: true
-        #  verify: true
     release: paasta-rabbitmq
   name: rmq
   networks:
@@ -148,20 +117,6 @@ instance_groups:
           password: PaaS-TA!2021
           username: admin
     release: paasta-rabbitmq
-#  - consumes:
-#      nats:
-#        deployment: paasta 
-#        from: nats
-#    name: route_registrar
-#    properties:
-#      route_registrar:
-#        routes:
-#        - name: paaasta-rabbitmq
-#          port: 15672
-#          registration_interval: 20s
-#          uris:
-#          - paaasta-rabbitmq.((system_domain))
-#    release: routing
   - name: bpm
     release: bpm
   name: haproxy
@@ -171,18 +126,12 @@ instance_groups:
   vm_type: ((vm_type_small)) 
 
 releases:
-#- name: rabbitmq-broker
-#  version: latest
-#- name: routing
-#  version: latest
 - name: cf-cli
   version: latest
-#- name: cf-rabbitmq-smoke-tests
-#  version: latest
 - name: bpm
   version: latest
 - name: paasta-rabbitmq
-  #url: https://bosh.io/d/github.com/pivotal-cf/cf-rabbitmq-release
+  url: https://nextcloud.paas-ta.org/index.php/s/o4HQoeYbEKPdNma/download
   version: 2.1.0
 
 variables:

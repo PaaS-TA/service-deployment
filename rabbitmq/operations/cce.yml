@@ -1,0 +1,46 @@
+---
+# CCE - rabbitmq patch 
+- type: replace
+  path: /instance_groups/name=rmq/jobs/name=rabbitmq-server/properties/rabbitmq-server/ssl?/cacert
+  value: ((rmq_ssl.ca))
+- type: replace
+  path: /instance_groups/name=rmq/jobs/name=rabbitmq-server/properties/rabbitmq-server/ssl?/cert
+  value: ((rmq_ssl.certificate))
+- type: replace
+  path: /instance_groups/name=rmq/jobs/name=rabbitmq-server/properties/rabbitmq-server/ssl?/key
+  value: ((rmq_ssl.private_key))
+- type: replace
+  path: /instance_groups/name=rmq/jobs/name=rabbitmq-server/properties/rabbitmq-server/ssl?/enabled
+  value: true
+- type: replace
+  path: /instance_groups/name=rmq/jobs/name=rabbitmq-server/properties/rabbitmq-server/ssl?/verify
+  value: true
+- type: replace
+  path: /instance_groups/name=rmq/jobs/name=rabbitmq-server/properties/rabbitmq-server/cce_enable?
+  value: true 
+
+- type: replace
+  path: /instance_groups/name=haproxy/jobs/name=rabbitmq-haproxy/properties/rabbitmq-haproxy/backend_ca_file?
+  value: ((rmq_ssl.ca))
+- type: replace
+  path: /instance_groups/name=haproxy/jobs/name=rabbitmq-haproxy/properties/rabbitmq-haproxy/cce_enable?
+  value: true
+- type: replace
+  path: /variables?/-
+  value:
+    name: rmq_ca
+    options:
+      common_name: rmqCA
+      is_ca: true
+    type: certificate
+- type: replace
+  path: /variables?/-
+  value:
+    name: rmq_ssl
+    options:
+      alternative_names:
+      - rmq.((private_networks_name)).((deployment_name)).bosh
+      - '*.rmq.((private_networks_name)).((deployment_name)).bosh'
+      ca: rmq_ca
+      common_name: rmqSSL
+    type: certificate

@@ -1,0 +1,25 @@
+---
+# set paasta-conf release
+- type: replace
+  path: /releases/name=paasta-conf?
+  value:
+    name: paasta-conf
+    url: https://nextcloud.paas-ta.org/index.php/s/CTDsro382NyyAEL/download
+    version: 1.0.1
+
+# CCE - sourcecontrol-webui tomcat patch
+- type: replace
+  path: /instance_groups/name=sourcecontrol-webui/jobs/-
+  value:
+    name: tomcat_conf
+    release: paasta-conf
+    properties:
+      cce_enable: true
+
+
+
+# CCE - mariadb patch 
+- type: replace
+  #path: /instance_groups/name=mariadb/jobs/name=mariadb/properties/mariadb?/cce_enable
+  path: /properties/mariadb/cce_enable?
+  value: true

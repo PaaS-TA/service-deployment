@@ -1,7 +1,7 @@
 - type: replace
   path: /releases/name=paasta-sourcecontrol-release/url
-  value: file://((releases_dir))/service/paasta-sourcecontrol-release-1.0.1.tgz
+  value: file://((releases_dir))/service/paasta-sourcecontrol-release-1.1.0.tgz
 
 - type: replace
   path: /releases/name=paasta-sourcecontrol-release/version
-  value: "1.0.1"
+  value: "1.1.0"

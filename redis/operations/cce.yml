@@ -1,0 +1,10 @@
+---
+# CCE - redis patch
+- type: replace
+  path: /instance_groups/name=redis/jobs/name=redis/properties?/cce_enable
+  value: true
+
+# CCE - mariadb patch 
+- type: replace
+  path: /properties/mariadb/cce_enable?
+  value: true

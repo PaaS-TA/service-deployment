@@ -3,8 +3,8 @@ name: lifecycle-service
 
 releases:
 - name: paasta-app-lifecycle-service
-  url: https://nextcloud.paas-ta.org/index.php/s/KZsLzMKE3kDr9SJ/download
-  version: "1.0"
+  url: https://nextcloud.paas-ta.org/index.php/s/cyAAcrbqfXriL2L/download
+  version: "1.1.0"
 
 stemcells:
 - alias: default
@@ -65,6 +65,7 @@ instance_groups:
       service:
         init_password: ((app_lifecycle_serviceadmin_password))
       services:
+        name: "app-lifecycle"
         id: ((broker_services_id))
         plans:
           id: ((broker_services_plans_id))

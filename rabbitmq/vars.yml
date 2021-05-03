@@ -1,3 +1,5 @@
+deployment_name: "rabbitmq"                                  # rabbitmq deployment name 
+
 # STEMCELL
 stemcell_os: "ubuntu-xenial"                                # stemcell os
 stemcell_version: "621.94"                                  # stemcell version
@@ -23,6 +25,8 @@ broker_azs: [z3]                                            # service-broker : a
 broker_instances: 1                                         # service-broker : instances (1)
 broker_private_ips: "<SERVICE_BROKER_PRIVATE_IPS>"          # service-broker : private ips (e.g. "10.0.81.33")
 broker_port: 4567                                           # service-broker : broker port (e.g. "4567")
+broker_username: "<SERVICE_BROKER_USERNAME>"		    # service-broker : username (e.g. "admin")
+broker_password: "<SERVICE_BROKER_PASSWORD>"                # service-broker : password (e.g. "admin" no recommand)
 
 # BROKER-REGISTRAR
 broker_registrar_azs: [z3]                                  # broker-registrar : azs

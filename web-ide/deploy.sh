@@ -8,6 +8,6 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 # bosh director alias name (PaaS-TA에
 # DEPLOY
 bosh -e ${BOSH_ENVIRONMENT} -n -d web-ide deploy --no-redact web-ide.yml \
     -o operations/${CURRENT_IAAS}-network.yml \
-    -l ${COMMON_VARS_PATH} \
     -o operations/cce.yml \
+    -l ${COMMON_VARS_PATH} \
     -l vars.yml

@@ -16,11 +16,11 @@ instance_groups:
           print_stack_traces: false
         rabbitmq:
           administrator:
-            password: PaaS-TA@2021
-            username: broker
+            password: ((broker_password))
+            username: ((broker_username))
           hosts: USING BOSH LINKS
           management:
-            username: admin
+            username: ((management_username))
           management_domain: paaasta-rabbitmq.((system_domain))
           operator_set_policy:
             enabled: true
@@ -44,11 +44,11 @@ instance_groups:
         host: rabbitmq-broker.((system_domain))
         port: ((broker_port))
         name: rabbitmq
-        password: broker-broker
+        password: ((broker_password))
         protocol: http
         service:
           name: rabbitmq
-        username: broker
+        username: ((broker_username))
       cf:
         admin_password: ((paasta_admin_password)) 
         admin_username: ((paasta_admin_username))
@@ -78,11 +78,11 @@ instance_groups:
       rabbitmq-server:
         administrators:
           broker:
-            password: PaaS-TA@2021
-            username: broker
+            password: ((broker_password))
+            username: ((broker_username))
           management:
-            password: PaaS-TA#2021
-            username: admin
+            password: ((management_password))
+            username: ((management_username))
         cluster_partition_handling: autoheal
         cookie: rabbit-cluster:aws
         disk_alarm_threshold: '{mem_relative,0.4}'
@@ -114,8 +114,8 @@ instance_groups:
     properties:
       rabbitmq-haproxy:
         stats:
-          password: PaaS-TA!2021
-          username: admin
+          password: ((management_password)
+          username: ((management_username))
     release: paasta-rabbitmq
   - name: bpm
     release: bpm

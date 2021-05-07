@@ -14,6 +14,8 @@ private_networks_name: "default"                            # private network na
 rabbitmq_azs: [z3]                                          # rabbitmq : azs
 rabbitmq_instances: 1                                       # rabbitmq : instances (1) 
 rabbitmq_private_ips: "<RABBITMQ_PRIVATE_IPS>"              # rabbitmq : private ips (e.g. "10.0.81.31")
+management_username: "<MANAGEMENT_USERNAME>"  		    # rabbitmq : username
+management_password: "<MANAGEMENT_PASSWORD>"		    # rabbitmq : password
 
 # HAPROXY
 haproxy_azs: [z3]                                           # haproxy : azs

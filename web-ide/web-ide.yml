@@ -28,7 +28,7 @@ instance_groups:
   networks:
   - name: ((private_networks_name))
   - name: ((public_networks_name))
-    static_ips: ((eclipse_che_public_ips))		    # 배포시 사용할 public ips, OnDemand instance를 초기에 0 으로 셋팅해서 주석처리.
+    static_ips: ((eclipse_che_public_ips))
 
   jobs:
   - name: eclipse-che

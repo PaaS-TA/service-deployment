@@ -17,7 +17,6 @@ mariadb_port: 13306                                               # mariadb port
 broker_azs: [z5]                                                  # broker azs
 broker_instances: 1                                               # broker instances 
 broker_vm_type: "service_medium"                                  # broker vm type
-bosh_version: 271.2.0
 
 # PROPERTIES
 broker_server_port: 8080                                          # broker server port

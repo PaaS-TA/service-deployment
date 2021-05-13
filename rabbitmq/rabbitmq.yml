@@ -16,18 +16,18 @@ instance_groups:
           print_stack_traces: false
         rabbitmq:
           administrator:
-            password: ((broker_password))
-            username: ((broker_username))
+            password: ((administrator_password))
+            username: ((administrator_username))
           hosts: USING BOSH LINKS
           management:
             username: ((management_username))
-          management_domain: paaasta-rabbitmq.((system_domain))
+          management_domain: server.rmq.((system_domain))
           operator_set_policy:
             enabled: true
             policy_definition: '{"ha-mode":"exactly","ha-params":2,"ha-sync-mode":"automatic"}'
             policy_name: operator_set_policy
             policy_priority: 50
-        route: rabbitmq-multitenant-broker
+        route: broker-rmq
         service:
           name: rabbitmq
           password: ((broker_password))
@@ -35,35 +35,6 @@ instance_groups:
           shareable: true
           username: ((broker_username))
           uuid: 568725FD-AD46-44CA-9853-621416E983A4
-    release: paasta-rabbitmq
-  - name: bpm
-    release: bpm
-  - name: broker-registrar
-    properties:
-      broker:
-        host: rabbitmq-broker.((system_domain))
-        port: ((broker_port))
-        name: rabbitmq
-        password: ((broker_password))
-        protocol: http
-        service:
-          name: rabbitmq
-        username: ((broker_username))
-      cf:
-        admin_password: ((paasta_admin_password)) 
-        admin_username: ((paasta_admin_username))
-        api_url: https://api.((system_domain))
-    release: paasta-rabbitmq
-  - name: broker-deregistrar
-    properties:
-      broker:
-        name: rabbitmq
-        service:
-          name: rabbitmq
-      cf:
-        admin_password: ((paasta_admin_password)) 
-        admin_username: ((paasta_admin_username))
-        api_url: https://api.((system_domain))
     release: paasta-rabbitmq
   name: rmq-broker
   networks:
@@ -78,8 +49,8 @@ instance_groups:
       rabbitmq-server:
         administrators:
           broker:
-            password: ((broker_password))
-            username: ((broker_username))
+            password: ((administrator_password))
+            username: ((administrator_username))
           management:
             password: ((management_password))
             username: ((management_username))
@@ -101,9 +72,31 @@ instance_groups:
         - 15674
         restart_statsdb_cron_schedule: 42 */4 * * *
     release: paasta-rabbitmq
+  - name: route_registrar
+    release: routing
+    consumes:
+      nats: {from: nats, deployment: paasta-4vm}
+      nats-tls: {from: nats-tls, deployment: paasta-4vm}
+    properties:
+      nats:
+        tls:
+          hostname: "((paasta_nats_ip))"
+          enabled: true
+          client_cert: "((nats_client_cert.certificate))"
+          client_key: "((nats_client_cert.private_key))"
+      route_registrar:
+        routes:
+        - name: server-rmq
+          port: 15672
+          registration_interval: 20s
+          uris:
+          - server.rmq.((system_domain))
+  - name: bpm
+    release: bpm
   name: rmq
   networks:
   - name: ((private_networks_name)) 
+    static_ips: ((rabbitmq_private_ips))
   persistent_disk_type: 50GB
   stemcell: default 
   vm_type: ((vm_type_small))  
@@ -114,29 +107,44 @@ instance_groups:
     properties:
       rabbitmq-haproxy:
         stats:
-          password: ((management_password)
+          password: ((management_password))
           username: ((management_username))
     release: paasta-rabbitmq
-  - name: bpm
-    release: bpm
   name: haproxy
   networks:
   - name: ((private_networks_name)) 
+    static_ips: ((haproxy_private_ips))
   stemcell: default 
   vm_type: ((vm_type_small)) 
 
 releases:
-- name: cf-cli
-  version: latest
 - name: bpm
   version: latest
 - name: paasta-rabbitmq
   url: https://nextcloud.paas-ta.org/index.php/s/o4HQoeYbEKPdNma/download
   version: 2.1.0
+- name: routing
+  url: https://bosh.io/d/github.com/cloudfoundry/routing-release?v=0.207.0
+  version: 0.207.0
+  sha1: 9e703259a07f032e7ca96dca2730d0e0c2b61685
 
 variables:
-- name: administar_password
+- name: administrator_password
   type: password
+- name: management_password
+  type: password
+- name: nats_ca
+  type: certificate
+  options:
+    is_ca: true
+    common_name: nats
+- name: nats_client_cert
+  type: certificate
+  options:
+    ca: nats_ca
+    common_name: "nats_client"
+    extended_key_usage:
+    - client_auth
 
 stemcells:
 - alias: default 
@@ -149,3 +157,4 @@ update:
   max_in_flight: 4
   serial: false
   update_watch_time: 30000-180000
+

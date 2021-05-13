@@ -14,8 +14,7 @@ private_networks_name: "default"                            # private network na
 rabbitmq_azs: [z3]                                          # rabbitmq : azs
 rabbitmq_instances: 1                                       # rabbitmq : instances (1) 
 rabbitmq_private_ips: "<RABBITMQ_PRIVATE_IPS>"              # rabbitmq : private ips (e.g. "10.0.81.31")
-management_username: "<MANAGEMENT_USERNAME>"  		    # rabbitmq : username
-#management_password: "<MANAGEMENT_PASSWORD>"		    # rabbitmq : password
+management_username: "<MANAGEMENT_USERNAME>"  		    # rabbitmq : username (e.g. "madmin") *broker/administrator_username != management_username
 
 # HAPROXY
 haproxy_azs: [z3]                                           # haproxy : azs
@@ -25,11 +24,10 @@ haproxy_private_ips: "<HAPROXY_PRIVATE_IPS>"                # haproxy : private 
 # SERVICE-BROKER
 broker_azs: [z3]                                            # service-broker : azs
 broker_instances: 1                                         # service-broker : instances (1)
-#broker_private_ips: "<SERVICE_BROKER_PRIVATE_IPS>"          # service-broker : private ips (e.g. "10.0.81.33")
 broker_port: 4567                                           # service-broker : broker port (e.g. "4567")
-broker_username: "<SERVICE_BROKER_USERNAME>"		    # service-broker : username (e.g. "admin") *broker_username != administrator_username
+broker_username: "<SERVICE_BROKER_USERNAME>"		    # service-broker : username (e.g. "admin") *broker/administrator_username != management_username
 broker_password: "<SERVICE_BROKER_PASSWORD>"                # service-broker : password (e.g. "admin" no recommand)
-administrator_username: "<SERVICE_BROKER_ADMIN_USERNAME>"   # servier-broker : administrator username (e.g. "administrator") *broker_username != administrator_username
+administrator_username: "<SERVICE_BROKER_ADMIN_USERNAME>"   # servier-broker : administrator username (e.g. "administrator")
 
 # BROKER-REGISTRAR
 broker_registrar_azs: [z3]                                  # broker-registrar : azs

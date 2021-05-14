@@ -22,9 +22,19 @@
 - type: replace
   path: /instance_groups/name=haproxy/jobs/name=rabbitmq-haproxy/properties/rabbitmq-haproxy/backend_ca_file?
   value: ((rmq_ssl.ca))
+
+- type: replace
+  path: /instance_groups/name=haproxy/jobs/name=rabbitmq-haproxy/properties/rabbitmq-haproxy/ssl_cert?
+  value: ((ha_ssl.certificate))
+
+- type: replace
+  path: /instance_groups/name=haproxy/jobs/name=rabbitmq-haproxy/properties/rabbitmq-haproxy/ssl_private_key?
+  value: ((ha_ssl.private_key))
+
 - type: replace
   path: /instance_groups/name=haproxy/jobs/name=rabbitmq-haproxy/properties/rabbitmq-haproxy/cce_enable?
   value: true
+
 - type: replace
   path: /variables?/-
   value:
@@ -33,14 +43,27 @@
       common_name: rmqCA
       is_ca: true
     type: certificate
+
 - type: replace
   path: /variables?/-
   value:
     name: rmq_ssl
     options:
       alternative_names:
-      - rmq.((private_networks_name)).((deployment_name)).bosh
-      - '*.rmq.((private_networks_name)).((deployment_name)).bosh'
+      - rmq.((system_domain))
+      - '*.rmq.((system_domain))'
+      #- ((rabbitmq_private_ips))
       ca: rmq_ca
       common_name: rmqSSL
+    type: certificate
+
+- type: replace
+  path: /variables?/-
+  value:
+    name: ha_ssl
+    options:
+      alternative_names:
+      - ((haproxy_private_ips))
+      ca: rmq_ca
+      common_name: ha_rmqSSL
     type: certificate

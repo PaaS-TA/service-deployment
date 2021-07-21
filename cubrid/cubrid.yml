@@ -5,6 +5,10 @@ releases:
 - name: "paasta-cubrid"                    #서비스 릴리즈 이름(필수)
   version: "2.0.1"                           #서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
   url: https://nextcloud.paas-ta.org/index.php/s/ic6tB9gcgdL3XQK/download
+- name: paasta-conf
+  url: https://nextcloud.paas-ta.org/index.php/s/CTDsro382NyyAEL/download
+  version: 1.0.1
+
 
 stemcells:
 - alias: default
@@ -33,6 +37,14 @@ instance_groups:
         max_clients: ((cubrid_max_clients))
         certificate: "((cubrid_certificate.public_key))"
         private_key: "((cubrid_certificate.private_key))"
+  - name: common_script
+    release: paasta-conf
+    properties:
+      post_start_script: |-
+        #!/bin/bash
+        find /home/vcap/.ssh/authorized_keys -type f | xargs sed -i -e 's/ssh-rsa/\
+        ssh-rsa/g'
+        chmod 756 /tmp/CUBRID1523
 
 - name: cubrid_broker                       #작업 이름(필수): Cubrid 서비스 브로커
   azs: ((cubrid_broker_azs))

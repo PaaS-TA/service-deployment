@@ -76,14 +76,12 @@ instance_groups:
     release: routing
     consumes:
       nats: {from: nats, deployment: paasta}
-      nats-tls: {from: nats-tls, deployment: paasta}
     properties:
       nats:
         tls:
-          hostname: "((paasta_nats_ip))"
-          enabled: true
           client_cert: "((nats_client_cert.certificate))"
           client_key: "((nats_client_cert.private_key))"
+        machines: ["((paasta_nats_ip))"]
       route_registrar:
         routes:
         - name: server-rmq

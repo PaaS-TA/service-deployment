@@ -23,7 +23,7 @@ glusterfs_url: "<GLUSTERFS_PUBLIC_IP>"                           # Glusterfs 서
 glusterfs_tenantname: "<GLUSTERFS_TENANT_NAME>"                  # Glusterfs 서비스 테넌트 이름(e.g. "service")
 glusterfs_username: "<GLUSTERFS_USERNAME>"                       # Glusterfs 서비스 계정 아이디(e.g. "swift")
 glusterfs_password: "<GLUSTERFS_PASSWORD>"                       # Glusterfs 서비스 암호(e.g. "password")
-
+swiftproxy_port: "<SWIFTPROXY_PORT>"                             # SwiftProxy port (e.g. 8080 or 10008)
 
 # GLUSTERFS_BROKER
 broker_azs: [z4]                                                 # glusterfs broker azs

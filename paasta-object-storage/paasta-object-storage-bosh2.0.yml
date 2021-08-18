@@ -1,0 +1,79 @@
+---
+name: paasta-object-storage                      # 서비스 배포이름(필수) bosh deployments 로 확인 가능한 이름
+
+stemcells:
+- alias: ((stemcell_alias))
+  os: ((stemcell_os))
+  version: "((stemcell_version))"
+- alias: binary_storage_stemcells
+  os: ((stemcell_os))
+  version: 3468.51 
+
+
+
+releases:
+- name: "((releases_name))"                   # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
+  version: "2.0"                                              # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  url: https://nextcloud.paas-ta.org/index.php/s/epTHfadp3Ag5665/download
+
+update:
+  canaries: 1                                               # canary 인스턴스 수(필수)
+  canary_watch_time: 5000-120000                            # canary 인스턴스가 수행하기 위한 대기 시간(필수)
+  update_watch_time: 5000-120000                            # non-canary 인스턴스가 수행하기 위한 대기 시간(필수)
+  max_in_flight: 1                                          # non-canary 인스턴스가 병렬로 update 하는 최대 개수(필수)
+  serial: false
+
+instance_groups:
+########## INFRA ##########
+- name: mariadb
+  azs:
+  - z5
+  instances: 1
+  vm_type: "((vm_type_small))"
+  stemcell: "((stemcell_alias))"
+  persistent_disk_type: "((mariadb_disk_type))"
+  networks:
+  - name: ((internal_networks_name))
+  jobs:
+  - name: mariadb
+    release: "((releases_name))"
+  syslog_aggregator: null
+
+- name: binary_storage
+  azs:
+  - z5
+  instances: 1
+  persistent_disk_type: "((binary_storage_disk_type))"
+  vm_type: "((vm_type_small))"
+  stemcell: binary_storage_stemcells
+  networks:
+  - name: ((internal_networks_name))
+  jobs:
+  - name: binary_storage
+    release: "((releases_name))"
+  syslog_aggregator: null
+
+
+
+properties:
+  mariadb:                                                # MARIA DB SERVER 설정 정보
+    port: ((mariadb_port))                                            # MARIA DB PORT 번호
+    admin_user:
+      password: '((mariadb_user_password))'                             # MARIA DB ROOT 계정 비밀번호
+    host_names:
+    - mariadb0
+  binary_storage:                                         # BINARY STORAGE SERVER 설정 정보
+    proxy_port: 10008                                     # 프록시 서버 Port(Object Storage >접속 Port)
+    auth_port: 5000
+    username:                                             # 최초 생성되는 유저이름(Object Storage 접속 유저이름)
+    - ((binary_storage_username))
+    password:                                             # 최초 생성되는 유저 비밀번호(Object Storage 접속 유저 비밀번호)
+    - ((binary_storage_password))
+    tenantname:                                           # 최초 생성되는 테넌트 이름(Object Storage 접속 테넌트 이름)
+    - ((binary_storage_tenantname))
+    email:                                                # 최소 생성되는 유저의 이메일
+    - ((binary_storage_email))
+    container:                                            # 최초 생성되는 컨테이너 이름
+    - portal-container
+    binary_desc:                                          # 최초 생성되는 컨테이너에 대한 설>명
+    - "portal binary_storage"

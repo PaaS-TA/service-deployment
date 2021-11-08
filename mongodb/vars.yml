@@ -1,6 +1,6 @@
 # STEMCELL
-stemcell_os: "ubuntu-xenial"                                     # stemcell os
-stemcell_version: "621.94"                                       # stemcell version
+stemcell_os: "ubuntu-bionic"                                     # stemcell os
+stemcell_version: "latest"                                       # stemcell version
 
 # NETWORK
 private_networks_name: "default"                                 # private network name
@@ -8,7 +8,7 @@ private_networks_name: "default"                                 # private netwo
 # MONGODB_REPL_SET_NAME
 replSetName1: "op1"                                              # replica set1 name
 replSetName2: "op2"                                              # replica set2 name
-replSetName3: "op3"                                              # replica set3 name
+replSetName3: "op3"                                              # replica set3 name : use to operations/add-replica-set.yml
 
 # MONGODB_SLAVE1
 mongodb_slave1_azs: [z3]                                         # mongodb slave1 azs
@@ -24,7 +24,7 @@ mongodb_slave2_vm_type: "medium"                                 # mongodb slave
 mongodb_slave2_persistent_disk_type: "10GB"                      # mongodb slave2 persistent disk type
 mongodb_slave2_static_ips: "<MONGODB_SLAVE2_PRIVATE_IPS>"        # mongodb slave2's private IPs (e.g. ["10.0.81.14","10.0.81.15"])
 
-# MONGODB_SLAVE3
+# MONGODB_SLAVE3 : use to operations/add-replica-set.yml
 mongodb_slave3_azs: [z3]                                         # mongodb slave3 azs
 mongodb_slave3_instances: 2                                      # mongodb slave3 instances
 mongodb_slave3_vm_type: "medium"                                 # mongodb slave3 vm type
@@ -47,7 +47,7 @@ mongodb_master2_persistent_disk_type: "10GB"                             # mongo
 mongodb_master2_static_ips: "<MONGODB_MASTER2_PRIVATE_IP>"               # mongodb master2's private IP (e.g. "10.0.81.13")
 mongodb_master2_replSet_hosts: "<MONGODB_MASTER2_REPLSET_HOSTS>"         # 첫번째 Host는 replicaSet2 의master2 ip, 차례대로 slave2 의 ips. (e.g. ["10.0.81.13", "10.0.81.14","10.0.81.15"])
 
-# MONGODB_MASTER3
+# MONGODB_MASTER3 : use to operations/add-replica-set.yml
 mongodb_master3_azs: [z3]                                                # mongodb master3 azs
 mongodb_master3_instances: 1                                             # mongodb master3 instances
 mongodb_master3_vm_type: "medium"                                        # mongodb master3 vm type
@@ -57,7 +57,7 @@ mongodb_master3_replSet_hosts: "<MONGODB_MASTER3_REPLSET_HOSTS>"         # 첫�
 
 # MONGODB_CONFIG
 mongodb_config_azs: [z3]                                                 # mongodb config azs
-mongodb_config_instances: 3                                              # mongodb config instances
+mongodb_config_instances: 2                                              # mongodb config instances : less than 3 instances
 mongodb_config_vm_type: "medium"                                         # mongodb config vm type
 mongodb_config_persistent_disk_type: "10GB"                              # mongodb config persistent disk type
 mongodb_config_static_ips: "<MONGODB_CONFIG_PRIVATE_IPS>"                # mongodb config's private IPs (e.g. ["10.0.81.19", "10.0.81.20","10.0.81.21"])

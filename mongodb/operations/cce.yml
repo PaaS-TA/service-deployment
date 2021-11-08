@@ -10,19 +10,11 @@
   value: true
 
 - type: replace
-  path: /instance_groups/name=mongodb_slave3/jobs/name=mongodb_slave/properties/cce_enable?
-  value: true
-
-- type: replace
   path: /instance_groups/name=mongodb_master1/jobs/name=mongodb_master/properties/cce_enable?
   value: true
 
 - type: replace
   path: /instance_groups/name=mongodb_master2/jobs/name=mongodb_master/properties/cce_enable?
-  value: true
-
-- type: replace
-  path: /instance_groups/name=mongodb_master3/jobs/name=mongodb_master/properties/cce_enable?
   value: true
 
 - type: replace
@@ -32,4 +24,3 @@
 - type: replace
   path: /instance_groups/name=mongodb_shard/jobs/name=mongodb_shard/properties/cce_enable?
   value: true
-

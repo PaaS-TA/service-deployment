@@ -4,7 +4,7 @@ releases:
 - name: paasta-glusterfs             # 서비스 릴리즈 이름(필수)
   url: https://nextcloud.paas-ta.org/index.php/s/8kR8gi5iwq34DFc/download
   version: "2.1.2"                   # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
-  sha1: adf2a9d08afe651f0eef07a002963f2e0f631c98
+  sha1: 3680bbc249a42fccc5526dc8d8db3cc38046d267
 
 update:
   canaries: 1                        # canary 인스턴스 수(필수)

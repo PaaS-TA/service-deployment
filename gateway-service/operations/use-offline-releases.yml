@@ -1,3 +1,0 @@
-- type: replace
-  path: /releases/name=paasta-api-gateway-service/url
-  value: file://((releases_dir))/service/paasta-api-gateway-service-release-1.1.0.tgz

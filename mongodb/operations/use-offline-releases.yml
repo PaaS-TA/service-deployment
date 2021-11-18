@@ -1,7 +1,0 @@
-- type: replace
-  path: /releases/name=paasta-mongodb-shard/url
-  value: file://((releases_dir))/service/paasta-mongodb-shard-2.1.0.tgz
-
-- type: replace
-  path: /releases/name=paasta-mongodb-shard/version
-  value: "2.1.0"

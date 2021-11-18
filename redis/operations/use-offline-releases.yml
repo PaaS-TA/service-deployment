@@ -1,3 +1,0 @@
-- type: replace
-  path: /releases/name=paasta-on-demand-redis-release/url
-  value: file://((releases_dir))/service/paasta-on-demand-redis-release-1.2.0.tgz

@@ -1,3 +1,0 @@
-- type: replace
-  path: /releases/name=paasta-rabbitmq/url
-  value: file://((releases_dir))/service/paasta-rabbitmq-release-2.1.0.tgz

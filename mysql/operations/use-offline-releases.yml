@@ -1,7 +1,0 @@
-- type: replace
-  path: /releases/name=paasta-mysql/url
-  value: file://((releases_dir))/service/paasta-mysql-2.1.0.tgz
-
-- type: replace
-  path: /releases/name=paasta-mysql/version
-  value: "2.1.0"

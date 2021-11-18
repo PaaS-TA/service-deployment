@@ -60,7 +60,7 @@ mongodb_config_azs: [z3]                                                 # mongo
 mongodb_config_instances: 2                                              # mongodb config instances : less than 3 instances
 mongodb_config_vm_type: "medium"                                         # mongodb config vm type
 mongodb_config_persistent_disk_type: "10GB"                              # mongodb config persistent disk type
-mongodb_config_static_ips: "<MONGODB_CONFIG_PRIVATE_IPS>"                # mongodb config's private IPs (e.g. ["10.0.81.19", "10.0.81.20","10.0.81.21"])
+mongodb_config_static_ips: "<MONGODB_CONFIG_PRIVATE_IPS>"                # mongodb config's private IPs (e.g. ["10.0.81.19", "10.0.81.20"])
 
 # MONGODB_SHARD
 mongodb_shard_azs: [z3]                                                  # mongodb shard azs

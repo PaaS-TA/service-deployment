@@ -66,13 +66,13 @@ mongodb_config_static_ips: "<MONGODB_CONFIG_PRIVATE_IPS>"                # mongo
 mongodb_shard_azs: [z3]                                                  # mongodb shard azs
 mongodb_shard_instances: 1                                               # mongodb shard instances
 mongodb_shard_vm_type: "medium"                                          # mongodb shard vm type
-mongodb_shard_static_ips: "<MONGODB_SHARD_PRIVATE_IP>"                   # mongodb shard's private IP (e.g. "10.0.81.22")
+mongodb_shard_static_ips: "<MONGODB_SHARD_PRIVATE_IP>"                   # mongodb shard's private IP (e.g. "10.0.81.21")
 
 # MONGODB_BROKER
 mongodb_broker_azs: [z3]                                                 # mongodb broker azs
 mongodb_broker_instances: 1                                              # mongodb broker instances
 mongodb_broker_vm_type: "medium"                                         # mongodb broker vm type
-mongodb_broker_static_ips: "<MONGODB_BROKER_PRIVATE_IP>"                 # mongodb broker's private IP (e.g. "10.0.81.23")
+mongodb_broker_static_ips: "<MONGODB_BROKER_PRIVATE_IP>"                 # mongodb broker's private IP (e.g. "10.0.81.22")
 
 # BROKER_REGISTRAR
 broker_registrar_broker_azs: [z3]                                        # broker registrar azs

@@ -58,12 +58,11 @@ instance_groups:
   syslog_aggregator: null
   
 - name: redis
-  azs:
-  - z5
+  azs: ((redis_azs))
   instances: 0 
-  vm_type: medium
+  vm_type: ((redis_vm_type))
   stemcell: default
-  persistent_disk_type: 1GB
+  persistent_disk_type: ((redis_persistent_disk_type))
   networks:
   - name: ((private_networks_name))
   jobs:

@@ -18,6 +18,11 @@ broker_azs: [z5]                                                  # broker azs
 broker_instances: 1                                               # broker instances 
 broker_vm_type: "service_medium"                                  # broker vm type
 
+# REDIS
+redis_azs: [z5]
+redis_vm_type: "medium"
+redis_persistent_disk_type: "1GB"
+
 # PROPERTIES
 broker_server_port: 8080                                          # broker server port
 

@@ -19,9 +19,9 @@ broker_instances: 1                                               # broker insta
 broker_vm_type: "service_medium"                                  # broker vm type
 
 # REDIS
-redis_azs: [z5]
-redis_vm_type: "medium"
-redis_persistent_disk_type: "1GB"
+redis_azs: [z5]                                                   # redis azs
+redis_vm_type: "medium"                                           # redis vm type
+redis_persistent_disk_type: "1GB"                                 # redis persistent disk type
 
 # PROPERTIES
 broker_server_port: 8080                                          # broker server port

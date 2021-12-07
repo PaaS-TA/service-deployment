@@ -18,3 +18,22 @@
 - type: replace
   path: /instance_groups/name=mariadb/jobs/name=mariadb/properties/mariadb?/cce_enable
   value: true
+
+# CCE - nginx patch
+- type: replace
+  path: /instance_groups/name=app-lifecycle/jobs/-
+  value:
+    name: common_script
+    release: paasta-conf
+    properties:
+      pre_start_script: |+
+        #!/bin/bash
+        sed -i'' -r -e "/keepalive_timeout/i\  disable_symlinks    on;" /var/vcap/jobs/app-lifecycle/config/taiga-nginx.conf
+        sed -i'' -r -e "/keepalive_timeout/i\  disable_symlinks    on;" /var/vcap/packages/nginx/conf/nginx.conf
+        echo "added disable_symlinks in nginx.conf"
+- type: replace
+  path: /releases/name=paasta-conf?
+  value:
+    name: paasta-conf
+    url:  https://nextcloud.paas-ta.org/index.php/s/eysAPEKdyX9d9mj/download
+    version: 1.0.4

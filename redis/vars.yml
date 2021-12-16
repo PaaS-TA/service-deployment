@@ -1,6 +1,6 @@
 # STEMCELL
-stemcell_os: "ubuntu-xenial"                                      # Deployment Main Stemcell OS
-stemcell_version: "621.94"                                        # Main Stemcell Version
+stemcell_os: "ubuntu-bionic"                                      # Deployment Main Stemcell OS
+stemcell_version: "1.34"                                        # Main Stemcell Version
 
 # NETWORK
 private_networks_name: "default"                                  # private network name
@@ -17,6 +17,11 @@ mariadb_port: 13306                                               # mariadb port
 broker_azs: [z5]                                                  # broker azs
 broker_instances: 1                                               # broker instances 
 broker_vm_type: "service_medium"                                  # broker vm type
+
+# REDIS
+redis_azs: [z5]                                                   # redis azs
+redis_vm_type: "medium"                                           # redis vm type
+redis_persistent_disk_type: "1GB"                                 # redis persistent disk type
 
 # PROPERTIES
 broker_server_port: 8080                                          # broker server port

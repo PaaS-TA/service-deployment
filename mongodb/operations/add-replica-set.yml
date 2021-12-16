@@ -1,0 +1,59 @@
+---
+
+- type: replace
+  path: /instance_groups/name=mongodb_slave2:after
+  value:
+    name: mongodb_slave3
+    instances: ((mongodb_slave3_instances))
+    azs: ((mongodb_slave3_azs))
+    vm_type: ((mongodb_slave3_vm_type))
+    stemcell: default
+    persistent_disk_type: ((mongodb_slave3_persistent_disk_type))
+    networks:
+    - name: ((private_networks_name))
+      static_ips: ((mongodb_slave3_static_ips))
+    jobs:
+    - name: mongodb_slave
+      properties:
+        replSetName: ((replSetName3)) # replicaSet3 의 이름
+        mongodb:
+          key: ((key))
+      release: paasta-mongodb-shard
+
+- type: replace
+  path: /instance_groups/name=mongodb_master2:after
+  value:
+    name: mongodb_master3
+    azs: ((mongodb_master3_azs))
+    vm_type: ((mongodb_master3_vm_type))
+    stemcell: default
+    instances: ((mongodb_master3_instances))
+    persistent_disk_type: ((mongodb_master3_persistent_disk_type))
+    networks:
+    - name: ((private_networks_name))
+      static_ips: [((mongodb_master3_static_ips))]
+    jobs:
+    - name: mongodb_master
+      properties:
+        replSet_hosts: ((mongodb_master3_replSet_hosts)) # 첫번째 Host는 replicaSet2의 master
+        replSetName: ((replSetName3))  # replicaSet3 의 이름
+        mongodb:
+          key: ((key))
+      release: paasta-mongodb-shard
+
+- type: replace
+  path: /instance_groups/name=mongodb_shard/jobs/name=mongodb_shard/properties/repl_name_host_list
+  value:
+    - ((replSetName1))/((mongodb_master1_static_ips)) # replicaSet1 의 이름/host
+    - ((replSetName2))/((mongodb_master2_static_ips)) # replicaSet2 의 이름/host
+    - ((replSetName3))/((mongodb_master3_static_ips)) # replicaSet3 의 이름/host
+
+#enable cce
+- type: replace
+  path: /instance_groups/name=mongodb_slave3/jobs/name=mongodb_slave/properties/cce_enable?
+  value: true
+
+- type: replace
+  path: /instance_groups/name=mongodb_master3/jobs/name=mongodb_master/properties/cce_enable?
+  value: true
+

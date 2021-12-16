@@ -3,8 +3,8 @@ name: lifecycle-service
 
 releases:
 - name: paasta-app-lifecycle-service
-  url: https://nextcloud.paas-ta.org/index.php/s/cyAAcrbqfXriL2L/download
-  version: "1.1.0"
+  url: https://nextcloud.paas-ta.org/index.php/s/RQnXsXSePsnLjfy/download
+  version: "1.1.1"
 
 stemcells:
 - alias: default
@@ -83,6 +83,12 @@ instance_groups:
   - name: ((public_networks_name))
   jobs:
   - name: app-lifecycle
+    release: paasta-app-lifecycle-service
+    properties:
+      service:
+        admin_password: ((app_lifecycle_admin_password))
+        init_password: ((app_lifecycle_serviceadmin_password))
+  - name: postgres
     release: paasta-app-lifecycle-service
     properties:
       service:

@@ -8,8 +8,8 @@ addons:
 
 releases:
 - name: paasta-mysql
-  url: https://nextcloud.paas-ta.org/index.php/s/sGAd2Eyc33AfP7d/download
-  version: "2.1.0"
+  url: https://nextcloud.paas-ta.org/index.php/s/2YRA33Co9b3fq5L/download
+  version: "2.1.1"
 - name: bpm
   version: latest
 stemcells:

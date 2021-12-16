@@ -3,8 +3,8 @@ name: mongodb  # 서비스 배포이름(필수)
 
 releases:
 - name: paasta-mongodb-shard  #서비스 릴리즈 이름(필수)
-  url: https://nextcloud.paas-ta.org/index.php/s/73a4ZanqgZYPMny/download
-  version: "2.1.0"   #서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  url: https://nextcloud.paas-ta.org/index.php/s/bpDipMPAE3JyD6N/download
+  version: "2.1.1"   #서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
 
 # this section describes how updates are handled
 update:
@@ -51,22 +51,6 @@ instance_groups:
       mongodb:
         key: ((key))
     release: paasta-mongodb-shard
-- name: mongodb_slave3
-  instances: ((mongodb_slave3_instances))
-  azs: ((mongodb_slave3_azs))
-  vm_type: ((mongodb_slave3_vm_type))
-  stemcell: default
-  persistent_disk_type: ((mongodb_slave3_persistent_disk_type))
-  networks:
-  - name: ((private_networks_name))
-    static_ips: ((mongodb_slave3_static_ips))
-  jobs:
-  - name: mongodb_slave
-    properties:
-      replSetName: ((replSetName3)) # replicaSet3 의 이름
-      mongodb:
-        key: ((key))
-    release: paasta-mongodb-shard
 - name: mongodb_master1   #작업 이름(필수): mongodb replica set의 master 서버
   instances: ((mongodb_master1_instances))  # job 인스턴스 수(필수)
   azs: ((mongodb_master1_azs))
@@ -98,23 +82,6 @@ instance_groups:
     properties:
       replSet_hosts: ((mongodb_master2_replSet_hosts)) # 첫번째 Host는 replicaSet2의 master
       replSetName: ((replSetName2))  # replicaSet2 의 이름
-      mongodb:
-        key: ((key))
-    release: paasta-mongodb-shard
-- name: mongodb_master3
-  azs: ((mongodb_master3_azs))
-  vm_type: ((mongodb_master3_vm_type))
-  stemcell: default
-  instances: ((mongodb_master3_instances))
-  persistent_disk_type: ((mongodb_master3_persistent_disk_type))
-  networks:
-  - name: ((private_networks_name))
-    static_ips: [((mongodb_master3_static_ips))]
-  jobs:
-  - name: mongodb_master
-    properties:
-      replSet_hosts: ((mongodb_master3_replSet_hosts)) # 첫번째 Host는 replicaSet2의 master
-      replSetName: ((replSetName3))  # replicaSet3 의 이름
       mongodb:
         key: ((key))
     release: paasta-mongodb-shard
@@ -151,7 +118,6 @@ instance_groups:
       repl_name_host_list: # mongodb_master properties
       - ((replSetName1))/((mongodb_master1_static_ips)) # replicaSet1 의 이름/host
       - ((replSetName2))/((mongodb_master2_static_ips)) # replicaSet2 의 이름/host
-      - ((replSetName3))/((mongodb_master3_static_ips)) # replicaSet3 의 이름/host
     release: paasta-mongodb-shard
 - name: mongodb_broker  #작업 이름(필수): mongodb 서비스 브로커
   vm_type: ((mongodb_broker_vm_type))

@@ -3,8 +3,8 @@ name: source-control-service
 
 releases:
 - name: paasta-sourcecontrol-release
-  url: https://nextcloud.paas-ta.org/index.php/s/2bk6FibYzZBK6ng/download
-  version: "1.1.0"
+  url: https://nextcloud.paas-ta.org/index.php/s/DP6HM5jrgLqsHMF/download
+  version: "1.1.1"
 
 stemcells:
 - alias: default

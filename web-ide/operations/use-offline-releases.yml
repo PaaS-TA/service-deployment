@@ -1,3 +1,0 @@
-- type: replace
-  path: /releases/name=paas-ta-webide-release/url
-  value: file://((releases_dir))/service/paas-ta-webide-release-2.1.0.tgz

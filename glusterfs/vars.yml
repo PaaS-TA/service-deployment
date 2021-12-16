@@ -1,6 +1,6 @@
 # STEMCELL
-stemcell_os: "ubuntu-xenial"                                     # stemcell os
-stemcell_version: "621.94"                                       # stemcell version
+stemcell_os: "ubuntu-bionic"                                     # stemcell os
+stemcell_version: "1.34"                                       # stemcell version
 
 
 # NETWORK
@@ -23,7 +23,9 @@ glusterfs_url: "<GLUSTERFS_PUBLIC_IP>"                           # Glusterfs 서
 glusterfs_tenantname: "<GLUSTERFS_TENANT_NAME>"                  # Glusterfs 서비스 테넌트 이름(e.g. "service")
 glusterfs_username: "<GLUSTERFS_USERNAME>"                       # Glusterfs 서비스 계정 아이디(e.g. "swift")
 glusterfs_password: "<GLUSTERFS_PASSWORD>"                       # Glusterfs 서비스 암호(e.g. "password")
-
+glusterfs_domainname: "<GLUSTERFS_DOMAIN_NAME>"                  # Glusterfs 서비스 도메인 이름 (e.g. "default")
+swiftproxy_port: "<SWIFT_PROXY_PORT>"                            # Glusterfs 서비스 swift proxy port (e.g. "10008")
+auth_port: "<AUTH_PORT>"                                         # Glusterfs 서비스 auth port (e.g. "15001")
 
 # GLUSTERFS_BROKER
 broker_azs: [z4]                                                 # glusterfs broker azs

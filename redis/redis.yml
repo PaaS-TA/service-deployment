@@ -19,8 +19,8 @@ releases:
 - name: bpm
   version: latest
 - name: "paasta-on-demand-redis-release"                    # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
-  version: "1.2.0"                                            # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
-  url: https://nextcloud.paas-ta.org/index.php/s/3X9Mmo4wm36iB2C/download
+  version: "1.2.1"                                            # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  url: https://nextcloud.paas-ta.org/index.php/s/dFZmbisYossQ7cq/download
 
 update:
   canaries: 1                                               # canary 인스턴스 수(필수)
@@ -58,12 +58,11 @@ instance_groups:
   syslog_aggregator: null
   
 - name: redis
-  azs:
-  - z5
+  azs: ((redis_azs))
   instances: 0 
-  vm_type: medium
+  vm_type: ((redis_vm_type))
   stemcell: default
-  persistent_disk_type: 1GB
+  persistent_disk_type: ((redis_persistent_disk_type))
   networks:
   - name: ((private_networks_name))
   jobs:

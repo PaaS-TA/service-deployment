@@ -2,8 +2,9 @@ name: glusterfs                       # 서비스 배포이름(필수)
 
 releases:
 - name: paasta-glusterfs             # 서비스 릴리즈 이름(필수)
-  url: https://nextcloud.paas-ta.org/index.php/s/bkz8asGEz5Swz45/download
-  version: "2.1.0"                   # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  url: https://nextcloud.paas-ta.org/index.php/s/8kR8gi5iwq34DFc/download
+  version: "2.1.2"                   # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  sha1: 3680bbc249a42fccc5526dc8d8db3cc38046d267
 
 update:
   canaries: 1                        # canary 인스턴스 수(필수)
@@ -52,6 +53,9 @@ instance_groups:
       glusterfs_tenantname: ((glusterfs_tenantname))         # Glusterfs 서비스 테넌트 이름
       glusterfs_username: ((glusterfs_username))             # Glusterfs 서비스 계정 아이디
       glusterfs_password: ((glusterfs_password))             # Glusterfs 서비스 암호
+      glusterfs_domainname: ((glusterfs_domainname))
+      swiftproxy_port: ((swiftproxy_port))
+      auth_port: ((auth_port))
 
 - name: broker-registrar
   instances: ((broker_registrar_instances))

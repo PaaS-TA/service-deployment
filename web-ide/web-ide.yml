@@ -8,8 +8,9 @@ stemcells:
 
 releases:
   - name: paas-ta-webide-release                                 # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
-    url: https://nextcloud.paas-ta.org/index.php/s/CTPT8LDodCrboqE/download
-    version: "2.1.1"                                             # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+    url: https://nextcloud.paas-ta.org/index.php/s/ZEdgWR4fYwf5aPH/download
+    sha1: fab436c6d3ab73f728b2e25a68604f50263fffc8
+    version: "2.1.2"                                             # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
 
 update:
   canaries: 1                                               # canary 인스턴스 수(필수)
@@ -26,7 +27,7 @@ instance_groups:
   vm_type: ((eclipse_che_vm_type))
   stemcell: default
   networks:
-  - name: ((private_networks_name))
+  #- name: ((private_networks_name))
   - name: ((public_networks_name))
     static_ips: ((eclipse_che_public_ips))
 

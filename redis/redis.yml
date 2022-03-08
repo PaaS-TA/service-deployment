@@ -19,8 +19,8 @@ releases:
 - name: bpm
   version: latest
 - name: "paasta-on-demand-redis-release"                    # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
-  version: "1.2.1"                                            # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
-  url: https://nextcloud.paas-ta.org/index.php/s/dFZmbisYossQ7cq/download
+  version: "1.2.2"                                            # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  url: https://nextcloud.paas-ta.org/index.php/s/Lgzrx7CeXKisdef/download
 
 update:
   canaries: 1                                               # canary 인스턴스 수(필수)
@@ -75,7 +75,7 @@ instance_groups:
         password: ((service_password))
 - name: sanity-tests
   azs:
-  - z5
+  - z1
   instances: 1
   lifecycle: errand
   vm_type: medium

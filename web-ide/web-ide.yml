@@ -27,7 +27,7 @@ instance_groups:
   vm_type: ((eclipse_che_vm_type))
   stemcell: default
   networks:
-  #- name: ((private_networks_name))
+  - name: ((private_networks_name))
   - name: ((public_networks_name))
     static_ips: ((eclipse_che_public_ips))
 

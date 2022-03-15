@@ -75,7 +75,7 @@ instance_groups:
         password: ((service_password))
 - name: sanity-tests
   azs:
-  - z1
+  - z5
   instances: 1
   lifecycle: errand
   vm_type: medium

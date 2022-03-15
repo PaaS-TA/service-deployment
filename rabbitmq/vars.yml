@@ -11,28 +11,28 @@ vm_type_small: "minimal"                                    # vm type small
 private_networks_name: "default"                            # private network name
 
 # RABBITMQ
-rabbitmq_azs: [z1]                                          # rabbitmq : azs
+rabbitmq_azs: [z3]                                          # rabbitmq : azs
 rabbitmq_instances: 1                                       # rabbitmq : instances (1) 
-rabbitmq_private_ips: "10.0.1.31"              # rabbitmq : private ips (e.g. "10.0.81.31")
-management_username: "madmin"  		    # rabbitmq : username (e.g. "madmin") *broker/administrator_username != management_username
+rabbitmq_private_ips: "<RABBITMQ_PRIVATE_IPS>"              # rabbitmq : private ips (e.g. "10.0.81.31")
+management_username: "<MANAGEMENT_USERNAME>"  		    # rabbitmq : username (e.g. "madmin") *broker/administrator_username != management_username
 
 # HAPROXY
-haproxy_azs: [z1]                                           # haproxy : azs
+haproxy_azs: [z3]                                           # haproxy : azs
 haproxy_instances: 1                                        # haproxy : instances (1) 
-haproxy_private_ips: "10.0.1.32"                # haproxy : private ips (e.g. "10.0.81.32")
+haproxy_private_ips: "<HAPROXY_PRIVATE_IPS>"                # haproxy : private ips (e.g. "10.0.81.32")
 
 # SERVICE-BROKER
-broker_azs: [z1]                                            # service-broker : azs
+broker_azs: [z3]                                            # service-broker : azs
 broker_instances: 1                                         # service-broker : instances (1)
 broker_port: 4567                                           # service-broker : broker port (e.g. "4567")
-broker_username: "admin"		    # service-broker : username (e.g. "admin") *broker/administrator_username != management_username
-broker_password: "sunny12"                # service-broker : password (e.g. "admin" no recommand)
-administrator_username: "administrator"   # servier-broker : administrator username (e.g. "administrator")
+broker_username: "<SERVICE_BROKER_USERNAME>"		    # service-broker : username (e.g. "admin") *broker/administrator_username != management_username
+broker_password: "<SERVICE_BROKER_PASSWORD>"                # service-broker : password (e.g. "admin" no recommand)
+administrator_username: "<SERVICE_BROKER_ADMIN_USERNAME>"   # servier-broker : administrator username (e.g. "administrator")
 
 # BROKER-REGISTRAR
-broker_registrar_azs: [z1]                                  # broker-registrar : azs
+broker_registrar_azs: [z3]                                  # broker-registrar : azs
 broker_registrar_instances: 1                               # broker-registrar : instances (1) 
 
 # BROKER-DEREGISTRAR
-broker_deregistrar_azs: [z1]                                # broker-deregistrar : azs
+broker_deregistrar_azs: [z3]                                # broker-deregistrar : azs
 broker_deregistrar_instances: 1                             # broker-deregistrar : instances (1)

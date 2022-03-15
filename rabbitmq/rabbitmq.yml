@@ -72,23 +72,23 @@ instance_groups:
         - 15674
         restart_statsdb_cron_schedule: 42 */4 * * *
     release: paasta-rabbitmq
-  - name: route_registrar
-    release: routing
-    consumes:
-      nats: {from: nats, deployment: paasta}
-    properties:
-      nats:
-        tls:
-          client_cert: "((nats_client_cert.certificate))"
-          client_key: "((nats_client_cert.private_key))"
-        machines: ["((paasta_nats_ip))"]
-      route_registrar:
-        routes:
-        - name: server-rmq
-          port: 15672
-          registration_interval: 20s
-          uris:
-          - server.rmq.((system_domain))
+#  - name: route_registrar
+#    release: routing
+#    consumes:
+#      nats: {from: nats, deployment: paasta}
+#    properties:
+#      nats:
+#        tls:
+#          client_cert: "((nats_client_cert.certificate))"
+#          client_key: "((nats_client_cert.private_key))"
+#        machines: ["((paasta_nats_ip))"]
+#      route_registrar:
+#        routes:
+#        - name: server-rmq
+#          port: 15672
+#          registration_interval: 20s
+#          uris:
+#          - server.rmq.((system_domain))
   - name: bpm
     release: bpm
   name: rmq
@@ -121,28 +121,28 @@ releases:
 - name: paasta-rabbitmq
   url: https://nextcloud.paas-ta.org/index.php/s/EsbsQsDG36jMGek/download
   version: 2.1.1
-- name: routing
-  url: https://bosh.io/d/github.com/cloudfoundry/routing-release?v=0.207.0
-  version: 0.207.0
-  sha1: 9e703259a07f032e7ca96dca2730d0e0c2b61685
+#- name: routing
+#  url: https://bosh.io/d/github.com/cloudfoundry/routing-release?v=0.207.0
+#  version: 0.207.0
+#  sha1: 9e703259a07f032e7ca96dca2730d0e0c2b61685
 
 variables:
 - name: administrator_password
   type: password
 - name: management_password
   type: password
-- name: nats_ca
-  type: certificate
-  options:
-    is_ca: true
-    common_name: nats
-- name: nats_client_cert
-  type: certificate
-  options:
-    ca: nats_ca
-    common_name: "nats_client"
-    extended_key_usage:
-    - client_auth
+#- name: nats_ca
+#  type: certificate
+#  options:
+#    is_ca: true
+#    common_name: nats
+#- name: nats_client_cert
+#  type: certificate
+#  options:
+#    ca: nats_ca
+#    common_name: "nats_client"
+#    extended_key_usage:
+#    - client_auth
 
 stemcells:
 - alias: default 

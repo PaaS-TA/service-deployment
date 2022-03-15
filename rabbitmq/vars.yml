@@ -10,6 +10,10 @@ vm_type_small: "minimal"                                    # vm type small
 # NETWORK
 private_networks_name: "default"                            # private network name
 
+# COMMON
+bosh_name: "micro-bosh"                                     # bosh name (e.g. micro-bosh) -- ('bosh env' 명령어를 통해 확인 가능)
+paasta_deployment_name: "paasta"                            # paasta application platform name (e.g. paasta)
+
 # RABBITMQ
 rabbitmq_azs: [z3]                                          # rabbitmq : azs
 rabbitmq_instances: 1                                       # rabbitmq : instances (1) 

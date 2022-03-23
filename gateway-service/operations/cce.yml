@@ -24,7 +24,15 @@
     properties:
       cce_enable: true
 
-
+- type: replace
+  path: /instance_groups/name=api-gateway/jobs/-
+  value:
+    name: common_script
+    release: paasta-conf
+    properties:
+      post_deploy_script: |-
+        #!/bin/bash
+        find /var/vcap/packages/api-gateway/repository/deployment/server/ -type d -perm -755 -exec chmod g-w {} \;
 
 # CCE - mariadb patch 
 - type: replace

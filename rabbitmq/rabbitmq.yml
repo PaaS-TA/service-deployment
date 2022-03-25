@@ -44,6 +44,17 @@ instance_groups:
 - azs: ((rabbitmq_azs))
   instances: ((rabbitmq_instances))
   jobs:
+  - name: bosh-dns-aliases
+    release: bosh-dns-aliases
+    properties:
+      aliases:
+      - domain: nats.service.cf.internal
+        targets:
+        - query: '*'
+          instance_group: nats
+          deployment: paasta
+          network: default
+          domain: bosh
   - name: rabbitmq-server
     properties:
       rabbitmq-server:
@@ -75,13 +86,13 @@ instance_groups:
   - name: route_registrar
     release: routing
     consumes:
-      nats: {from: nats, deployment: paasta}
+      nats-tls: {from: nats-tls, deployment: paasta}
     properties:
       nats:
         tls:
+          enabled: true
           client_cert: "((nats_client_cert.certificate))"
           client_key: "((nats_client_cert.private_key))"
-        machines: ["((paasta_nats_ip))"]
       route_registrar:
         routes:
         - name: server-rmq
@@ -122,24 +133,21 @@ releases:
   url: https://nextcloud.paas-ta.org/index.php/s/EsbsQsDG36jMGek/download
   version: 2.1.1
 - name: routing
-  url: https://bosh.io/d/github.com/cloudfoundry/routing-release?v=0.207.0
-  version: 0.207.0
-  sha1: 9e703259a07f032e7ca96dca2730d0e0c2b61685
+  url: https://bosh.io/d/github.com/cloudfoundry/routing-release?v=0.228.0
+  version: 0.228.0
+- name: bosh-dns-aliases
+  url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-aliases-release?v=0.0.4
+  version: 0.0.4
 
 variables:
 - name: administrator_password
   type: password
 - name: management_password
   type: password
-- name: nats_ca
-  type: certificate
-  options:
-    is_ca: true
-    common_name: nats
 - name: nats_client_cert
   type: certificate
   options:
-    ca: nats_ca
+    ca: /((bosh_name))/((paasta_deployment_name))/nats_ca
     common_name: "nats_client"
     extended_key_usage:
     - client_auth

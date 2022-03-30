@@ -74,10 +74,10 @@ instance_groups:
         port: ((service_port))
         password: ((service_password))
 - name: sanity-tests
-  azs: ((sanity-tests_azs))
-  instances: 1
+  azs: ((sanity_tests_azs))
+  instances: ((sanity_tests_instances))
   lifecycle: errand
-  vm_type: medium
+  vm_type: ((sanity_tests_vm_type))
   stemcell: default
   networks: 
   - name: ((private_networks_name))

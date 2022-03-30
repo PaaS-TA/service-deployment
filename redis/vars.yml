@@ -23,7 +23,10 @@ redis_azs: [z5]                                                   # redis azs
 redis_vm_type: "medium"                                           # redis vm type
 redis_persistent_disk_type: "1GB"                                 # redis persistent disk type
 
-sanity-tests_azs: [z5]
+# SANITY-TEST
+sanity_tests_azs: [z5]
+sanity_tests_instances: 1
+sanity_tests_vm_type: medium
 
 # PROPERTIES
 broker_server_port: 8080                                          # broker server port

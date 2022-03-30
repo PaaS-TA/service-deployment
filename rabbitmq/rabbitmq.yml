@@ -52,7 +52,7 @@ instance_groups:
         targets:
         - query: '*'
           instance_group: nats
-          deployment: paasta
+          deployment: ((paasta_deployment_name))
           network: default
           domain: bosh
   - name: rabbitmq-server

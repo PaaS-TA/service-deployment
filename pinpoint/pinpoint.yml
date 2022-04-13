@@ -3,8 +3,8 @@ name: pinpoint                                                    # 서비스 �
 
 releases:
 - name: "paasta-pinpoint-release"                                # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
-  version: "1.1.0"                                              # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
-  url: https://nextcloud.paas-ta.org/index.php/s/W537HGSMNPH3qfo/download
+  version: "1.1.1"                                              # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  url: https://nextcloud.paas-ta.org/index.php/s/qR9BtKnFowbLDTj/download
 
 stemcells:
 - alias: default

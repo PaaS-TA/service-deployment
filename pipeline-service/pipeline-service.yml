@@ -3,8 +3,9 @@ name: pipeline-service                      # 서비스 배포이름(필수)
 
 releases:
 - name: paasta-delivery-pipeline-release                    # 서비스 릴리즈 이름(필수)
-  url: https://nextcloud.paas-ta.org/index.php/s/gQcxojD5D9YaNXz/download
-  version: "1.3.0"                                        # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  url: https://nextcloud.paas-ta.org/index.php/s/JNWgtMT6n7DqBks/download
+  sha1: e915dc36753f8f4719d5363004c0e7a06cc4ce5e
+  version: "1.3.1"                                        # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
 
 stemcells:
 - alias: default

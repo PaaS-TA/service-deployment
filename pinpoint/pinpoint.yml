@@ -5,7 +5,7 @@ releases:
 - name: "paasta-pinpoint-release"                                # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
   version: "1.1.2"                                              # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
   url: https://nextcloud.paas-ta.org/index.php/s/oMz8sZsTSRHyktn/download
-  sha1: 583bbe395e4ce26f38fbdd4a4585ef520471fc2a
+  sha1: 2c0c537928908048063a3cb38b05b5a4d8114f25 
 
 stemcells:
 - alias: default

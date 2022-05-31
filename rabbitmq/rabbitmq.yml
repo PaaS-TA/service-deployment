@@ -86,7 +86,7 @@ instance_groups:
   - name: route_registrar
     release: routing
     consumes:
-      nats-tls: {from: nats-tls, deployment: paasta}
+      nats-tls: {from: nats-tls, deployment: ((paasta_deployment_name))}
     properties:
       nats:
         tls:

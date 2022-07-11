@@ -106,6 +106,14 @@ instance_groups:
       log_dir: mysql-broker
       log_file: mysql-broker
       log_level: INFO
+      services:
+        plans:
+          a:
+            name: ((mysql_broker_services_plan_a_name))
+            connection: ((mysql_broker_services_plan_a_connection))
+          b:
+            name: ((mysql_broker_services_plan_b_name))
+            connection: ((mysql_broker_services_plan_b_connection))
 
 variables:
 - name: mysql_cluster_health_password

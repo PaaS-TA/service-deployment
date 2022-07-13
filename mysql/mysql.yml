@@ -8,9 +8,9 @@ addons:
 
 releases:
 - name: paasta-mysql
-  url: https://nextcloud.paas-ta.org/index.php/s/ieZiectMY4kH4Ls/download
-  version: "2.1.3"
-  sha1: 15c823564a33466351dba337864d2e54abf2bbf4
+  url: https://nextcloud.paas-ta.org/index.php/s/nZXWPTT8R8GLxWk/download
+  version: "2.1.4"
+  sha1: 4bc60c9093bbccfcace3d907493b7f6fa764c2a4
 
 - name: bpm
   version: latest

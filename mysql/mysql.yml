@@ -60,7 +60,7 @@ instance_groups:
           enabled: false
         galera:
           enabled: true
-      port: 13306
+      port: ((mysql_port))
       tls:
         galera: ((galera_server_certificate))
         server: ((mysql_server_certificate))
@@ -115,7 +115,7 @@ instance_groups:
 
 
 - name: proxy
-  instances: ((proxy_instances))
+  instances: 1
   azs: ((proxy_azs))
   networks:
   - name: ((private_networks_name))
@@ -141,7 +141,7 @@ instance_groups:
   - name: op-mysql-java-broker
     release: paasta-mysql
     properties:
-      database_type: mariadb
+      database_type: mysql
       mysql_admin_password: ((mysql_admin_password))
       log_dir: mysql-broker
       log_file: mysql-broker

@@ -5,4 +5,47 @@
   path: /instance_groups/name=mysql-broker/jobs/name=op-mysql-java-broker/properties/cce_enable?
   value: true
 
+- type: replace
+  path: /releases/name=pxc?
+  value:
+    name: "pxc"
+    sha1: 72d00a5cad4781904fddab9668bf797d19328489
+    url: https://nextcloud.paas-ta.org/index.php/s/cfGCLsgPz6iMcCE/download
+    version: 0.44.0-PaaS-TA-v2
 
+- type: replace
+  path: /instance_groups/name=mysql/jobs/-
+  value:
+    name: paasta_db_conf
+    release: paasta-conf
+    properties:
+      cce_enable: true
+
+- type: replace
+  path: /instance_groups/name=mysql/jobs/name=db_init_script/properties/init_sql?
+  value: |-
+    CREATE DATABASE IF NOT EXISTS broker;
+    USE broker;
+    CREATE TABLE IF NOT EXISTS `service_binding` (
+      `binding_id` varchar(100) NOT NULL DEFAULT '',
+      `instance_id` varchar(100) DEFAULT NULL,
+      `username` varchar(100) DEFAULT NULL,
+      `password` varchar(100) DEFAULT NULL,
+      `app_id` varchar(100) DEFAULT NULL,
+      PRIMARY KEY (`binding_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+    CREATE TABLE IF NOT EXISTS `service_instances` (
+      `instance_id` varchar(100) NOT NULL,
+      `service_id` varchar(100) NOT NULL,
+      `plan_id` varchar(100) NOT NULL,
+      `organization_guid` varchar(100) NOT NULL,
+      `space_guid` varchar(100) NOT NULL,
+      PRIMARY KEY (`instance_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+    GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED with sha256_password BY '((mysql_admin_password))';
+    CREATE USER IF NOT EXISTS 'root'@'((proxy_static_ip))' IDENTIFIED with sha256_password BY '((mysql_admin_password))';
+    ALTER USER IF EXISTS 'root'@'((proxy_static_ip))' IDENTIFIED with sha256_password BY '((mysql_admin_password))';
+    GRANT ALL PRIVILEGES ON *.* TO 'root'@'((proxy_static_ip))' WITH GRANT OPTION;
+    flush privileges;

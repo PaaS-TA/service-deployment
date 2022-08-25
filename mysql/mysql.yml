@@ -7,13 +7,21 @@ addons:
     release: bpm
 
 releases:
+- name: "pxc"
+  sha1: 495099d35e3b2a24bf73ed42c152e1ff10cb3576
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/pxc-release?v=0.44.0
+  version: 0.44.0
+- name: paasta-conf
+  url:  https://nextcloud.paas-ta.org/index.php/s/2zz3xPqEErCPq3y/download
+  version: 1.0.7
 - name: paasta-mysql
-  url: https://nextcloud.paas-ta.org/index.php/s/nZXWPTT8R8GLxWk/download
-  version: "2.1.4"
-  sha1: 4bc60c9093bbccfcace3d907493b7f6fa764c2a4
+  sha1: d505992214d0dd9c1c681df57e228ccbf7325170
+  url: https://nextcloud.paas-ta.org/index.php/s/i7FSCrTYHdFcKKE/download
+  version: 2.2.0
 
 - name: bpm
   version: latest
+ 
 stemcells:
 - alias: default
   os: ((stemcell_os))
@@ -26,71 +34,101 @@ update:
   max_in_flight: 1
   serial: true
 
+#features:
+#  use_dns_addresses: false
+
 instance_groups:
 - name: mysql
-  instances: ((mysql_instances))
+  migrated_from:
+  - name: mysql
   azs: ((mysql_azs))
-  networks:
-  - name: ((private_networks_name))
+  persistent_disk_type: ((mysql_persistent_disk_type))
+  instances: ((mysql_instances))
   vm_type: ((mysql_vm_type))
   stemcell: default
-  persistent_disk_type: ((mysql_persistent_disk_type))
-  jobs:
-  - name: mysql
-    release: paasta-mysql
-    properties:
-      cf_mysql:
-        mysql:
-          port: ((mysql_port))
-          admin_password: ((mysql_admin_password))
-          cluster_health:
-            password: "((mysql_cluster_health_password))"
-          galera_healthcheck:
-            endpoint_password: "((mysql_galera_healthcheck_endpoint_password))"
-            db_password: "((mysql_galera_healthcheck_db_password))"
-  - name: smoke-tests-user
-    release: paasta-mysql
-    properties:
-      cf_mysql:
-        smoke_tests:
-          db_password: "((mysql_smoke_tests_db_password))"
-
-- name: arbitrator
-  instances: ((arbitrator_instances))
-  azs: ((arbitrator_azs))
+  update:
+    serial: true
   networks:
-  - name: ((private_networks_name))
-  vm_type: ((arbitrator_vm_type))
-  stemcell: default
+  - name: default
   jobs:
-  - release: paasta-mysql
-    name: arbitrator
+  - name: pxc-mysql
+    release: pxc
     properties:
-      cf_mysql:
-        mysql:
-          admin_password: ((mysql_admin_password))
-          galera_healthcheck:
-            endpoint_password: "((mysql_galera_healthcheck_endpoint_password))"
+      admin_password: ((mysql_admin_password))
+      engine_config:
+        binlog:
+          enabled: false
+        galera:
+          enabled: true
+      port: 13306
+      tls:
+        galera: ((galera_server_certificate))
+        server: ((mysql_server_certificate))
+  - name: galera-agent
+    release: pxc
+    properties:
+      db_password: ((cf_mysql_mysql_galera_healthcheck_password))
+      endpoint_password: ((cf_mysql_mysql_galera_healthcheck_endpoint_password))
+  - name: gra-log-purger
+    release: pxc
+  - name: cluster-health-logger
+    release: pxc
+    properties:
+      db_password: ((cf_mysql_mysql_cluster_health_password))
+  - name: bootstrap
+    release: pxc
+  - name: db_init_script
+    release: paasta-conf
+    properties:
+      delay_time: 10
+      db_client_path: /var/vcap/packages/pxc/bin/mysql
+      db_username: root
+      db_password: ((mysql_admin_password))
+      socket_path: /var/vcap/sys/run/pxc-mysql/mysqld.sock
+      database_type: mysql
+      init_sql: |-
+        CREATE DATABASE IF NOT EXISTS broker;
+        USE broker;
+        CREATE TABLE IF NOT EXISTS `service_binding` (
+          `binding_id` varchar(100) NOT NULL DEFAULT '',
+          `instance_id` varchar(100) DEFAULT NULL,
+          `username` varchar(100) DEFAULT NULL,
+          `password` varchar(100) DEFAULT NULL,
+          `app_id` varchar(100) DEFAULT NULL,
+          PRIMARY KEY (`binding_id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+        CREATE TABLE IF NOT EXISTS `service_instances` (
+          `instance_id` varchar(100) NOT NULL,
+          `service_id` varchar(100) NOT NULL,
+          `plan_id` varchar(100) NOT NULL,
+          `organization_guid` varchar(100) NOT NULL,
+          `space_guid` varchar(100) NOT NULL,
+          PRIMARY KEY (`instance_id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+        CREATE USER IF NOT EXISTS 'root'@'((proxy_static_ip))' IDENTIFIED BY '((mysql_admin_password))';
+        ALTER USER IF EXISTS 'root'@'((proxy_static_ip))' IDENTIFIED BY '((mysql_admin_password))';
+        GRANT ALL PRIVILEGES ON *.* TO 'root'@'((proxy_static_ip))' WITH GRANT OPTION;
+        flush privileges;
+
+
 
 - name: proxy
   instances: ((proxy_instances))
   azs: ((proxy_azs))
   networks:
   - name: ((private_networks_name))
+    static_ips: [((proxy_static_ip))]
   vm_type: ((proxy_vm_type))
   stemcell: default
   jobs:
   - name: proxy
-    release: paasta-mysql
+    release: pxc
     properties:
-      cf_mysql:
-        proxy:
-          port: ((proxy_mysql_port))
-          api_password: "((proxy_api_password))"
-    provides:
-      mysql-database:
-        as: mysql-database
-        shared: true
+      port: ((proxy_mysql_port))
+      api_password: ((cf_mysql_proxy_api_password))
+      api_port: 8083
 
 - name: mysql-broker
   instances: ((mysql_broker_instances))
@@ -103,6 +141,8 @@ instance_groups:
   - name: op-mysql-java-broker
     release: paasta-mysql
     properties:
+      database_type: mariadb
+      mysql_admin_password: ((mysql_admin_password))
       log_dir: mysql-broker
       log_file: mysql-broker
       log_level: INFO
@@ -116,13 +156,43 @@ instance_groups:
             connection: ((mysql_broker_services_plan_b_connection))
 
 variables:
-- name: mysql_cluster_health_password
+- name: cf_mysql_mysql_admin_password
   type: password
-- name: mysql_galera_healthcheck_endpoint_password
+- name: cf_mysql_proxy_api_password
   type: password
-- name: mysql_galera_healthcheck_db_password
+- name: cf_mysql_mysql_galera_healthcheck_password
   type: password
-- name: mysql_smoke_tests_db_password
-  type: password  
-- name: proxy_api_password
+- name: cf_mysql_mysql_galera_healthcheck_endpoint_password
   type: password
+- name: cf_mysql_mysql_cluster_health_password
+  type: password
+- name: pxc_galera_ca
+  type: certificate
+  options:
+    common_name: pxc_galera_ca
+    is_ca: true
+- name: pxc_server_ca
+  type: certificate
+  options:
+    common_name: pxc_server_ca
+    is_ca: true
+- name: galera_server_certificate
+  type: certificate
+  update_mode: converge
+  options:
+    ca: pxc_galera_ca
+    common_name: galera_server_certificate
+    alternative_names:
+    - galera_server_certificate
+    extended_key_usage:
+    - server_auth
+    - client_auth
+- name: mysql_server_certificate
+  type: certificate
+  update_mode: converge
+  options:
+    ca: pxc_server_ca
+    common_name: sql-db.service.cf.internal
+    alternative_names:
+    - sql-db.service.cf.internal
+

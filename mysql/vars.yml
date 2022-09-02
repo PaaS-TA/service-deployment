@@ -1,28 +1,23 @@
 # STEMCELL
 stemcell_os: "ubuntu-bionic"                                     # stemcell os
-stemcell_version: "1.92"                                       # stemcell version
+stemcell_version: "1.97"                                       # stemcell version
 
 # NETWORK
 private_networks_name: "default"                                 # private network name
 
 # MYSQL
 mysql_azs: [z4]                                                  # mysql azs
-mysql_instances: 1                                               # mysql instances (N)
+mysql_instances: 3                                               # mysql instances (N)
 mysql_vm_type: "small"                                           # mysql vm type
 mysql_persistent_disk_type: "8GB"                                # mysql persistent disk type
 mysql_port: 13306                                                # mysql port (e.g. 13306) -- Do Not Use "3306"
 mysql_admin_password: "<MYSQL_ADMIN_PASSWORD>"                   # mysql admin password (e.g. "admin!Service")
 
-# ARBITRATOR
-arbitrator_azs: [z4]                                             # arbitrator azs 
-arbitrator_instances: 1                                          # arbitrator instances (1)
-arbitrator_vm_type: "small"                                      # arbitrator vm type
-
 # PROXY
 proxy_azs: [z4]                                                  # proxy azs
-proxy_instances: 1                                               # proxy instances (1)
 proxy_vm_type: "small"                                           # proxy vm type
 proxy_mysql_port: 13307                                          # proxy mysql port (e.g. 13307) -- Do Not Use "3306"
+proxy_static_ip: "<PROXY_STATIC_IP>"                             # proxy ip (e.g. "10.0.161.100")
 
 # MYSQL_BROKER
 mysql_broker_azs: [z4]                                           # mysql broker azs

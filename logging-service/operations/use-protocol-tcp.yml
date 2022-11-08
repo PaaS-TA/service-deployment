@@ -1,0 +1,5 @@
+---
+
+- type: replace
+  path: /instance_groups/name=collector/jobs/name=syslog_forwarder/properties/syslog/use_tcp_for_file_forwarding_local_transport?
+  value: true

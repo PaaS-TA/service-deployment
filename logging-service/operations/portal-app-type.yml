@@ -1,0 +1,13 @@
+---
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=paas-ta-portal-log-api/consumes
+  value:
+    paas-ta-portal-registration-link: nil
+
+- type: replace
+  path: /instance_groups/name=api/properties?
+  value:
+    paasta:
+      domain: ((system_domain))
+    portalType: app

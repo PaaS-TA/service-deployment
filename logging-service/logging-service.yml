@@ -156,6 +156,9 @@ instance_groups:
     consumes:
       paas-ta-portal-registration-link: {from: portal-registration, deployment: portal-api}
   properties:
+    spring:
+      application:
+        name: PortalLoggingApi
     influxdb:
       ip: ((influxdb_ip))
       port: ((influxdb_http_port))

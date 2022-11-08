@@ -6,8 +6,10 @@
     paas-ta-portal-registration-link: nil
 
 - type: replace
-  path: /instance_groups/name=api/properties?
+  path: /instance_groups/name=api/properties/paasta?
   value:
-    paasta:
-      domain: ((system_domain))
-    portalType: app
+    domain: ((system_domain))
+
+- type: replace
+  path: /instance_groups/name=api/properties/portalType?
+  value: app

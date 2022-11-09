@@ -6,7 +6,7 @@ stemcell_version: "1.107"		# Stemcell Version
 # VARIABLE
 syslog_forwarder_custom_rule: 'if ($msg contains "DEBUG") then stop'      # PaaS-TA Logging Agent에서 전송할 Custom Rule
 syslog_forwarder_fallback_servers: []
-portal_type: "vm"                     # PaaS-TA Portal 배포 타입(vm, app)
+portal_deploy_type: "vm"                     # PaaS-TA Portal 배포 타입(vm, app)
 
 
 # Fluentd

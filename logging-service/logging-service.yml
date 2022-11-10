@@ -143,13 +143,13 @@ instance_groups:
         tls_enabled: false
         transport: ((fluentd_transport))
 
-- name : api
-  azs: ((api_azs))
-  instances: ((api_instances))
-  vm_type: ((api_vm_type))
+- name : log-api
+  azs: ((log_api_azs))
+  instances: ((log_api_instances))
+  vm_type: ((log_api_vm_type))
   stemcell: default
   networks:
-  - name: ((api_network))
+  - name: ((log_api_network))
   jobs:
   - name: paas-ta-portal-log-api
     release: paasta-portal-api-release

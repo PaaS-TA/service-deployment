@@ -45,8 +45,8 @@ collector_vm_type: "small"      # collector : vm type
 collector_network: "default"    # collector 네트워크
 
 
-# API
-api_azs: ["z4"]                                             # api : azs
-api_instances: 1                                            # api : instances (1)
-api_vm_type: "small"                                        # api : vm type
-api_network: "default"                                      # api 네트워크
+# LOG-API
+log_api_azs: ["z4"]                                             # log-api : azs
+log_api_instances: 1                                            # log-api : instances (1)
+log_api_vm_type: "small"                                        # log-api : vm type
+log_api_network: "default"                                      # log-api 네트워크

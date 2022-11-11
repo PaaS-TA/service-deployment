@@ -8,7 +8,7 @@ stemcells:
 
 releases:
 - name: paasta-portal-api-release
-  sha1: a9b01f7a46cc86a284954ca6c9072fc4efd41954
+  sha1: 4333b908237e5db7dc252df2d4e90c229b3c39f1
   version: 2.5.10
   url: https://nextcloud.paas-ta.org/index.php/s/GiKm67pjZ3mRP2m/download
 - name: monitoring-dashboard-release

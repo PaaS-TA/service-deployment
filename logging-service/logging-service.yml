@@ -8,7 +8,7 @@ stemcells:
 
 releases:
 - name: paasta-portal-api-release
-  sha1: fc8cc89f95accf11de7aa8283444f2fc24a2acd7
+  sha1: 3e5af30ce706d3fa07ef7f89cc4a38be83d0faf1
   version: 2.5.10
   url: https://nextcloud.paas-ta.org/index.php/s/GiKm67pjZ3mRP2m/download
 - name: monitoring-dashboard-release
@@ -167,6 +167,8 @@ instance_groups:
       database: ((influxdb_database))
       measurement: ((influxdb_measurement))
       limit: ((influxdb_query_limit))
+      https:
+        enabled: ((influxdb_https_enabled))
 
 
 variables:

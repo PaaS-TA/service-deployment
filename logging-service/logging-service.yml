@@ -1,241 +1,194 @@
 ---
-name: logging-service 
-
-releases:
-- name: paasta-logging-service-release
-  url: https://nextcloud.paas-ta.org/index.php/s/eoCBY5QSFjJr3AS/download
-  version: "1.0"
+name: logging-service
 
 stemcells:
 - alias: default
   os: ((stemcell_os))
   version: ((stemcell_version))
 
-update: 
-  canaries: 1                            # canary 인스턴스 수(필수)
-  canary_watch_time: 30000-600000        # canary 인스턴스가 수행하기 위한 대기 시간(필수)
-  max_in_flight: 1                       # non-canary 인스턴스가 병렬로 update 하는 최대 개수(필수)
-  update_watch_time: 5000-600000        # non-canary 인스턴스가 수행하기 위한 대기 시간(필수)
-  serial: false
+releases:
+- name: paasta-portal-api-release
+  sha1: 3e5af30ce706d3fa07ef7f89cc4a38be83d0faf1
+  version: 2.5.10
+  url: https://nextcloud.paas-ta.org/index.php/s/GiKm67pjZ3mRP2m/download
+- name: monitoring-dashboard-release
+  version: 5.8.1
+  sha1: 59e6a10ff7ee11093fedcad0ede8e8265179b973
+  url: https://nextcloud.paas-ta.org/index.php/s/DPKMAafeHwKNWs4/download
+- name: monitoring-influxdb-release
+  version: 5.8.1
+  sha1: 813d7b2ebf18c0859df209853818c53a22f42b2f
+  url: https://nextcloud.paas-ta.org/index.php/s/qSsJerfdNKXxC5o/download
+- name: paasta-collector-release
+  version: 5.8.2
+  sha1: f56523758bc839be53e44583df1b65837ed303af
+  url: https://nextcloud.paas-ta.org/index.php/s/gesnBRQsKEJPoTE/download
+- name: syslog
+  version: 12.0.2
+  sha1: ef0c0cfaf83002175fd88aae005774e33f1d4787
+  url: https://bosh.io/d/github.com/cloudfoundry/syslog-release?v=12.0.2
+- name: bpm
+  version: 1.1.15
+  sha1: 0d48aa01a65b947b97570234eb2401e821a8bd35
+  url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.1.15
 
 instance_groups:
-- name: elasticsearch_master
-  azs: ((es_master_azs))
-  instances: ((es_master_instances))
-  persistent_disk_type: ((es_master_persistent_disk_type))
-  vm_type: ((vm_type_default))
+- name: fluentd
+  azs: ((fluentd_azs))
+  instances: ((fluentd_instances))
+  vm_type: ((fluentd_vm_type))
   stemcell: default
   networks:
-  - name: ((private_networks_name))
-    static_ips: ((es_master_private_ips))
+  - name: ((fluentd_network))
+    static_ips:
+    - ((fluentd_ip))
   jobs:
-  - name: elasticsearch
-    release: paasta-logging-service-release
-    properties: 
-      elasticsearch:
-        cluster_name: logsearch
-        exec: null
-        master_hosts: ((es_master_private_ips))
-        node:
-          allow_data: false
-          allow_master: true
-  - name: cerebro
-    release: paasta-logging-service-release
+  - name: fluentd
+    release: monitoring-dashboard-release
     properties:
-      elasticsearch:
-        cluster_name: logsearch
-  update:
-    max_in_flight: 1
+      logging:
+        db:
+          name: ((influxdb_database))
+        measurement:
+          name: ((influxdb_measurement))
+        time:
+          precision: ((influxdb_time_precision))
+      influxdb:
+        http:
+          host: ((influxdb_ip))
+          port: ((influxdb_http_port))
+        user: ((influxdb_username))
+        password: ((influxdb_password))
+        ssl:
+          enabled: ((influxdb_https_enabled))
+      fluentd:
+        port: ((fluentd_port))
+        transport: ((fluentd_transport))
+  - name: bpm
+    release: bpm
 
-- name: queue
-  azs: ((queue_azs))
-  instances: ((queue_instances))
-  persistent_disk_type: ((queue_persistent_disk_type))
-  vm_type: ((vm_type_default))
+- name: influxdb
+  azs: ((influxdb_azs))
+  instances: ((influxdb_instances))
+  vm_type: ((influxdb_vm_type))
   stemcell: default
+  persistent_disk_type: ((influxdb_persistent_disk_type))
   networks:
-  - name: ((private_networks_name))
-    static_ips: ((queue_private_ips))
+  - name: ((influxdb_network))
+    static_ips:
+    - ((influxdb_ip))
   jobs:
-  - name: queue
-    release: paasta-logging-service-release
+  - name: influxdb
+    release: monitoring-influxdb-release
     properties:
-      redis:
-        host: ((queue_private_url))
-
-- name: maintenance
-  azs: ((maintenance_azs))
-  instances: ((maintenance_instances))
-  vm_type: ((vm_type_minimal))
-  stemcell: default
-  networks:
-  - name: ((private_networks_name))
-    static_ips: ((maintenance_private_ips))
-  jobs:
-  - name: elasticsearch_config
-    release: paasta-logging-service-release
+      influxdb:
+        user: ((influxdb_username))
+        password: ((influxdb_password))
+        interval: ((influxdb_interval)) 
+        replication: 1
+        ips: 127.0.0.1
+        https_enabled: ((influxdb_https_enabled))
+        http:
+          bind-address: ((influxdb_http_port))
+        pem_key: ((influxdb_ssl.certificate))((influxdb_ssl.private_key))
+        logging_db_name: ((influxdb_database))
+  - name: chronograf
+    release: monitoring-influxdb-release
     properties:
-      elasticsearch_config:
-        elasticsearch:
-          host: ((es_master_private_url))
-        index_prefix: ((es_config_index_prefix))
-        templates:
-        - shards-and-replicas: /var/vcap/jobs/elasticsearch_config/index-templates/shards-and-replicas.json
-        - index-settings: /var/vcap/jobs/elasticsearch_config/index-templates/index-settings.json
-        - index-mappings: /var/vcap/jobs/elasticsearch_config/index-templates/index-mappings.json
-        - index-mappings-laas: /var/vcap/jobs/elasticsearch_config/index-templates/index-mappings-laas.json
-        - index-mappings-app: /var/vcap/jobs/elasticsearch_config/index-templates/index-mappings-app.json
-        - index-mappings-platform: /var/vcap/jobs/elasticsearch_config/index-templates/index-mappings-platform.json
-  - name: curator
-    release: paasta-logging-service-release
-    properties:
-      elasticsearch_config:
-        index_prefix: ((es_config_index_prefix))
-      curator:
-        elasticsearch:
-          host: ((es_master_private_url))
-          port: 9200
-        purge_logs:
-          retention_period: ((retention_period))
-          unit: days
-  update:
-    serial: true
-
-- name: elasticsearch_data
-  azs: ((es_data_azs))
-  instances: ((es_data_instances))
-  persistent_disk_type: ((es_data_persistent_disk_type))
-  vm_type: ((vm_type_medium))
-  stemcell: default
-  networks:
-  - name: ((private_networks_name))
-    static_ips: ((es_data_private_ips))
-  jobs:
-  - name: elasticsearch
-    release: paasta-logging-service-release
-    properties:
-      elasticsearch:
-        cluster_name: logsearch
-        exec: null
-        master_hosts: ((es_master_private_ips))
-        node:
-          allow_data: true
-          allow_master: false
-  update:
-    max_in_flight: 1
-    serial: true
-
-- name: visualization
-  azs: ((visualization_azs))
-  instances: ((visualization_instances))
-  vm_type: ((vm_type_default))
-  stemcell: default
-  networks:
-  - name: ((private_networks_name))
-    static_ips: ((visualization_private_ips))
-  jobs:
-  - name: kibana
-    release: paasta-logging-service-release
-    properties:
-      kibana:
-        elasticsearch: 
-          host: ((es_master_private_url))
-          port: 9200
-        version: ((visualization_version))
-      laas: 
-        cf_api_url: "https://api.((system_domain))"
-        cf_client_id: ((uaa_client_laas_id))
-        cf_client_secret: ((uaa_client_laas_secret))
-        cf_uaa_callback_url: http://((router_public_ips))/app/laas/callback
-        cf_uaa_scope: cloud_controller.read&openid
-        cf_uaa_url: "https://uaa.((system_domain))"
-        elasticsearch_index_prefix: ((es_config_index_prefix))
-        top_left_logo_image: ((laas_logo))
+      influxdb:
+        user: ((influxdb_username))
+        password: ((influxdb_password))
+        https_enabled: ((influxdb_https_enabled))
+        http:
+          bind-address: ((influxdb_http_port))
+  - name: bpm
+    release: bpm
 
 - name: collector
   azs: ((collector_azs))
   instances: ((collector_instances))
-  vm_type: ((vm_type_default))
+  vm_type: ((collector_vm_type))
   stemcell: default
   networks:
-  - name: ((private_networks_name))
-    static_ips: ((collector_private_ips))
+  - name: ((collector_network))
   jobs:
-  - name: ingestor_syslog 
-    release: paasta-logging-service-release
-    properties:
-      logstash_ingestor:
-        debug: false
-        relp:
-          port: null
-      redis:
-        host: ((queue_private_url))
   - name: ingestor_cloudfoundry-firehose
-    release: paasta-logging-service-release
+    release: paasta-collector-release
     properties:
       cloudfoundry:
         api_endpoint: https://api.((system_domain))
         firehose_client_id: firehose-to-syslog
         firehose_client_secret: firehose-secret
         firehose_events: LogMessage
-        skip_ssl_validation: true
+        skip_ssl_validation: "true"
       create-uaa-client:
         cloudfoundry:
           system_domain: ((system_domain))
-          uaa_admin_client_id: ((uaa_client_admin_id)) 
+          uaa_admin_client_id: ((uaa_client_admin_id))
           uaa_admin_client_secret: ((uaa_client_admin_secret))
       syslog:
-        host: ((router_private_url))
-        port: 5514
+        host: ((fluentd_ip))
+        port: ((fluentd_port))
+        protocol: ((fluentd_transport))
+  - name: syslog_forwarder
+    release: syslog
+    properties:
+      syslog:
+        address: ((fluentd_ip))
+        custom_rule: |
+          ((syslog_forwarder_custom_rule))
+          if ($programname startswith "vcap.") then stop
+        fallback_servers: ((syslog_forwarder_fallback_servers))
+        port: ((fluentd_port))
+        tls_enabled: false
+        transport: ((fluentd_transport))
 
-- name: parser
-  azs: ((parser_azs))
-  instances: ((parser_instances))
-  vm_type: ((vm_type_default))
+- name : log-api
+  azs: ((log_api_azs))
+  instances: ((log_api_instances))
+  vm_type: ((log_api_vm_type))
   stemcell: default
   networks:
-  - name: ((private_networks_name))
-    static_ips: ((parser_private_ips))
+  - name: ((log_api_network))
   jobs:
-  - name: parser
-    release: paasta-logging-service-release
-    properties:
-      logstash_parser:
-        debug: false
-        elasticsearch:
-          index: ((es_config_index_prefix))((parser_es_index))
-          index_type: ((parser_es_index_type))
-      redis:
-        host: ((queue_private_url))
-  - name: elasticsearch
-    release: paasta-logging-service-release
-    properties:
-      elasticsearch:
-        cluster_name: logsearch
-        exec: null
-        master_hosts: ((es_master_private_ips))
-  update:
-    max_in_flight: 4
-    serial: false
+  - name: paas-ta-portal-log-api
+    release: paasta-portal-api-release
+    consumes:
+      paas-ta-portal-registration-link: {from: portal-registration, deployment: portal-api}
+  properties:
+    spring:
+      application:
+        name: PortalLoggingApi
+    influxdb:
+      ip: ((influxdb_ip))
+      port: ((influxdb_http_port))
+      username: ((influxdb_username))
+      password: ((influxdb_password))
+      database: ((influxdb_database))
+      measurement: ((influxdb_measurement))
+      limit: ((influxdb_query_limit))
+      https:
+        enabled: ((influxdb_https_enabled))
 
-- name: router
-  azs: ((router_azs))
-  instances: ((router_instances))
-  vm_type: ((vm_type_minimal))                          
-  stemcell: default
-  networks:
-  - name: ((private_networks_name))
-    static_ips: ((router_private_ips))
-  - name: ((public_networks_name))
-    static_ips: ((router_public_ips))
-  jobs:
-  - name: haproxy
-    release: paasta-logging-service-release
-    properties:
-      haproxy:
-        cluster_monitor:
-        ingestor:
-          backend_servers: ((collector_private_ips))
-        kibana:
-          backend_servers: ((visualization_private_ips))
 
+variables:
+- name: influxdb_ca
+  options:
+    common_name: influxdbCA
+    is_ca: true
+  type: certificate
+- name: influxdb_ssl
+  options:
+    alternative_names:
+    - ((system_domain))
+    - '*.((system_domain))'
+    ca: influxdb_ca
+    common_name: influxdbSSL
+  type: certificate
+
+update:
+  canaries: 1
+  canary_watch_time: 30000-600000
+  max_in_flight: 1
+  serial: true
+  update_watch_time: 5000-600000

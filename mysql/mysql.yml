@@ -15,9 +15,9 @@ releases:
   url:  https://nextcloud.paas-ta.org/index.php/s/2zz3xPqEErCPq3y/download
   version: 1.0.7
 - name: paasta-mysql
-  sha1: d505992214d0dd9c1c681df57e228ccbf7325170
-  url: https://nextcloud.paas-ta.org/index.php/s/i7FSCrTYHdFcKKE/download
-  version: 2.2.0
+  sha1: 697bc5283b1cfec20764a70f6bfda82b882fff40
+  url: https://nextcloud.paas-ta.org/index.php/s/wLDLEd5X4S2RrXP/download
+  version: 2.2.1
 
 - name: bpm
   version: latest

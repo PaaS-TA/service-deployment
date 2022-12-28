@@ -3,9 +3,9 @@ name: source-control-service
 
 releases:
 - name: paasta-sourcecontrol-release
-  url: https://nextcloud.paas-ta.org/index.php/s/JLcYXHCE9LfMdEt/download
-  sha1: e5618fcb117455b3b989df8699983a74edb83076	
-  version: "1.1.6"
+  url: https://nextcloud.paas-ta.org/index.php/s/NYYMECyTH5enp6d/download
+  sha1: f7c8d81db813faa3af2542104cc4193abc87b0ad
+  version: "1.1.7"
 
 stemcells:
 - alias: default
@@ -143,6 +143,8 @@ properties:
       databasename:  "PAASTA_SRC_DB"
 
   scm:
+    admin:
+      pwd: ((scm_admin_password))
     base:
       url: http://((scm_private_ips)):8084/scm
       port: 8084

@@ -4,7 +4,7 @@ name: gateway-service
 releases:
 - name: paasta-api-gateway-service
   url: https://nextcloud.paas-ta.org/index.php/s/Rz5enbLPTEeACNX/download
-  sha1: 882cc37dc24215b2d7040f20169e5e98fc1ef97c
+  sha1: 433754ea031b998f14e50f631254df36c8624a18
   version: "1.1.7"
 
 stemcells:

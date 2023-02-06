@@ -1,6 +1,6 @@
 # STEMCELL
 stemcell_os: "ubuntu-bionic"		# Stemcell OS
-stemcell_version: "1.169"		# Stemcell Version
+stemcell_version: "1.171"		# Stemcell Version
 
 
 # VARIABLE

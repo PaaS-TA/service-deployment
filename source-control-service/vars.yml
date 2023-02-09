@@ -1,6 +1,6 @@
 # STEMCELL
 stemcell_os: "ubuntu-bionic"                                   # stemcell os
-stemcell_version: "1.122"                                     # stemcell version
+stemcell_version: "1.169"                                     # stemcell version
 
 # VM_TYPE
 vm_type_small: "minimal"                                       # vm type small
@@ -14,6 +14,7 @@ scm_azs: [z3]                                                  # scm : azs
 scm_instances: 1                                               # scm : instances (1)
 scm_persistent_disk_type: "30GB"                               # scm : persistent disk type
 scm_private_ips: "<SCM_PRIVATE_IPS>"                           # scm : private ips (e.g. "10.0.81.41")
+scm_admin_password: "<SCM_ADMIN_PASSWORD>"                     # scm : scm-sever admin password -- Do Not Use "scmadmin"
 
 # MARIA-DB# MARIA_DB
 mariadb_azs: [z3]                                              # mariadb : azs

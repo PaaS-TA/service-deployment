@@ -1,6 +1,6 @@
 # STEMCELL
 stemcell_os: "ubuntu-bionic"                                      # Deployment Main Stemcell OS
-stemcell_version: "1.171"                                        # Main Stemcell Version
+stemcell_version: "1.188"                                        # Main Stemcell Version
 
 # NETWORK
 private_networks_name: "default"                                  # private network name

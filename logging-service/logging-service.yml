@@ -11,10 +11,10 @@ releases:
   sha1: fb210001bac6f20d7ecc54ef3268aee7bb3b1df1
   version: 2.5.15
   url: https://nextcloud.paas-ta.org/index.php/s/3keZaEXRsdaawkz/download
-- name: monitoring-dashboard-release
-  version: 5.8.1
-  sha1: 59e6a10ff7ee11093fedcad0ede8e8265179b973
-  url: https://nextcloud.paas-ta.org/index.php/s/DPKMAafeHwKNWs4/download
+- name: fluentd-release
+  version: 1.15.2
+  sha1: 28b0d0643377eab4707ff1dcc310488872f3bfe2
+  url: https://nextcloud.paas-ta.org/index.php/s/RtLE8M66jFwZKN5/download
 - name: monitoring-influxdb-release
   version: 5.8.1
   sha1: 813d7b2ebf18c0859df209853818c53a22f42b2f
@@ -44,7 +44,7 @@ instance_groups:
     - ((fluentd_ip))
   jobs:
   - name: fluentd
-    release: monitoring-dashboard-release
+    release: fluentd-release
     properties:
       logging:
         db:

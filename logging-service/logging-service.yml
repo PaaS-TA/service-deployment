@@ -7,10 +7,6 @@ stemcells:
   version: ((stemcell_version))
 
 releases:
-- name: paasta-portal-api-release
-  sha1: fb210001bac6f20d7ecc54ef3268aee7bb3b1df1
-  version: 2.5.15
-  url: https://nextcloud.paas-ta.org/index.php/s/3keZaEXRsdaawkz/download
 - name: fluentd-release
   version: 1.15.2
   sha1: 28b0d0643377eab4707ff1dcc310488872f3bfe2
@@ -90,7 +86,7 @@ instance_groups:
         https_enabled: ((influxdb_https_enabled))
         http:
           bind-address: ((influxdb_http_port))
-        pem_key: ((influxdb_ssl.certificate))((influxdb_ssl.private_key))
+        pem_key: ((influxdb_pem_key))
         logging_db_name: ((influxdb_database))
   - name: chronograf
     release: monitoring-influxdb-release
@@ -143,51 +139,6 @@ instance_groups:
         tls_enabled: false
         transport: ((fluentd_transport))
 
-- name : log-api
-  azs: ((log_api_azs))
-  instances: ((log_api_instances))
-  vm_type: ((log_api_vm_type))
-  stemcell: default
-  networks:
-  - name: ((log_api_network))
-  jobs:
-  - name: paas-ta-portal-log-api
-    release: paasta-portal-api-release
-    consumes:
-      paas-ta-portal-registration-link: {from: portal-registration, deployment: portal-api}
-  properties:
-    spring:
-      application:
-        name: PortalLoggingApi
-    influxdb:
-      ip: ((influxdb_ip))
-      port: ((influxdb_http_port))
-      username: ((influxdb_username))
-      password: ((influxdb_password))
-      database: ((influxdb_database))
-      measurement: ((influxdb_measurement))
-      limit: ((influxdb_query_limit))
-      https:
-        enabled: ((influxdb_https_enabled))
-      ssl:
-        keyPath: ((influxdb_ssl_key_path))
-        password: ((influxdb_ssl_password))
-
-
-variables:
-- name: influxdb_ca
-  options:
-    common_name: influxdbCA
-    is_ca: true
-  type: certificate
-- name: influxdb_ssl
-  options:
-    alternative_names:
-    - ((system_domain))
-    - '*.((system_domain))'
-    ca: influxdb_ca
-    common_name: influxdbSSL
-  type: certificate
 
 update:
   canaries: 1

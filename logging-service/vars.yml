@@ -6,7 +6,6 @@ stemcell_version: "1.102"		# Stemcell Version
 # VARIABLE
 syslog_forwarder_custom_rule: 'if ($msg contains "DEBUG") then stop'      # PaaS-TA Logging Agent에서 전송할 Custom Rule
 syslog_forwarder_fallback_servers: []
-paasta_deploy_type: "ap"                # PaaS-TA 배포 타입(ap, sidecar)
 portal_deploy_type: "vm"                # PaaS-TA Portal 배포 타입(vm, app)
 
 
@@ -33,13 +32,10 @@ influxdb_username: "<INFLUXDB_USERNAME>"	  # InfluxDB Admin 계정 Username
 influxdb_password: "<INFLUXDB_PASSWORD>"	  # InfluxDB Admin 계정 Password
 influxdb_interval: "7d"                     # InfluxDB Retention Policy (bootstrapper)
 influxdb_https_enabled: "true"              # InfluxDB HTTPS 설정
-influxdb_ssl_key_path: "/var/vcap/jobs/paas-ta-portal-log-api/data"     # InfluxDB SSL key store path
-influxdb_ssl_password: "paasta2022"         # InfluxDB SSL password
 
 influxdb_database: "<INFLUXDB_DATABASE>"          # InfluxDB Database명
 influxdb_measurement: "<INFLUXDB_MEASUREMENT>"    # InfluxDB Measurement명
 influxdb_time_precision: "s"    # hour(h), minutes(m), second(s), millisecond(ms), microsecond(u), nanosecond(ns)
-influxdb_query_limit: "<INFLUXDB_QUERY_LIMIT>"    # InfluxDB query limit (default "50")
 
 
 # COLLECTOR
@@ -47,10 +43,3 @@ collector_azs: ["z4"]                   # collector : azs
 collector_instances: 1                  # collector : instances (1)
 collector_vm_type: "small"              # collector : vm type
 collector_network: "default"            # collector 네트워크
-
-
-# LOG-API
-log_api_azs: ["z4"]                     # log-api : azs
-log_api_instances: 1                    # log-api : instances (1)
-log_api_vm_type: "small"                # log-api : vm type
-log_api_network: "default"              # log-api 네트워크

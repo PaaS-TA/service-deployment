@@ -3,9 +3,9 @@ name: lifecycle-service
 
 releases:
 - name: paasta-app-lifecycle-service
-  url: https://nextcloud.paas-ta.org/index.php/s/5oXPrDCJ57Lnnmz/download
-  version: "1.1.6"
-  sha1: 3aa298d74c03d1df614caef9cb433bb8971a2dfd
+  url: https://nextcloud.paas-ta.org/index.php/s/aCbeSYMyer97Syz/download
+  version: "1.1.5"
+  sha1: f112b52c107407606f8aa31727bf9bbbb56bd6f7
 
 stemcells:
 - alias: default

@@ -7,14 +7,10 @@ stemcells:
   version: ((stemcell_version))
 
 releases:
-- name: paasta-portal-api-release
-  sha1: 3e5af30ce706d3fa07ef7f89cc4a38be83d0faf1
-  version: 2.5.10
-  url: https://nextcloud.paas-ta.org/index.php/s/GiKm67pjZ3mRP2m/download
-- name: monitoring-dashboard-release
-  version: 5.8.1
-  sha1: 59e6a10ff7ee11093fedcad0ede8e8265179b973
-  url: https://nextcloud.paas-ta.org/index.php/s/DPKMAafeHwKNWs4/download
+- name: fluentd-release
+  version: 1.15.2
+  sha1: 28b0d0643377eab4707ff1dcc310488872f3bfe2
+  url: https://nextcloud.paas-ta.org/index.php/s/RtLE8M66jFwZKN5/download
 - name: monitoring-influxdb-release
   version: 5.8.1
   sha1: 813d7b2ebf18c0859df209853818c53a22f42b2f
@@ -44,7 +40,7 @@ instance_groups:
     - ((fluentd_ip))
   jobs:
   - name: fluentd
-    release: monitoring-dashboard-release
+    release: fluentd-release
     properties:
       logging:
         db:
@@ -84,13 +80,13 @@ instance_groups:
       influxdb:
         user: ((influxdb_username))
         password: ((influxdb_password))
-        interval: ((influxdb_interval)) 
+        interval: ((influxdb_interval))
         replication: 1
         ips: 127.0.0.1
         https_enabled: ((influxdb_https_enabled))
         http:
           bind-address: ((influxdb_http_port))
-        pem_key: ((influxdb_ssl.certificate))((influxdb_ssl.private_key))
+        pem_key: ((influxdb_pem_key))
         logging_db_name: ((influxdb_database))
   - name: chronograf
     release: monitoring-influxdb-release
@@ -143,48 +139,6 @@ instance_groups:
         tls_enabled: false
         transport: ((fluentd_transport))
 
-- name : log-api
-  azs: ((log_api_azs))
-  instances: ((log_api_instances))
-  vm_type: ((log_api_vm_type))
-  stemcell: default
-  networks:
-  - name: ((log_api_network))
-  jobs:
-  - name: paas-ta-portal-log-api
-    release: paasta-portal-api-release
-    consumes:
-      paas-ta-portal-registration-link: {from: portal-registration, deployment: portal-api}
-  properties:
-    spring:
-      application:
-        name: PortalLoggingApi
-    influxdb:
-      ip: ((influxdb_ip))
-      port: ((influxdb_http_port))
-      username: ((influxdb_username))
-      password: ((influxdb_password))
-      database: ((influxdb_database))
-      measurement: ((influxdb_measurement))
-      limit: ((influxdb_query_limit))
-      https:
-        enabled: ((influxdb_https_enabled))
-
-
-variables:
-- name: influxdb_ca
-  options:
-    common_name: influxdbCA
-    is_ca: true
-  type: certificate
-- name: influxdb_ssl
-  options:
-    alternative_names:
-    - ((system_domain))
-    - '*.((system_domain))'
-    ca: influxdb_ca
-    common_name: influxdbSSL
-  type: certificate
 
 update:
   canaries: 1

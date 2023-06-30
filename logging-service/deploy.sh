@@ -6,32 +6,34 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias n
 
 
 # Portal 설치 타입 및 프로토콜 종류에 따라 옵션 파일 사용 여부를 분기한다.
-PORTAL_TYPE=`grep portal_deploy_type vars.yml | cut -d "#" -f1`
+PORTAL_DEPLOY_TYPE=`grep portal_deploy_type vars.yml | cut -d "#" -f1`
 FLUENTD_TRANSPORT=`grep fluentd_transport vars.yml`
 
 
-if [[ "${PORTAL_TYPE}" =~ "app" ]]; then
+if [[ "${PORTAL_DEPLOY_TYPE}" =~ "app" ]]; then
   if [[ "${FLUENTD_TRANSPORT}" =~ "tcp" ]]; then
     bosh -e ${BOSH_ENVIRONMENT} -d logging-service -n deploy logging-service.yml \
-          -o operations/portal-app-type.yml \
           -o operations/use-protocol-tcp.yml \
           -l vars.yml \
+          -l operations/pem.yml \
           -l ${COMMON_VARS_PATH}
   else
     bosh -e ${BOSH_ENVIRONMENT} -d logging-service -n deploy logging-service.yml \
-          -o operations/portal-app-type.yml \
           -l vars.yml \
+          -l operations/pem.yml \
           -l ${COMMON_VARS_PATH}
   fi
-elif [[ "${PORTAL_TYPE}" =~ "vm" ]]; then
+elif [[ "${PORTAL_DEPLOY_TYPE}" =~ "vm" ]]; then
   if [[ "${FLUENTD_TRANSPORT}" =~ "tcp" ]]; then
     bosh -e ${BOSH_ENVIRONMENT} -d logging-service -n deploy logging-service.yml \
           -o operations/use-protocol-tcp.yml \
           -l vars.yml \
+          -l operations/pem.yml \
           -l ${COMMON_VARS_PATH}
   else
     bosh -e ${BOSH_ENVIRONMENT} -d logging-service -n deploy logging-service.yml \
           -l vars.yml \
+          -l operations/pem.yml \
           -l ${COMMON_VARS_PATH}
   fi
 else

@@ -8,9 +8,9 @@ stemcells:
 
 releases:
   - name: paas-ta-webide-release                                 # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
-    url: https://nextcloud.paas-ta.org/index.php/s/3bjecmdagYymi5N/download
-    sha1: 7ece7da9ac6bd1c9d13774761a10393b3ea8fb0a
-    version: "2.1.7"                                             # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+    url: https://nextcloud.paas-ta.org/index.php/s/kN6j8LB9N6tiybK/download
+    sha1: cf3656019928e19298d429f781fdf89d3e6167c6
+    version: "2.1.8"                                             # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
 
 update:
   canaries: 1                                               # canary 인스턴스 수(필수)

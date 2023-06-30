@@ -19,9 +19,9 @@ releases:
 - name: bpm
   version: latest
 - name: "paasta-on-demand-redis-release"                    # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
-  version: "1.2.5"                                            # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
-  sha1: bb329e111fb8b6a6bf5dd5a86c1fbb69f91866e8
-  url: https://nextcloud.paas-ta.org/index.php/s/xySPxXW8L35LLqm/download
+  version: "1.2.6"                                            # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
+  sha1: 748ed2644adcb2e288252037057171a3a25b50d9
+  url: https://nextcloud.paas-ta.org/index.php/s/zZ4TjbMRCm9JoRt/download
 
 update:
   canaries: 1                                               # canary 인스턴스 수(필수)

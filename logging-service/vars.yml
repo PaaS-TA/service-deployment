@@ -1,12 +1,12 @@
 # STEMCELL
-stemcell_os: "ubuntu-bionic"		# Stemcell OS
-stemcell_version: "1.188"		# Stemcell Version
+stemcell_os: "ubuntu-jammy"		# Stemcell OS
+stemcell_version: "1.102"		# Stemcell Version
 
 
 # VARIABLE
 syslog_forwarder_custom_rule: 'if ($msg contains "DEBUG") then stop'      # PaaS-TA Logging Agent에서 전송할 Custom Rule
 syslog_forwarder_fallback_servers: []
-portal_deploy_type: "vm"                     # PaaS-TA Portal 배포 타입(vm, app)
+portal_deploy_type: "vm"                # PaaS-TA Portal 배포 타입(vm, app)
 
 
 # Fluentd
@@ -20,11 +20,11 @@ fluentd_transport: "tcp"               # fluentd Logging Protocol
 
 
 # INFLUXDB
-influxdb_azs: ["z4"]			            # InfluxDB : azs
-influxdb_instances: 1			            # InfluxDB : instances (1)
-influxdb_vm_type: "large"		          # InfluxDB : vm type
-influxdb_network: "default"		        # InfluxDB 네트워크
-influxdb_persistent_disk_type: "10GB"	# InfluxDB 영구 Disk 종류
+influxdb_azs: ["z4"]                    # InfluxDB : azs
+influxdb_instances: 1			              # InfluxDB : instances (1)
+influxdb_vm_type: "large"		            # InfluxDB : vm type
+influxdb_network: "default"		          # InfluxDB 네트워크
+influxdb_persistent_disk_type: "10GB"	  # InfluxDB 영구 Disk 종류
 
 influxdb_ip: "<INFLUXDB_IP>"
 influxdb_http_port: "8086"                  # default 8086
@@ -36,18 +36,10 @@ influxdb_https_enabled: "true"              # InfluxDB HTTPS 설정
 influxdb_database: "<INFLUXDB_DATABASE>"          # InfluxDB Database명
 influxdb_measurement: "<INFLUXDB_MEASUREMENT>"    # InfluxDB Measurement명
 influxdb_time_precision: "s"    # hour(h), minutes(m), second(s), millisecond(ms), microsecond(u), nanosecond(ns)
-influxdb_query_limit: "<INFLUXDB_QUERY_LIMIT>"                  # InfluxDB query limit (default "50")
 
 
 # COLLECTOR
-collector_azs: ["z4"]           # collector : azs
-collector_instances: 1          # collector : instances (1)
-collector_vm_type: "small"      # collector : vm type
-collector_network: "default"    # collector 네트워크
-
-
-# LOG-API
-log_api_azs: ["z4"]                                             # log-api : azs
-log_api_instances: 1                                            # log-api : instances (1)
-log_api_vm_type: "small"                                        # log-api : vm type
-log_api_network: "default"                                      # log-api 네트워크
+collector_azs: ["z4"]                   # collector : azs
+collector_instances: 1                  # collector : instances (1)
+collector_vm_type: "small"              # collector : vm type
+collector_network: "default"            # collector 네트워크

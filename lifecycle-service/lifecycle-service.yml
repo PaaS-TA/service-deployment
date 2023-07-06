@@ -1,5 +1,5 @@
 ---
-name: lifecycle-service
+name: ((deployment_name))
 
 releases:
 - name: paasta-app-lifecycle-service
@@ -58,7 +58,7 @@ instance_groups:
           secret: ((bosh_client_admin_secret))
         url: ((bosh_url)):((bosh_director_port))
         oauth_url: ((bosh_url)):((bosh_oauth_port))
-        deployment_name: lifecycle-service
+        deployment_name: ((deployment_name))
       port: ((broker_port))
       logging:
         level_broker: ((broker_logging_level_broker))

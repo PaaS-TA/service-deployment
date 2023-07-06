@@ -83,7 +83,9 @@ instance_groups:
   - name: ((private_networks_name))
   - name: ((public_networks_name))
   jobs:
-  - name: app-lifecycle
+  - name: taiga-front
+    release: paasta-app-lifecycle-service
+  - name: taiga-back
     release: paasta-app-lifecycle-service
     properties:
       service:

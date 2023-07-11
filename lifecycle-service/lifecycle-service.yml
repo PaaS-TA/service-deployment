@@ -1,11 +1,11 @@
 ---
-name: lifecycle-service
+name: ((deployment_name))
 
 releases:
 - name: paasta-app-lifecycle-service
-  url: https://nextcloud.paas-ta.org/index.php/s/aCbeSYMyer97Syz/download
-  version: "1.1.5"
-  sha1: f112b52c107407606f8aa31727bf9bbbb56bd6f7
+  url: https://nextcloud.paas-ta.org/index.php/s/JH4snDeMwXf2cES/download
+  version: "1.1.6"
+  sha1: 6c2b6eeff6b03835680758ccdc37ed38538ea63d
 
 stemcells:
 - alias: default
@@ -58,7 +58,7 @@ instance_groups:
           secret: ((bosh_client_admin_secret))
         url: ((bosh_url)):((bosh_director_port))
         oauth_url: ((bosh_url)):((bosh_oauth_port))
-        deployment_name: lifecycle-service
+        deployment_name: ((deployment_name))
       port: ((broker_port))
       logging:
         level_broker: ((broker_logging_level_broker))
@@ -83,7 +83,9 @@ instance_groups:
   - name: ((private_networks_name))
   - name: ((public_networks_name))
   jobs:
-  - name: app-lifecycle
+  - name: taiga-front
+    release: paasta-app-lifecycle-service
+  - name: taiga-back
     release: paasta-app-lifecycle-service
     properties:
       service:

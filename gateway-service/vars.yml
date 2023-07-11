@@ -1,3 +1,5 @@
+deployment_name: "gateway-service"
+
 # STEMCELL
 stemcell_os: "ubuntu-jammy"                                         # stemcell os
 stemcell_version: "1.102"                                           # stemcell version

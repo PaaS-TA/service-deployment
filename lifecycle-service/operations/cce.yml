@@ -1,13 +1,13 @@
 ---
 # CCE - mariadb patch 
 - type: replace
-  path: /instance_groups/name=app-lifecycle/jobs/name=app-lifecycle/properties/postgres?/port
+  path: /instance_groups/name=app-lifecycle/jobs/name=taiga-back/properties/postgres?/port
   value: ((postgres_port))
 - type: replace
-  path: /instance_groups/name=app-lifecycle/jobs/name=app-lifecycle/properties/postgres?/cce_enable
+  path: /instance_groups/name=app-lifecycle/jobs/name=taiga-back/properties/postgres?/cce_enable
   value: true
 - type: replace
-  path: /instance_groups/name=app-lifecycle/jobs/name=app-lifecycle/properties/mariadb?/cce_enable
+  path: /instance_groups/name=app-lifecycle/jobs/name=taiga-back/properties/mariadb?/cce_enable
   value: true
 - type: replace
   path: /instance_groups/name=app-lifecycle/jobs/name=postgres/properties/postgres?/port

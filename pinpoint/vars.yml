@@ -1,6 +1,6 @@
 # STEMCELL
 stemcell_os: "ubuntu-jammy"                                     # stemcell os
-stemcell_version: "1.102"                                       # stemcell version
+stemcell_version: "1.181"                                       # stemcell version
 
 # NETWORK
 private_networks_name: "default"                                 # private network name

@@ -5,7 +5,7 @@ features:
 releases:
 - name: paasta-app-lifecycle-service
   url: https://nextcloud.paas-ta.org/index.php/s/bPMEg9Ajj2TqAg7/download
-  sha1: 2123ec57ea6cd4be4be84b7a865c6131c3064dba
+  sha1: cd80520fefa3ce3da7081ab523210bdc29453fdd
   version: "1.1.7"
 
 stemcells:

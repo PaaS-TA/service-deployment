@@ -130,9 +130,9 @@ releases:
 - name: bpm
   version: latest
 - name: paasta-rabbitmq
-  url: https://nextcloud.paas-ta.org/index.php/s/WifEjnyZgJJjg68/download
-  version: 2.1.2
-  sha1: 6d9e0049835c667330da14fa6fa5d4666f995e88
+  url: https://nextcloud.paas-ta.org/index.php/s/EYMxfr93WTbytmj/download
+  version: 2.1.3
+  sha1: 02834d79bd5ce512f98d92220a25a1834c9aed58
 - name: routing
   url: https://bosh.io/d/github.com/cloudfoundry/routing-release?v=0.228.0
   version: 0.228.0

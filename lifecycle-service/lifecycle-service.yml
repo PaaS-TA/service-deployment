@@ -1,11 +1,12 @@
 ---
 name: ((deployment_name))
-
+features:
+  use_dns_addresses: false
 releases:
 - name: paasta-app-lifecycle-service
-  url: https://nextcloud.paas-ta.org/index.php/s/Kkk9xfbSA9yyZ3D/download
-  version: "1.1.6.1"
-  sha1: efdab652246f1c2b0623f6ec933a6977a1c086b6
+  url: https://nextcloud.paas-ta.org/index.php/s/bPMEg9Ajj2TqAg7/download
+  sha1: cd80520fefa3ce3da7081ab523210bdc29453fdd
+  version: "1.1.7"
 
 stemcells:
 - alias: default

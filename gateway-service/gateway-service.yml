@@ -1,11 +1,12 @@
 ---
 name: ((deployment_name))
-
+features:
+  use_dns_addresses: false
 releases:
 - name: paasta-api-gateway-service
-  url: https://nextcloud.paas-ta.org/index.php/s/bxCey8mqk4m2KAn/download
-  sha1: 77d72dc91e4266e377dce275907a938db4e5f526
-  version: "1.1.9.1"
+  url: https://nextcloud.paas-ta.org/index.php/s/JAB6jPe2NaASzKc/download
+  sha1: 9019baaaa198689516d108284597a5fc59e30caf
+  version: "1.1.10"
 
 stemcells:
 - alias: default
